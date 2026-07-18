@@ -201,7 +201,7 @@
         let lotes = [];
         let cat = [];
         let hist = [];
-        const CLAVE_ADMIN = "admin123";
+        const CLAVE_ADMIN = "negro1687";
 
         function descargarDatosNube() {
             fetch(`${dbURL}datos.json`)
@@ -231,7 +231,7 @@
             .catch(err => console.error("Error subiendo datos:", err));
         }
 
-        setInterval(descargarDatosNube, 6000);
+        setInterval(descargarDatosNube, 30000);
         descargarDatosNube();
 
         function conmutarVista(destino) {
