@@ -68,7 +68,7 @@
                     <h2>1. Selecciona tu Prenda</h2>
                     <div class="form-group">
                         <label for="filtroGenero">Filtrar por Género</label>
-                        <select id="filtroGenero" onchange="renderizarTienda()">
+                        <select id="filtroGenero" onchange="renderizarTienda(true)">
                             <option value="Todos">Todos</option>
                             <option value="Hombre">Hombre</option>
                             <option value="Mujer">Mujer</option>
@@ -196,7 +196,6 @@
     </div>
 
     <script>
-        // ENLACE DE FIREBASE INTEGRADO
         const dbURL = "https://tienda-survivor-default-rtdb.firebaseio.com/";
         
         let lotes = [];
@@ -204,7 +203,6 @@
         let hist = [];
         const CLAVE_ADMIN = "admin123";
 
-        // Función para descargar todo desde la nube en tiempo real
         function descargarDatosNube() {
             fetch(`${dbURL}datos.json`)
             .then(res => res.json())
@@ -221,7 +219,6 @@
             .catch(err => console.error("Error sincronizando:", err));
         }
 
-        // Función para empujar los cambios hacia la nube
         function subirDatosNube() {
             fetch(`${dbURL}datos.json`, {
                 method: "PUT",
@@ -234,8 +231,7 @@
             .catch(err => console.error("Error subiendo datos:", err));
         }
 
-        // Escuchar cambios constantemente cada 5 segundos
-        setInterval(descargarDatosNube, 5000);
+        setInterval(descargarDatosNube, 6000);
         descargarDatosNube();
 
         function conmutarVista(destino) {
@@ -251,7 +247,7 @@
             } else {
                 document.getElementById('vistaAdmin').classList.remove('activa');
                 document.getElementById('vistaClientes').classList.add('activa');
-                renderizarTienda();
+                renderizarTienda(true);
             }
         }
 
@@ -361,10 +357,13 @@
             } else alert("Stock insuficiente");
         }
 
-        function renderizarTienda() {
+        function renderizarTienda(forzarMenu = false) {
             let filtroG = document.getElementById('filtroGenero').value;
             let select = document.getElementById('vSelectPrendaCliente');
             let listaVisual = document.getElementById('listaVisualProductos');
+            
+            // Guardamos lo que el cliente ya seleccionó para no borrárselo
+            let seleccionPrevia = select.value;
             
             let htmlSelect = `<option value="">Selecciona tu prenda...</option>`;
             let htmlVisual = "";
@@ -401,7 +400,12 @@
                     </div>`;
             });
 
-            select.innerHTML = htmlSelect;
+            // Solo redibujamos las opciones si el cliente no tiene nada seleccionado, o si cambia de género, o si se fuerza.
+            if (forzarMenu || seleccionPrevia === "" || select.options.length <= 1) {
+                select.innerHTML = htmlSelect;
+                select.value = seleccionPrevia; // Re-aplicamos la selección
+            }
+            
             listaVisual.innerHTML = htmlVisual || "<p style='text-align:center; color:#7f8c8d; grid-column: 1/-1;'>No hay productos disponibles por ahora.</p>";
             actualizarPrecioTienda();
         }
@@ -410,7 +414,7 @@
             let idx = document.getElementById('vSelectPrendaCliente').value;
             let cant = parseInt(document.getElementById('vCantCliente').value) || 1;
             
-            if (idx === "") {
+            if (idx === "" || !cat[idx]) {
                 document.getElementById('precioUnitarioTienda').innerText = "$0";
                 document.getElementById('precioTotalTienda').innerText = "$0";
                 return;
@@ -510,7 +514,7 @@
             if(rGan) rGan.innerText = "$" + Math.round(gan);
 
             if(document.getElementById('vistaClientes').classList.contains('activa')) {
-                renderizarTienda();
+                renderizarTienda(false); // Falso para proteger la selección del cliente
             }
         }
     </script>
