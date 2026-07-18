@@ -2,24 +2,20 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Inventario SURVIVOR</title>
+    <title>Sistema SURVIVOR</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #e8f5e9; padding: 20px; color: #2e7d32; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #e8f5e9; padding: 20px; color: #2e7d32; margin: 0; }
         .container { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        
         .navbar { display: flex; align-items: center; gap: 15px; background: #2e7d32; padding: 15px; color: white; border-radius: 8px; margin-bottom: 20px; }
-        .logo-marca { height: 50px; width: 50px; object-fit: cover; border-radius: 4px; background: #fff; padding: 2px; border: 2px solid #fff; }
-        
+        .logo-marca { height: 50px; width: 50px; object-fit: cover; border-radius: 4px; background: #fff; padding: 2px; }
         .box { border: 1px solid #c8e6c9; padding: 15px; border-radius: 8px; margin-bottom: 20px; background: #f1f8e9; }
         input, select { padding: 10px; border: 1px solid #a5d6a7; border-radius: 5px; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
         button { padding: 10px 20px; background: #2e7d32; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
-        
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #c8e6c9; padding: 12px; text-align: center; }
         th { background: #2e7d32; color: white; }
         .total-row { font-weight: bold; background: #dcedc8; font-size: 18px; }
-        
-        /* Estilo galería */
+        .vista { display: none; } .activa { display: block; }
         .galeria-item { border: 1px solid #c8e6c9; padding: 10px; border-radius: 8px; width: 150px; text-align: center; }
         .img-preview { width: 100px; height: 100px; object-fit: cover; border-radius: 5px; border: 2px solid #2e7d32; }
     </style>
@@ -27,123 +23,122 @@
 <body>
 
 <div class="container">
-    <div class="navbar">
-        <img id="logoDisplay" src="https://via.placeholder.com/50" class="logo-marca" alt="Logo">
-        <h1>SURVIVOR</h1>
-    </div>
-
-    <!-- Registro Stock -->
-    <div class="box">
-        <h3>Registrar Stock</h3>
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
-            <input type="text" id="prodNombre" placeholder="Nombre">
-            <select id="prodCuello">
-                <option value="Cuello Redondo">Cuello Redondo</option>
-                <option value="Cuello Medio">Cuello Medio</option>
-            </select>
-            <input type="number" id="prodStock" placeholder="Cantidad">
+    <!-- VISTA CLIENTE -->
+    <div id="vistaCliente" class="vista activa">
+        <div class="navbar">
+            <img id="logoCli" src="https://via.placeholder.com/50" class="logo-marca">
+            <h1>SURVIVOR</h1>
+            <button onclick="accesoAdmin()" style="background: #1b5e20; width: auto; margin-left: auto;">🔐 Admin</button>
         </div>
-        <button onclick="registrarStock()">Agregar al Inventario</button>
+        <h3>Catálogo de Prendas</h3>
+        <div id="galeriaCliente" style="display:flex; gap:15px; flex-wrap:wrap;"></div>
     </div>
 
-    <!-- Tabla -->
-    <table>
-        <thead><tr><th>Producto</th><th>Cuello</th><th>Stock</th></tr></thead>
-        <tbody id="bodyInventario"></tbody>
-        <tfoot><tr class="total-row"><td colspan="2">TOTAL DISPONIBLE</td><td id="totalStock">0</td></tr></tfoot>
-    </table>
+    <!-- VISTA ADMIN -->
+    <div id="vistaAdmin" class="vista">
+        <div class="navbar" style="background: #1b5e20;">
+            <img id="logoAdmin" src="https://via.placeholder.com/50" class="logo-marca">
+            <h1>Panel Admin</h1>
+            <button onclick="irCliente()" style="background: #2e7d32; width: auto; margin-left: auto;">🛒 Ver Tienda</button>
+        </div>
 
-    <!-- Configuración y Fotos -->
-    <div class="box" style="margin-top: 30px;">
-        <h3>Configuración de Empresa</h3>
-        <label>Cambiar Logo:</label>
-        <input type="file" id="fotoLogo" accept="image/*">
-        <button onclick="subirLogo()" style="background: #1b5e20;">Guardar Logo</button>
-        
-        <h3 style="margin-top:30px;">Prendas (Fotos y Descripción)</h3>
-        <input type="text" id="nombrePrendaRef" placeholder="Nombre de la prenda">
-        <input type="text" id="descPrendaRef" placeholder="Descripción de la prenda">
-        <input type="file" id="fotoPrenda" accept="image/*">
-        <button onclick="subirFotoPrenda()" style="background: #1b5e20;">Subir Foto con Descripción</button>
-        <div id="galeriaPrendas" style="display:flex; gap:15px; margin-top:20px; flex-wrap:wrap;"></div>
+        <div class="box">
+            <h3>Registrar Stock</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                <input type="text" id="prodNombre" placeholder="Nombre">
+                <select id="prodCuello"><option>Cuello Redondo</option><option>Cuello Medio</option></select>
+                <input type="number" id="prodStock" placeholder="Cantidad">
+            </div>
+            <button onclick="registrarStock()">Agregar al Inventario</button>
+        </div>
+
+        <table>
+            <thead><tr><th>Producto</th><th>Cuello</th><th>Stock</th></tr></thead>
+            <tbody id="bodyInventario"></tbody>
+            <tfoot><tr class="total-row"><td colspan="2">TOTAL</td><td id="totalStock">0</td></tr></tfoot>
+        </table>
+
+        <div class="box" style="margin-top: 20px;">
+            <h3>Configuración</h3>
+            <input type="file" id="fotoLogo" accept="image/*">
+            <button onclick="subirLogo()">Guardar Logo</button>
+            <h3 style="margin-top:20px;">Prendas (Fotos y Descripción)</h3>
+            <input type="text" id="nombrePrendaRef" placeholder="Nombre">
+            <input type="text" id="descPrendaRef" placeholder="Descripción">
+            <input type="file" id="fotoPrenda" accept="image/*">
+            <button onclick="subirFotoPrenda()" style="background: #1b5e20;">Subir Prenda</button>
+        </div>
     </div>
 </div>
 
 <script>
     const dbURL = "https://tienda-survivor-default-rtdb.firebaseio.com/";
 
-    // --- LOGO ---
+    function accesoAdmin() {
+        if(prompt("Contraseña:") === "admin123") {
+            document.getElementById('vistaCliente').classList.remove('activa');
+            document.getElementById('vistaAdmin').classList.add('activa');
+        }
+    }
+    function irCliente() {
+        document.getElementById('vistaAdmin').classList.remove('activa');
+        document.getElementById('vistaCliente').classList.add('activa');
+    }
+
+    // Funciones Base de Datos (Integradas)
     function subirLogo() {
         let file = document.getElementById('fotoLogo').files[0];
         if(file) {
             let reader = new FileReader();
-            reader.onloadend = function() {
-                fetch(`${dbURL}config.json`, { method: "PUT", body: JSON.stringify({ logo: reader.result }) })
-                .then(() => cargarLogo());
+            reader.onloadend = () => {
+                fetch(`${dbURL}config.json`, { method: "PUT", body: JSON.stringify({ logo: reader.result }) }).then(actualizarTodo);
             }
             reader.readAsDataURL(file);
         }
     }
 
-    function cargarLogo() {
-        fetch(`${dbURL}config.json`).then(r => r.json()).then(data => {
-            if(data && data.logo) document.getElementById('logoDisplay').src = data.logo;
-        });
-    }
-
-    // --- INVENTARIO ---
     function registrarStock() {
-        let item = { 
-            nombre: document.getElementById('prodNombre').value, 
-            cuello: document.getElementById('prodCuello').value, 
-            stock: parseInt(document.getElementById('prodStock').value) || 0 
-        };
-        fetch(`${dbURL}inventario.json`, { method: "POST", body: JSON.stringify(item) }).then(() => cargarInventario());
+        let item = { nombre: document.getElementById('prodNombre').value, cuello: document.getElementById('prodCuello').value, stock: parseInt(document.getElementById('prodStock').value) || 0 };
+        fetch(`${dbURL}inventario.json`, { method: "POST", body: JSON.stringify(item) }).then(actualizarTodo);
     }
 
-    function cargarInventario() {
-        fetch(`${dbURL}inventario.json`).then(r => r.json()).then(data => {
-            let html = "", total = 0;
-            for(let id in data) {
-                total += data[id].stock;
-                html += `<tr><td>${data[id].nombre}</td><td>${data[id].cuello}</td><td>${data[id].stock}</td></tr>`;
-            }
-            document.getElementById('bodyInventario').innerHTML = html;
-            document.getElementById('totalStock').innerText = total;
-        });
-    }
-
-    // --- FOTOS PRENDAS ---
     function subirFotoPrenda() {
         let file = document.getElementById('fotoPrenda').files[0];
-        let nombre = document.getElementById('nombrePrendaRef').value;
-        let descripcion = document.getElementById('descPrendaRef').value;
+        let nombre = document.getElementById('nombrePrendaRef').value, descripcion = document.getElementById('descPrendaRef').value;
         if(file && nombre) {
             let reader = new FileReader();
-            reader.onloadend = function() {
-                fetch(`${dbURL}fotos.json`, { method: "POST", body: JSON.stringify({ nombre, descripcion, url: reader.result }) }).then(() => cargarFotos());
+            reader.onloadend = () => {
+                fetch(`${dbURL}fotos.json`, { method: "POST", body: JSON.stringify({ nombre, descripcion, url: reader.result }) }).then(actualizarTodo);
             }
             reader.readAsDataURL(file);
         }
     }
 
-    function cargarFotos() {
-        fetch(`${dbURL}fotos.json`).then(r => r.json()).then(data => {
-            let html = "";
-            for(let id in data) {
-                html += `<div class="galeria-item">
-                    <img src="${data[id].url}" class="img-preview">
-                    <p style="font-weight:bold; margin:5px 0 0;">${data[id].nombre}</p>
-                    <p style="font-size:11px; color:#555;">${data[id].descripcion || ''}</p>
-                </div>`;
+    function actualizarTodo() {
+        fetch(`${dbURL}.json`).then(r => r.json()).then(data => {
+            if(!data) return;
+            // Logo
+            if(data.config) {
+                document.getElementById('logoCli').src = document.getElementById('logoAdmin').src = data.config.logo;
             }
-            document.getElementById('galeriaPrendas').innerHTML = html;
+            // Inventario
+            let invHtml = "", total = 0;
+            for(let id in data.inventario) {
+                total += data.inventario[id].stock;
+                invHtml += `<tr><td>${data.inventario[id].nombre}</td><td>${data.inventario[id].cuello}</td><td>${data.inventario[id].stock}</td></tr>`;
+            }
+            document.getElementById('bodyInventario').innerHTML = invHtml;
+            document.getElementById('totalStock').innerText = total;
+            // Galería
+            let galHtml = "";
+            for(let id in data.fotos) {
+                galHtml += `<div class="galeria-item"><img src="${data.fotos[id].url}" class="img-preview"><p style="font-weight:bold">${data.fotos[id].nombre}</p><p style="font-size:11px">${data.fotos[id].descripcion}</p></div>`;
+            }
+            document.getElementById('galeriaCliente').innerHTML = galHtml;
         });
     }
 
-    cargarInventario();
-    cargarFotos();
-    cargarLogo();
+    actualizarTodo();
 </script>
 </body>
 </html>
