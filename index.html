@@ -345,7 +345,7 @@
                     tel: document.getElementById('cliTel').value, 
                     dir: document.getElementById('cliDir').value,
                     prodNombre: p.nombre, lote: p.lote, genero: p.genero, talla: p.talla, cuello: p.cuello, manga: p.manga,
-                    detalle: `Lote: ${p.lote} | ${p.genero} | ${p.talla} | ${p.cuello}`, 
+                    detalle: `Lote: ${p.lote} | ${p.genero} | ${p.talla} | ${p.cuello} | ${p.manga}`, 
                     cant, total: cant * p.precio, estado: document.getElementById('vEstadoPago').value 
                 });
                 subirDatosNube();
@@ -362,7 +362,6 @@
             let select = document.getElementById('vSelectPrendaCliente');
             let listaVisual = document.getElementById('listaVisualProductos');
             
-            // Guardamos lo que el cliente ya seleccionó para no borrárselo
             let seleccionPrevia = select.value;
             
             let htmlSelect = `<option value="">Selecciona tu prenda...</option>`;
@@ -371,7 +370,8 @@
             cat.forEach((p, i) => {
                 if (filtroG !== "Todos" && p.genero !== filtroG) return;
 
-                let desc = `${p.nombre} - ${p.genero} (${p.talla}) | ${p.cuello}`;
+                // DETALLE COMPLETO INCLUYENDO MANGA CORTA / LARGA EN EL MENÚ DESPLEGABLE
+                let desc = `${p.nombre} - ${p.genero} (${p.talla}) | ${p.cuello} | ${p.manga}`;
                 let badge = p.stock > 0 ? `<span class="badge-stock">Disponibles: ${p.stock}</span>` : `<span class="badge-stock agotado">Agotado</span>`;
 
                 if (p.stock > 0) {
@@ -400,10 +400,9 @@
                     </div>`;
             });
 
-            // Solo redibujamos las opciones si el cliente no tiene nada seleccionado, o si cambia de género, o si se fuerza.
             if (forzarMenu || seleccionPrevia === "" || select.options.length <= 1) {
                 select.innerHTML = htmlSelect;
-                select.value = seleccionPrevia; // Re-aplicamos la selección
+                select.value = seleccionPrevia;
             }
             
             listaVisual.innerHTML = htmlVisual || "<p style='text-align:center; color:#7f8c8d; grid-column: 1/-1;'>No hay productos disponibles por ahora.</p>";
@@ -443,7 +442,7 @@
                 hist.push({ 
                     cliente: nombre, tel: tel, dir: dir,
                     prodNombre: p.nombre, lote: p.lote, genero: p.genero, talla: p.talla, cuello: p.cuello, manga: p.manga,
-                    detalle: `Lote: ${p.lote} | ${p.genero} | ${p.talla} | ${p.cuello}`, 
+                    detalle: `Lote: ${p.lote} | ${p.genero} | ${p.talla} | ${p.cuello} | ${p.manga}`, 
                     cant, total: cant * p.precio, estado: "Pendiente" 
                 });
 
@@ -482,10 +481,10 @@
             let selV = `<option value="">Seleccione...</option>`;
             cat.forEach((p, i) => {
                 htmlCat += `<tr class="${p.genero === 'Hombre' ? 'fila-hombre' : 'fila-mujer'}">
-                <td>Lote: ${p.lote} | ${p.genero} | ${p.talla} | ${p.cuello}</td><td>${p.stock}</td>
+                <td>Lote: ${p.lote} | ${p.genero} | ${p.talla} | ${p.cuello} | ${p.manga}</td><td>${p.stock}</td>
                 <td><button onclick="ajustarStock(${i}, 1)">+</button><button onclick="ajustarStock(${i}, -1)">-</button>
                 <button onclick="cat.splice(${i},1);subirDatosNube()" style="background:#c0392b">X</button></td></tr>`;
-                selV += `<option value="${i}">Lote: ${p.lote} | ${p.genero} | ${p.talla} | ${p.cuello}</option>`;
+                selV += `<option value="${i}">Lote: ${p.lote} | ${p.genero} | ${p.talla} | ${p.cuello} | ${p.manga}</option>`;
             });
             let tCat = document.getElementById('tablaCatalogo');
             if(tCat) tCat.innerHTML = htmlCat;
@@ -514,7 +513,7 @@
             if(rGan) rGan.innerText = "$" + Math.round(gan);
 
             if(document.getElementById('vistaClientes').classList.contains('activa')) {
-                renderizarTienda(false); // Falso para proteger la selección del cliente
+                renderizarTienda(false);
             }
         }
     </script>
