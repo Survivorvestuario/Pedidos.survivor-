@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Integral SURVIVOR</title>
+    <title>Sistema Global SURVIVOR</title>
     <style>
         /* Estilos Generales */
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; padding: 20px; margin: 0; color: #333; }
@@ -23,19 +23,16 @@
         th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
         th { background: #34495e; color: white; }
         
-        /* Clases de Estado y Tablas */
         .pagado { background-color: #d4edda !important; }
         .pendiente { background-color: #fff3cd !important; }
         .fila-hombre { background-color: #e3f2fd !important; }
         .fila-mujer { background-color: #fce4ec !important; }
         
-        /* Estilos específicos de la Tienda */
         .navbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background: #2c3e50; padding: 15px 20px; border-radius: 8px; color: white; }
         .navbar h1 { margin: 0; font-size: 24px; color: white; }
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; color: #495057; }
         
-        /* Catálogo en Cuadrícula de Tarjetas (Mejorado para Fotos) */
         .lista-productos { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; max-height: 500px; overflow-y: auto; padding-right: 5px; }
         .item-producto { border-radius: 8px; border: 1px solid #e9ecef; background: #fdfefe; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; overflow: hidden; border-top: 4px solid #2c3e50; }
         .item-producto.Hombre { border-top-color: #3498db; background-color: #f4f9fd; }
@@ -55,11 +52,10 @@
         
         footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e9ecef; text-align: center; font-size: 13px; color: #7f8c8d; }
         .btn-admin-acceso { background: transparent; border: none; color: #bdc3c7; cursor: pointer; font-size: 12px; text-decoration: underline; }
-        .btn-admin-acceso:hover { color: #7f8c8d; }
         
-        /* Control de Vistas */
         .vista { display: none; }
         .vista.activa { display: block; }
+        .loading { font-style: italic; color: #7f8c8d; }
     </style>
 </head>
 <body>
@@ -76,7 +72,6 @@
             </div>
 
             <div class="grid-tienda">
-                <!-- Bloque Izquierdo: Selección -->
                 <div class="box">
                     <h2>1. Selecciona tu Prenda</h2>
                     <div class="form-group">
@@ -108,7 +103,6 @@
                     </div>
                 </div>
 
-                <!-- Bloque Derecho: Formulario Cliente -->
                 <div class="box">
                     <h2>2. Datos de Envío y Contacto</h2>
                     <div class="form-group">
@@ -123,13 +117,12 @@
                         <label for="cliDirCliente">Dirección de Despacho</label>
                         <input type="text" id="cliDirCliente" placeholder="Calle, Número, Ciudad">
                     </div>
-                    <button class="btn-compra" onclick="enviarPedidoCliente()">Confirmar y Solicitar Pedido</button>
+                    <button class="btn-compra" id="btnEnviarPedido" onclick="enviarPedidoCliente()">Confirmar y Solicitar Pedido</button>
                 </div>
             </div>
 
-            <!-- Listado Visual de Referencia con Fotos -->
             <div class="box" style="margin-top: 20px;">
-                <h2>Prendas Disponibles en Stock</h2>
+                <h2>Prendas Disponibles en Stock <span id="loadStatus" class="loading">(Sincronizando nube...)</span></h2>
                 <div class="lista-productos" id="listaVisualProductos"></div>
             </div>
 
@@ -138,7 +131,6 @@
                 <button class="btn-admin-acceso" onclick="conmutarVista('admin')">Acceso Privado Administrador</button>
             </footer>
         </div>
-
 
         <!-- ========================================== -->
         <!-- 2. VISTA ADMINISTRADOR (PANEL DE GESTIÓN)  -->
@@ -149,7 +141,6 @@
                 <button onclick="conmutarVista('clientes')" style="background: #27ae60; border-radius: 6px; padding: 8px 15px;">🛒 Volver a la Tienda</button>
             </div>
 
-            <!-- Lotes -->
             <div class="box">
                 <h2>1. Gestión de Inversión por Lote</h2>
                 <div class="grid">
@@ -167,7 +158,6 @@
                 </table>
             </div>
 
-            <!-- Catálogo con Carga de Foto -->
             <div class="box">
                 <h2>2. Catálogo (Productos)</h2>
                 <div class="grid">
@@ -185,7 +175,6 @@
                     <input type="number" id="prodPrecio" placeholder="Precio Venta $">
                     <input type="number" id="prodStock" placeholder="Stock Inicial">
                 </div>
-                <!-- NUEVO CAMPO: Subir Imagen -->
                 <div style="margin-top: 15px; max-width: 300px;">
                     <label style="font-size:13px;" for="prodImagen">📸 Foto del Producto (Opcional):</label>
                     <input type="file" id="prodImagen" accept="image/*">
@@ -194,7 +183,6 @@
                 <table id="tablaCatalogo"></table>
             </div>
 
-            <!-- Ventas Manuales -->
             <div class="box">
                 <h2>3. Registro de Ventas Manuales</h2>
                 <div class="grid">
@@ -208,7 +196,6 @@
                 <button onclick="registrarVenta()" style="background: #27ae60; margin-top: 10px;">Registrar Venta</button>
             </div>
 
-            <!-- Resumen e Historial -->
             <div class="box">
                 <h2>4. Historial de Ventas y Pedidos de Clientes</h2>
                 <p><strong>Capital Recuperado:</strong> <span id="resCap">$0</span> | <strong>Ganancia Total:</strong> <span id="resGan">$0</span></p>
@@ -219,10 +206,52 @@
     </div>
 
     <script>
-        let lotes = JSON.parse(localStorage.getItem('lotes')) || [];
-        let cat = JSON.parse(localStorage.getItem('cat')) || [];
-        let hist = JSON.parse(localStorage.getItem('hist')) || [];
+        // === CONFIGURACIÓN DE TU NUBE DE FIREBASE ===
+        // ⚠️ PEGA TU URL DE FIREBASE AQUÍ ABAJO (Debe incluir las comillas y terminar con / )
+        const FIREBASE_URL = "DEJA_TU_URL_DE_FIREBASE_AQUI/"; 
         const CLAVE_ADMIN = "admin123";
+
+        let lotes = [];
+        let cat = [];
+        let hist = [];
+
+        // Descargar datos automáticamente desde Internet
+        async function cargarDatosDeNube() {
+            if(FIREBASE_URL.includes("DEJA_TU_URL")) return;
+            try {
+                let res = await fetch(FIREBASE_URL + ".json");
+                let datos = await res.json();
+                if (datos) {
+                    lotes = datos.lotes || [];
+                    cat = datos.cat || [];
+                    hist = datos.hist || [];
+                }
+                document.getElementById('loadStatus').innerText = "(Conectado)";
+                renderizarTienda();
+                if(document.getElementById('vistaAdmin').classList.contains('activa')) {
+                    actualizarTablasAdmin();
+                }
+            } catch(e) {
+                document.getElementById('loadStatus').innerText = "(Error de conexión)";
+            }
+        }
+
+        // Subir datos automáticamente a Internet cada vez que haces un cambio
+        async function guardarDatosEnNube() {
+            if(FIREBASE_URL.includes("DEJA_TU_URL")) {
+                alert("Por favor, configura tu URL de Firebase en el código.");
+                return;
+            }
+            await fetch(FIREBASE_URL + ".json", {
+                method: "PUT",
+                body: JSON.stringify({ lotes, cat, hist })
+            });
+            cargarDatosDeNube();
+        }
+
+        // Sincronización automática de hilos en segundo plano cada 7 segundos
+        setInterval(cargarDatosDeNube, 7000);
+        window.onload = cargarDatosDeNube;
 
         function conmutarVista(destino) {
             if (destino === 'admin') {
@@ -230,7 +259,7 @@
                 if (intento === CLAVE_ADMIN) {
                     document.getElementById('vistaClientes').classList.remove('activa');
                     document.getElementById('vistaAdmin').classList.add('activa');
-                    actualizarTodoEstructura();
+                    actualizarTablasAdmin();
                 } else if (intento !== null) {
                     alert("Contraseña incorrecta.");
                 }
@@ -247,7 +276,6 @@
             if (cuello === "Cuello Polo") precioInput.value = 13000;
             else if (cuello === "Cuello Medio") precioInput.value = 14000;
         }
-        ajustarPrecioAutomatico();
 
         function registrarLote() {
             let nombre = document.getElementById('iNombreLote').value.trim();
@@ -259,15 +287,14 @@
             let sumaInversion = tela + conf;
             let costoUnit = cant > 0 ? (sumaInversion) / cant : 0;
             lotes.push({ nombre, tela, conf, sumaInversion, cant, costoUnit });
-            actualizarTodoEstructura();
             
+            guardarDatosEnNube();
             document.getElementById('iNombreLote').value = "";
             document.getElementById('iTela').value = "";
             document.getElementById('iConf').value = "";
             document.getElementById('iCant').value = "";
         }
 
-        // AGREGAR PRENDA: Modificado para procesar e incluir la foto
         function agregarPrenda() {
             let loteSel = document.getElementById('prodLoteSelect').value;
             if(!loteSel) return alert("Crea y selecciona un lote primero");
@@ -284,45 +311,39 @@
                 manga: document.getElementById('prodManga').value,
                 precio: parseFloat(document.getElementById('prodPrecio').value) || 0,
                 stock: parseInt(document.getElementById('prodStock').value) || 0,
-                imagen: "" // Espacio asignado para la imagen codificada
+                imagen: ""
             };
 
-            // Si el administrador subió una foto, la procesamos antes de guardar
             if (file) {
                 let reader = new FileReader();
                 reader.onloadend = function() {
-                    nuevaPrenda.imagen = reader.result; // Imagen convertida a texto Base64
+                    nuevaPrenda.imagen = reader.result;
                     cat.push(nuevaPrenda);
-                    fileInput.value = ""; // Resetea el input de imagen
-                    actualizarTodoEstructura();
+                    fileInput.value = "";
+                    guardarDatosEnNube();
                 }
                 reader.readAsDataURL(file);
             } else {
-                // Si no subió foto, guarda el producto directo
                 cat.push(nuevaPrenda);
-                actualizarTodoEstructura();
+                guardarDatosEnNube();
             }
         }
 
         function ajustarStock(i, c) { 
             cat[i].stock += c; 
             if(cat[i].stock < 0) cat[i].stock = 0;
-            actualizarTodoEstructura(); 
+            guardarDatosEnNube(); 
         }
         
-        function eliminarLote(i) { lotes.splice(i, 1); actualizarTodoEstructura(); }
-
-        function cambiarEstadoPago(i) {
-            hist[i].estado = hist[i].estado === 'Pagado' ? 'Pendiente' : 'Pagado';
-            actualizarTodoEstructura();
-        }
+        function eliminarLote(i) { lotes.splice(i, 1); guardarDatosEnNube(); }
+        function cambiarEstadoPago(i) { hist[i].estado = hist[i].estado === 'Pagado' ? 'Pendiente' : 'Pagado'; guardarDatosEnNube(); }
 
         function eliminarVenta(i) {
             let venta = hist[i];
             let prodIndex = cat.findIndex(p => p.nombre === venta.prodNombre && p.lote === venta.lote && p.genero === venta.genero && p.talla === venta.talla && p.cuello === venta.cuello && p.manga === venta.manga);
             if(prodIndex !== -1) cat[prodIndex].stock += venta.cant;
             hist.splice(i, 1);
-            actualizarTodoEstructura();
+            guardarDatosEnNube();
         }
 
         function registrarVenta() {
@@ -341,16 +362,14 @@
                     detalle: `Lote: ${p.lote} | ${p.genero} | ${p.talla} | ${p.cuello}`, 
                     cant, total: cant * p.precio, estado: document.getElementById('vEstadoPago').value 
                 });
-                actualizarTodoEstructura();
+                guardarDatosEnNube();
                 
                 document.getElementById('cliNombre').value = "";
                 document.getElementById('cliTel').value = "";
-                document.getElementById('cliDir').value = "";
                 document.getElementById('vCant').value = "";
             } else alert("Stock insuficiente");
         }
 
-        // TIENDA CLIENTES: Modificada para mostrar las tarjetas con sus respectivas fotos
         function renderizarTienda() {
             let filtroG = document.getElementById('filtroGenero').value;
             let select = document.getElementById('vSelectPrendaCliente');
@@ -364,21 +383,15 @@
 
                 let desc = `${p.nombre} - ${p.genero} (${p.talla}) | ${p.cuello}`;
                 let badge = p.stock > 0 ? `<span class="badge-stock">Disponibles: ${p.stock}</span>` : `<span class="badge-stock agotado">Agotado</span>`;
+                if (p.stock > 0) htmlSelect += `<option value="${i}">${desc}</option>`;
 
-                if (p.stock > 0) {
-                    htmlSelect += `<option value="${i}">${desc}</option>`;
-                }
-
-                // Evaluar si el producto tiene foto cargada o dejamos un recuadro limpio
                 let areaImagen = p.imagen 
                     ? `<img class="img-producto" src="${p.imagen}" alt="Foto">` 
                     : `<span class="img-placeholder">Sin foto disponible</span>`;
 
                 htmlVisual += `
                     <div class="item-producto ${p.genero}">
-                        <div class="img-producto-container">
-                            ${areaImagen}
-                        </div>
+                        <div class="img-producto-container">${areaImagen}</div>
                         <div class="cuerpo-prod">
                             <div class="info-prod">
                                 <p><strong>${p.nombre} (${p.genero})</strong></p>
@@ -400,19 +413,17 @@
         function actualizarPrecioTienda() {
             let idx = document.getElementById('vSelectPrendaCliente').value;
             let cant = parseInt(document.getElementById('vCantCliente').value) || 1;
-            
             if (idx === "") {
                 document.getElementById('precioUnitarioTienda').innerText = "$0";
                 document.getElementById('precioTotalTienda').innerText = "$0";
                 return;
             }
-
             let p = cat[idx];
             document.getElementById('precioUnitarioTienda').innerText = `$${p.precio}`;
             document.getElementById('precioTotalTienda').innerText = `$${cant * p.precio}`;
         }
 
-        function enviarPedidoCliente() {
+        async function enviarPedidoCliente() {
             let idx = document.getElementById('vSelectPrendaCliente').value;
             let cant = parseInt(document.getElementById('vCantCliente').value);
             let nombre = document.getElementById('cliNombreCliente').value.trim();
@@ -422,11 +433,13 @@
             if (idx === "" || isNaN(cant) || cant <= 0) return alert("Selecciona una prenda y cantidad válida.");
             if (!nombre || !tel || !dir) return alert("Por favor rellena tus datos para el envío.");
 
+            document.getElementById('btnEnviarPedido').innerText = "Procesando...";
+            
+            await cargarDatosDeNube();
             let p = cat[idx];
 
             if (p.stock >= cant) {
                 p.stock -= cant;
-                
                 hist.push({ 
                     cliente: nombre, tel: tel, dir: dir,
                     prodNombre: p.nombre, lote: p.lote, genero: p.genero, talla: p.talla, cuello: p.cuello, manga: p.manga,
@@ -434,27 +447,21 @@
                     cant, total: cant * p.precio, estado: "Pendiente" 
                 });
 
-                localStorage.setItem('cat', JSON.stringify(cat));
-                localStorage.setItem('hist', JSON.stringify(hist));
-
+                await guardarDatosEnNube();
                 alert("¡Tu pedido ha sido recibido con éxito!");
                 
                 document.getElementById('cliNombreCliente').value = "";
                 document.getElementById('cliTelCliente').value = "";
                 document.getElementById('cliDirCliente').value = "";
                 document.getElementById('vCantCliente').value = 1;
-                
-                renderizarTienda();
             } else {
-                alert("Stock insuficiente para cumplir tu solicitud.");
+                alert("¡Lo sentimos! Alguien acaba de comprar ese artículo y ya no hay stock suficiente.");
             }
+            document.getElementById('btnEnviarPedido').innerText = "Confirmar y Solicitar Pedido";
+            renderizarTienda();
         }
 
-        function actualizarTodoEstructura() {
-            localStorage.setItem('lotes', JSON.stringify(lotes)); 
-            localStorage.setItem('cat', JSON.stringify(cat)); 
-            localStorage.setItem('hist', JSON.stringify(hist));
-
+        function actualizarTablasAdmin() {
             let htmlL = "";
             let selL = `<option value="">Seleccione Lote...</option>`;
             lotes.forEach((l, i) => {
@@ -471,7 +478,7 @@
                 htmlCat += `<tr class="${p.genero === 'Hombre' ? 'fila-hombre' : 'fila-mujer'}">
                 <td>Lote: ${p.lote} | ${p.genero} | ${p.talla} | ${p.cuello}</td><td>${p.stock}</td>
                 <td><button onclick="ajustarStock(${i}, 1)">+</button><button onclick="ajustarStock(${i}, -1)">-</button>
-                <button onclick="cat.splice(${i},1);actualizarTodoEstructura()" style="background:#c0392b">X</button></td></tr>`;
+                <button onclick="cat.splice(${i},1);guardarDatosEnNube()" style="background:#c0392b">X</button></td></tr>`;
                 selV += `<option value="${i}">Lote: ${p.lote} | ${p.genero} | ${p.talla} | ${p.cuello}</option>`;
             });
             document.getElementById('tablaCatalogo').innerHTML = htmlCat;
@@ -495,8 +502,6 @@
             document.getElementById('resCap').innerText = "$" + Math.round(cap);
             document.getElementById('resGan').innerText = "$" + Math.round(gan);
         }
-
-        renderizarTienda();
     </script>
 </body>
 </html>
