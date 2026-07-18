@@ -196,7 +196,7 @@
     </div>
 
     <script>
-        // ENLACE DE FIREBASE INTEGRADO AUTOMÁTICAMENTE
+        // ENLACE DE FIREBASE INTEGRADO
         const dbURL = "https://tienda-survivor-default-rtdb.firebaseio.com/";
         
         let lotes = [];
@@ -225,15 +225,17 @@
         function subirDatosNube() {
             fetch(`${dbURL}datos.json`, {
                 method: "PUT",
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ lotes, cat, hist })
             })
             .then(() => {
                 actualizarVisuales();
-            });
+            })
+            .catch(err => console.error("Error subiendo datos:", err));
         }
 
-        // Escuchar cambios constantemente cada 4 segundos para que se actualice solo
-        setInterval(descargarDatosNube, 4000);
+        // Escuchar cambios constantemente cada 5 segundos
+        setInterval(descargarDatosNube, 5000);
         descargarDatosNube();
 
         function conmutarVista(destino) {
@@ -443,6 +445,7 @@
 
                 fetch(`${dbURL}datos.json`, {
                     method: "PUT",
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ lotes, cat, hist })
                 })
                 .then(() => {
