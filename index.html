@@ -1,521 +1,202 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Integral SURVIVOR</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; padding: 20px; margin: 0; color: #333; }
-        .container { max-width: 1100px; margin: 0 auto; }
-        .box { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border: 1px solid #e9ecef; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 10px; }
-        .grid-tienda { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media(max-width: 768px) { .grid-tienda { grid-template-columns: 1fr; } }
-        
-        input, select { padding: 8px; width: 100%; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
-        button { padding: 8px 12px; cursor: pointer; background: #2c3e50; color: white; border: none; border-radius: 4px; margin: 2px; font-weight: bold; }
-        button:hover { opacity: 0.9; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-        th { background: #34495e; color: white; }
-        
-        .pagado { background-color: #d4edda !important; }
-        .pendiente { background-color: #fff3cd !important; }
-        .fila-hombre { background-color: #e3f2fd !important; }
-        .fila-mujer { background-color: #fce4ec !important; }
-        
-        .navbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background: #2c3e50; padding: 15px 20px; border-radius: 8px; color: white; }
-        .navbar h1 { margin: 0; font-size: 24px; color: white; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #495057; }
-        
-        .lista-productos { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; max-height: 500px; overflow-y: auto; padding-right: 5px; }
-        .item-producto { border-radius: 8px; border: 1px solid #e9ecef; background: #fdfefe; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; overflow: hidden; border-top: 4px solid #2c3e50; }
-        .item-producto.Hombre { border-top-color: #3498db; background-color: #f4f9fd; }
-        .item-producto.Mujer { border-top-color: #e91e63; background-color: #fdf5f7; }
-        
-        .img-producto-container { width: 100%; height: 160px; background: #eaeded; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .img-producto { width: 100%; height: 100%; object-fit: cover; }
-        .img-placeholder { color: #bdc3c7; font-size: 13px; font-style: italic; }
-        
-        .cuerpo-prod { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .badge-stock { display: inline-block; background: #27ae60; color: white; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; margin-top: 5px; }
-        .badge-stock.agotado { background: #c0392b; }
-        .precio-tag { font-size: 18px; font-weight: bold; color: #2c3e50; margin-top: 5px; }
-        
-        button.btn-compra { width: 100%; padding: 12px; background: #27ae60; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e9ecef; text-align: center; font-size: 13px; color: #7f8c8d; }
-        .btn-admin-acceso { background: transparent; border: none; color: #bdc3c7; cursor: pointer; font-size: 12px; text-decoration: underline; }
-        
-        .vista { display: none; }
-        .vista.activa { display: block; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VESTUARIO SURVIVOR</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Anton&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--verde-oscuro:#0a1f13;--verde:#1b7a3d;--verde-claro:#2ecc71;--verde-bg:#143d24;--blanco:#fff;--negro:#080808}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--verde-bg);color:white;display:flex;min-height:100vh}
+.sidebar{width:300px;background:var(--verde-oscuro);border-right:4px solid var(--negro);position:fixed;left:0;top:0;bottom:0;padding:0;display:flex;flex-direction:column;z-index:10;overflow-y:auto}
+.logo-box{background:linear-gradient(180deg,#0e0e0e,#000);border-bottom:3px solid var(--verde-claro);padding:25px 15px 18px 15px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.logo-box img{max-width:200px;max-height:170px;object-fit:contain;display:block;margin:0 auto 12px auto;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.8))}
+.brand-name{font-family:'Black Ops One','Anton',Impact,sans-serif;font-size:26px;letter-spacing:2px;color:white;line-height:1;text-transform:uppercase;text-shadow:2px 2px 0 black,0 0 10px rgba(46,204,113,0.4)}
+.brand-sub{font-family:'Anton',sans-serif;font-size:14px;letter-spacing:6px;color:var(--verde-claro);margin-top:6px;text-transform:uppercase}
+.upload-btn{margin-top:12px;background:#111;color:#aaa;border:1px dashed #2ecc71;border-radius:20px;padding:6px 14px;font-size:10px;cursor:pointer}
+.admin-only{display:none}.admin-only.visible{display:block}.admin-mode.admin-only{display:block}
+.nav-section{padding:12px}
+.nav-title{font-size:10px;letter-spacing:2px;color:#5a8a6a;margin:14px 0 6px 6px;font-weight:bold}
+.nav-btn{width:100%;padding:12px 14px;background:transparent;border:1px solid #1e3d29;color:white;border-radius:10px;text-align:left;font-weight:700;cursor:pointer;transition:0.2s;font-size:13px;margin-bottom:6px}
+.nav-btn:hover{background:var(--verde);transform:translateX(3px)}
+.nav-btn.active{background:var(--verde);border-color:white}
+.main{margin-left:300px;flex:1;padding:28px}
+.box{background:white;color:#111;padding:22px;border-radius:14px;margin-bottom:20px;box-shadow:0 10px 25px rgba(0,0,0,0.4);border-left:6px solid black}
+.box h2{color:var(--verde);border-bottom:3px solid black;padding-bottom:8px;margin-bottom:15px;font-family:'Anton',sans-serif}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.grid-tienda{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;margin-top:15px}
+.stat-card{background:black;color:white;border-radius:12px;padding:18px;border:2px solid var(--verde)}
+.stat-card.green{background:var(--verde)}
+.stat-card h4{font-size:11px;letter-spacing:2px;color:var(--verde-claro);margin-bottom:6px}
+.stat-card.val{font-size:26px;font-weight:bold}
+input,select,textarea{padding:11px;width:100%;border:2px solid black;border-radius:8px;background:white;color:black}
+button{padding:10px 14px;cursor:pointer;background:black;color:white;border:none;border-radius:8px;font-weight:bold}
+.btn-verde{background:var(--verde)}
+.btn-compra{width:100%;padding:14px;background:var(--verde);color:white;border:2px solid black;border-radius:10px;font-size:16px;font-weight:bold;margin-top:10px}
+.vista{display:none}.vista.activa{display:block;animation:fade.3s}@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.lista-productos{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.item-producto{border-radius:14px;border:2px solid black;background:white;overflow:hidden;cursor:pointer;transition:.2s;display:flex;flex-direction:column}
+.item-producto:hover{transform:translateY(-4px)}
+.item-producto.seleccionado{outline:4px solid var(--verde-claro)}
+.img-producto-container{width:100%;height:190px;background:#e8f5e9;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.img-producto{width:100%;height:100%;object-fit:cover}
+.badge-stock{background:var(--verde);color:white;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:bold;margin-top:6px;display:inline-block}
+.badge-stock.agotado{background:#c0392b}
+.precio-tag{font-size:20px;font-weight:bold;color:var(--verde)}
+table{width:100%;border-collapse:collapse;margin-top:15px;font-size:13px}th,td{border:1px solid #ddd;padding:8px;text-align:center}th{background:black;color:white}
+.pagado{background:#d4edda!important}.pendiente{background:#fff3cd!important}
+.wa-float{position:fixed;bottom:22px;right:22px;background:#25D366;color:white;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 6px 18px rgba(0,0,0,0.4);z-index:99;text-decoration:none;animation:pulse 2s infinite}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+@media(max-width:900px){.sidebar{width:100%;position:relative}.main{margin-left:0}body{flex-direction:column}.grid-tienda{grid-template-columns:1fr}}
+</style>
 </head>
-<body>
+<body id="bodyRoot">
+<div class="sidebar">
+ <div class="logo-box">
+  <img id="logoImg" src="survivor_logo_final.png" alt="Logo" onerror="this.style.display='none'">
+  <div class="brand-name">VESTUARIO</div>
+  <div class="brand-name" style="color:#2ecc71">SURVIVOR</div>
+  <div class="brand-sub">— RESISTENCIA —</div>
+  <div id="adminLogoUpload" class="admin-only"><label class="upload-btn" for="inputLogo">CAMBIAR LOGO<input type="file" id="inputLogo" accept="image/*" style="display:none" onchange="cargarLogo(event)"></label></div>
+ </div>
+ <div class="nav-section">
+  <div class="nav-title">TIENDA</div>
+  <button class="nav-btn active" onclick="mostrarVista('quienes')">🏢 QUIENES SOMOS</button>
+  <button class="nav-btn" onclick="mostrarVista('materia')">🧵 MATERIA PRIMA</button>
+  <button class="nav-btn" onclick="mostrarVista('productos')">👕 PRODUCTOS</button>
+  <button class="nav-btn" onclick="mostrarVista('compras')">🛒 COMPRAS / PEDIDO</button>
+  <button class="nav-btn" onclick="mostrarVista('contacto')">📩 CONTACTANOS</button>
+  <div id="adminMenu" class="admin-only">
+   <div class="nav-title" style="color:#ff6b6b">🔐 ADMIN OCULTO</div>
+   <button class="nav-btn" onclick="mostrarVista('dashboard')">📊 ESTADISTICAS</button>
+   <button class="nav-btn" onclick="mostrarVista('lotes')">📦 LOTES E INVERSION</button>
+   <button class="nav-btn" onclick="mostrarVista('catalogoAdmin')">🗃️ CATALOGO ADMIN</button>
+   <button class="nav-btn" onclick="mostrarVista('ventas')">📋 VENTAS E INVENTARIO</button>
+  </div>
+  <div style="margin-top:20px;padding:10px;background:#000;border-radius:10px;text-align:center">
+   <button id="btnAdminToggle" onclick="toggleAdmin()" style="width:100%;background:#1b7a3d;padding:10px;border-radius:8px">🔐 MODO ADMIN</button>
+   <div style="font-size:10px;color:#777;margin-top:6px">Clave: negro1687</div>
+  </div>
+ </div>
+</div>
+<div class="main">
+ <div id="vistaQuienes" class="vista activa"><div class="box" style="background:#0a1f13;color:white;border-color:#2ecc71"><h2 style="color:white;border-color:#2ecc71;font-family:'Black Ops One'">QUIENES SOMOS - VESTUARIO SURVIVOR</h2><p>VESTUARIO SURVIVOR confecciona vestuario que resiste. Poleras piqué, polo, medio y beatle.</p></div></div>
+ <div id="vistaMateria" class="vista"><div class="box"><h2>MATERIA PRIMA</h2><div class="stats-grid"><div class="stat-card"><h4>TELA PIQUE</h4><div>Resistente</div></div><div class="stat-card"><h4>JERSEY</h4><div>Suave</div></div><div class="stat-card"><h4>CONFECCION</h4><div>Taller</div></div></div></div></div>
+ <div id="vistaProductos" class="vista"><div class="box"><h2>PRODUCTOS - Click para seleccionar</h2><div style="display:flex;gap:10px;margin-bottom:15px"><select id="filtroGenero" onchange="renderizarTienda(true)" style="max-width:200px"><option value="Todos">Todos</option><option value="Hombre">Hombre</option><option value="Mujer">Mujer</option></select><span id="infoSeleccion" style="background:black;color:white;padding:8px 12px;border-radius:8px;font-size:13px">Ningun producto seleccionado</span></div><div class="lista-productos" id="listaVisualProductos"></div><button class="btn-compra" onclick="irACompras()">🛒 COMPRAR → IR A PEDIDO</button></div></div>
+ <div id="vistaCompras" class="vista"><div class="grid-tienda"><div class="box"><h2>1. Tu Prenda</h2><select id="vSelectPrendaCliente" onchange="actualizarPrecioTienda()"></select><div style="display:flex;justify-content:space-between;margin-top:15px"><div><span>Unitario:</span><div class="precio-tag" id="precioUnitarioTienda">$0</div></div><div style="width:40%"><label>Cantidad</label><input type="number" id="vCantCliente" value="1" min="1" oninput="actualizarPrecioTienda()"></div></div><div style="text-align:right;margin-top:12px;font-size:20px;font-weight:bold;color:#1b7a3d">Total: <span id="precioTotalTienda">$0</span></div><div id="previewProducto" style="margin-top:15px;border:2px dashed #ccc;border-radius:10px;padding:12px;text-align:center;min-height:110px">Selecciona producto</div></div><div class="box"><h2>2. Datos Envío</h2><div style="margin-bottom:10px"><label>Nombre</label><input id="cliNombreCliente"></div><div style="margin-bottom:10px"><label>Teléfono</label><input id="cliTelCliente"></div><div style="margin-bottom:10px"><label>Dirección</label><input id="cliDirCliente"></div><button class="btn-compra" onclick="enviarPedidoCliente()">✅ Confirmar Pedido + WhatsApp</button></div></div></div>
+ <div id="vistaContacto" class="vista"><div class="box"><h2>CONTACTANOS / TRABAJA CON NOSOTROS</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:20px"><div><h3>VESTUARIO SURVIVOR</h3><p>📍 Santiago, Chile<br>📱 WhatsApp: +56 9 4891 8687<br>📧 contacto@vestuariosurvivor.cl<br>📸 @survivor.vestuario</p></div><div><h3>Trabaja con Nosotros</h3><div style="display:flex;flex-direction:column;gap:10px;margin-top:10px"><input id="trabNombre" placeholder="Tu nombre"><input id="trabContacto" placeholder="Correo / teléfono"><select id="trabCargo"><option>Vendedor</option><option>Confección</option><option>Reparto</option><option>Distribuidor</option></select><textarea id="trabMsg" rows="4" placeholder="Cuéntanos sobre ti"></textarea><button class="btn-verde" onclick="enviarTrabajaWA()">📲 Enviar por WhatsApp</button></div></div></div>
+ <div id="vistaDashboard" class="vista"><div class="box" style="background:#0a1f13;color:white;border-color:#2ecc71"><h2 style="color:white;border-color:#2ecc71">📊 ESTADISTICAS</h2><div class="stats-grid"><div class="stat-card green"><h4>TOTAL INVERTIDO</h4><div class="val" id="statInversion">$0</div></div><div class="stat-card"><h4>CAPITAL RECUPERADO</h4><div class="val" id="statCap">$0</div></div><div class="stat-card"><h4>GANANCIA REAL</h4><div class="val" id="statGan">$0</div></div><div class="stat-card"><h4>POR COBRAR</h4><div class="val" id="statPend">$0</div></div><div class="stat-card"><h4>STOCK COSTO</h4><div class="val" id="statStockCosto">$0</div></div><div class="stat-card"><h4>STOCK VENTA</h4><div class="val" id="statStockVenta">$0</div></div></div><div style="margin-top:20px;background:white;color:black;border-radius:10px;padding:15px"><h4>Resumen por Lote</h4><table id="tablaDashboardLotes"></table></div><div style="margin-top:15px;background:white;color:black;border-radius:10px;padding:15px"><h4>Stock Bajo</h4><div id="listaStockBajo"></div></div></div></div>
+ <div id="vistaLotes" class="vista"><div class="box"><h2>LOTES E INVERSION</h2><div class="grid"><input id="iNombreLote" placeholder="Nombre Lote"><input type="number" id="iTela" placeholder="Tela $"><input type="number" id="iConf" placeholder="Conf. $"><input type="number" id="iCant" placeholder="Cantidad"></div><button onclick="registrarLote()" class="btn-verde" style="margin-top:10px">Registrar Lote</button><table><thead><tr><th>Lote</th><th>Tela</th><th>Conf.</th><th>Suma</th><th>Cant.</th><th>Costo U.</th><th>X</th></tr></thead><tbody id="bodyLotes"></tbody></table></div></div>
+ <div id="vistaCatalogoAdmin" class="vista"><div class="box"><h2>CATALOGO ADMIN</h2><div class="grid"><input id="prodNombre" value="Polera Survivor"><select id="prodLoteSelect"></select><select id="prodGenero"><option>Hombre</option><option>Mujer</option></select><select id="prodTalla"><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option></select><select id="prodCuello" onchange="ajustarPrecioAutomatico()"><option>Cuello Polo</option><option>Cuello Medio</option><option>Cuello Piqué</option><option>Cuello Beatle</option></select><select id="prodManga"><option>Manga Corta</option><option>Manga Larga</option></select><input type="number" id="prodPrecio" placeholder="Precio"><input type="number" id="prodStock" placeholder="Stock"></div><div style="margin-top:12px"><label>Foto:</label><input type="file" id="prodImagen" accept="image/*"></div><button onclick="agregarPrenda()" style="margin-top:10px;background:#1b7a3d">Agregar</button><table id="tablaCatalogo"></table></div></div>
+ <div id="vistaVentas" class="vista"><div class="box"><h2>VENTAS MANUALES</h2><div class="grid"><input id="cliNombre" placeholder="Cliente"><input id="cliTel" placeholder="Tel"><input id="cliDir" placeholder="Dir"><select id="vSelectPrenda"></select><input type="number" id="vCant" placeholder="Cant"><select id="vEstadoPago"><option value="Pagado">Pagado</option><option value="Pendiente">Pendiente</option></select></div><button onclick="registrarVenta()" style="margin-top:10px;background:#1b7a3d">Registrar Venta</button></div><div class="box"><h2>HISTORIAL</h2><p><b>Capital:</b> <span id="resCap">$0</span> | <b>Ganancia:</b> <span id="resGan">$0</span></p><table id="tablaVentas"></table></div></div>
+</div>
 
-    <div class="container">
+<a href="https://wa.me/56948918687?text=Hola%20VESTUARIO%20SURVIVOR%20quiero%20info" target="_blank" class="wa-float">💬</a>
 
-        <!-- VISTA DE CLIENTES -->
-        <div id="vistaClientes" class="vista activa">
-            <div class="navbar">
-                <h1>Catálogo de Pedidos SURVIVOR</h1>
-                <button onclick="conmutarVista('admin')" style="background: #e67e22; border-radius: 6px; padding: 8px 15px;">🔐 Modo Admin</button>
-            </div>
+<script>
+const dbURL="https://tienda-survivor-default-rtdb.firebaseio.com/";
+let lotes=[],cat=[],hist=[];
+const CLAVE_ADMIN="negro1687";
+let productoSeleccionadoIndex="";
+let adminDesbloqueado=false;
 
-            <div class="grid-tienda">
-                <div class="box">
-                    <h2>1. Selecciona tu Prenda</h2>
-                    <div class="form-group">
-                        <label for="filtroGenero">Filtrar por Género</label>
-                        <select id="filtroGenero" onchange="renderizarTienda(true)">
-                            <option value="Todos">Todos</option>
-                            <option value="Hombre">Hombre</option>
-                            <option value="Mujer">Mujer</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="vSelectPrendaCliente">Prendas Disponibles</label>
-                        <select id="vSelectPrendaCliente" onchange="actualizarPrecioTienda()"></select>
-                    </div>
-                    <div class="form-group">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
-                            <div>
-                                <span style="color: #7f8c8d;">Precio Unitario:</span>
-                                <div class="precio-tag" id="precioUnitarioTienda">$0</div>
-                            </div>
-                            <div style="width: 40%;">
-                                <label for="vCantCliente">Cantidad</label>
-                                <input type="number" id="vCantCliente" value="1" min="1" oninput="actualizarPrecioTienda()">
-                            </div>
-                        </div>
-                    </div>
-                    <div style="text-align: right; margin-top: 15px; font-size: 18px; font-weight: bold; color: #27ae60;">
-                        Total Pedido: <span id="precioTotalTienda">$0</span>
-                    </div>
-                </div>
+function cargarLogo(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{localStorage.setItem('logoSurvivor',ev.target.result);document.getElementById('logoImg').src=ev.target.result;document.getElementById('logoImg').style.display='block';};r.readAsDataURL(f);}
+(function(){const s=localStorage.getItem('logoSurvivor');if(s){const img=document.getElementById('logoImg');if(img){img.src=s;img.style.display='block';}}})();
 
-                <div class="box">
-                    <h2>2. Datos de Envío y Contacto</h2>
-                    <div class="form-group">
-                        <label for="cliNombreCliente">Nombre Completo</label>
-                        <input type="text" id="cliNombreCliente" placeholder="Ej. Juan Pérez">
-                    </div>
-                    <div class="form-group">
-                        <label for="cliTelCliente">Teléfono de Contacto</label>
-                        <input type="text" id="cliTelCliente" placeholder="Ej. +56912345678">
-                    </div>
-                    <div class="form-group">
-                        <label for="cliDirCliente">Dirección de Despacho</label>
-                        <input type="text" id="cliDirCliente" placeholder="Calle, Número, Ciudad">
-                    </div>
-                    <button class="btn-compra" onclick="enviarPedidoCliente()">Confirmar y Solicitar Pedido</button>
-                </div>
-            </div>
+function mostrarVista(nombre){
+ document.querySelectorAll('.vista').forEach(v=>v.classList.remove('activa'));
+ document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+ const mapa={quienes:'vistaQuienes',materia:'vistaMateria',productos:'vistaProductos',compras:'vistaCompras',contacto:'vistaContacto',dashboard:'vistaDashboard',lotes:'vistaLotes',catalogoAdmin:'vistaCatalogoAdmin',ventas:'vistaVentas'};
+ if(mapa[nombre]) document.getElementById(mapa[nombre]).classList.add('activa');
+}
+function toggleAdmin(){
+ if(adminDesbloqueado){adminDesbloqueado=false;document.getElementById('bodyRoot').classList.remove('admin-mode');document.getElementById('adminMenu').classList.remove('visible');document.getElementById('btnAdminToggle').innerText='🔐 MODO ADMIN';mostrarVista('quienes');return;}
+ let p=prompt('Contraseña admin:'); if(p===CLAVE_ADMIN){adminDesbloqueado=true;document.getElementById('bodyRoot').classList.add('admin-mode');document.getElementById('adminMenu').classList.add('visible');document.getElementById('btnAdminToggle').innerText='🚪 SALIR ADMIN';mostrarVista('dashboard');} else if(p!==null) alert('Incorrecta');
+}
+function irACompras(){if(productoSeleccionadoIndex===""){alert("Selecciona prenda");return;} mostrarVista('compras');}
+function descargarDatosNube(){fetch(dbURL+'datos.json').then(r=>r.json()).then(data=>{if(data){lotes=data.lotes||[];cat=data.cat||[];hist=data.hist||[];}else{lotes=[];cat=[];hist=[];} actualizarVisuales();}).catch(e=>console.error(e));}
+function subirDatosNube(){fetch(dbURL+'datos.json',{method:"PUT",headers:{'Content-Type':'application/json'},body:JSON.stringify({lotes,cat,hist})}).then(()=>actualizarVisuales()).catch(e=>console.error(e));}
+setInterval(descargarDatosNube,30000);descargarDatosNube();
+function ajustarPrecioAutomatico(){let c=document.getElementById('prodCuello').value;let pi=document.getElementById('prodPrecio');if(c==="Cuello Polo") pi.value=13000; else if(c==="Cuello Medio") pi.value=14000;}
+function registrarLote(){let nombre=document.getElementById('iNombreLote').value.trim();let tela=parseFloat(document.getElementById('iTela').value)||0;let conf=parseFloat(document.getElementById('iConf').value)||0;let cant=parseInt(document.getElementById('iCant').value)||0;if(!nombre) return alert("Nombre lote");let suma=tela+conf;let costo=cant>0?suma/cant:0;lotes.push({nombre,tela,conf,sumaInversion:suma,cant,costoUnit:costo});subirDatosNube();}
+function agregarPrenda(){let loteSel=document.getElementById('prodLoteSelect').value;if(!loteSel) return alert("Crea lote");let fi=document.getElementById('prodImagen');let file=fi.files[0];let nueva={nombre:document.getElementById('prodNombre').value,lote:loteSel,genero:document.getElementById('prodGenero').value,talla:document.getElementById('prodTalla').value,cuello:document.getElementById('prodCuello').value,manga:document.getElementById('prodManga').value,precio:parseFloat(document.getElementById('prodPrecio').value)||0,stock:parseInt(document.getElementById('prodStock').value)||0,imagen:""};if(file){let r=new FileReader();r.onload=ev=>{nueva.imagen=ev.target.result;cat.push(nueva);subirDatosNube();fi.value="";};r.readAsDataURL(file);}else{cat.push(nueva);subirDatosNube();}}
+function eliminarLote(i){if(confirm("Eliminar lote?")){lotes.splice(i,1);subirDatosNube();}}
+function ajustarStock(i,d){cat[i].stock+=d;if(cat[i].stock<0) cat[i].stock=0;subirDatosNube();}
+function cambiarEstadoPago(i){hist[i].estado=hist[i].estado==='Pagado'?'Pendiente':'Pagado';subirDatosNube();}
+function eliminarVenta(i){if(!confirm("Eliminar venta?")) return; hist.splice(i,1); subirDatosNube();}
+function registrarVenta(){let idx=document.getElementById('vSelectPrenda').value;let cant=parseInt(document.getElementById('vCant').value);if(idx===""||isNaN(cant)) return alert("Selecciona prenda y cantidad");let p=cat[idx];if(p.stock<cant) return alert("Stock insuficiente");p.stock-=cant;hist.push({cliente:document.getElementById('cliNombre').value||'Venta Manual',tel:document.getElementById('cliTel').value,dir:document.getElementById('cliDir').value,prodNombre:p.nombre,lote:p.lote,genero:p.genero,talla:p.talla,cuello:p.cuello,manga:p.manga,detalle:'Lote:'+p.lote+'|'+p.genero+'|'+p.talla+'|'+p.cuello+'|'+p.manga,cant,total:cant*p.precio,estado:document.getElementById('vEstadoPago').value});subirDatosNube();}
 
-            <div class="box" style="margin-top: 20px;">
-                <h2>Prendas Disponibles en Stock</h2>
-                <div class="lista-productos" id="listaVisualProductos"></div>
-            </div>
+function seleccionarProducto(i){productoSeleccionadoIndex=i;document.getElementById('vSelectPrendaCliente').value=i;document.getElementById('infoSeleccion').innerText='Seleccionado: '+cat[i].nombre+' - '+cat[i].genero+' '+cat[i].talla+' | Stock:'+cat[i].stock;document.querySelectorAll('.item-producto').forEach((el,idx)=>el.classList.toggle('seleccionado',idx==i));actualizarPrecioTienda();}
+function renderizarTienda(forzar){let lista=document.getElementById('listaVisualProductos');let select=document.getElementById('vSelectPrendaCliente');if(!lista||!select) return;let filtro=document.getElementById('filtroGenero').value;let prev=select.value;let htmlV="";let htmlS='<option value="">Seleccione prenda...</option>';cat.forEach((p,i)=>{if(filtro!=="Todos"&&p.genero!==filtro) return;let img=p.imagen?'<img src="'+p.imagen+'" class="img-producto">':'<div style="color:#888">Sin foto</div>';htmlV+='<div class="item-producto '+p.genero+' '+(productoSeleccionadoIndex==i?'seleccionado':'')+'" onclick="seleccionarProducto('+i+')"><div class="img-producto-container">'+img+'</div><div class="cuerpo-prod"><div><strong>'+p.nombre+'</strong><br><small>Lote:'+p.lote+' | '+p.genero+' | '+p.talla+'</small><br><span class="badge-stock '+(p.stock<=0?'agotado':'')+'">'+(p.stock>0?'Stock:'+p.stock:'AGOTADO')+'</span></div><div class="precio-tag">$'+p.precio+'</div></div></div>';htmlS+='<option value="'+i+'">'+p.nombre+' - '+p.lote+' | '+p.genero+' | '+p.talla+'</option>';});if(forzar||prev===""||select.options.length<=1){select.innerHTML=htmlS;select.value=prev;}lista.innerHTML=htmlV||"<p style='color:white'>No hay productos</p>";actualizarPrecioTienda();}
+function actualizarPrecioTienda(){let idx=document.getElementById('vSelectPrendaCliente').value;let cant=parseInt(document.getElementById('vCantCliente').value)||1;let unit=document.getElementById('precioUnitarioTienda');let total=document.getElementById('precioTotalTienda');let prev=document.getElementById('previewProducto');if(idx===""||!cat[idx]){unit.innerText="$0";total.innerText="$0";if(prev) prev.innerHTML="Selecciona producto";return;}let p=cat[idx];unit.innerText='$'+p.precio;total.innerText='$'+(cant*p.precio);if(prev){let img=p.imagen?'<img src="'+p.imagen+'" style="max-width:100%;max-height:180px;border-radius:8px">':'Sin foto';prev.innerHTML=img+'<br><b>'+p.nombre+'</b><br>Stock:'+p.stock;}}
 
-            <footer>
-                <p>© Sistema SURVIVOR. Todos los derechos reservados.</p>
-                <button class="btn-admin-acceso" onclick="conmutarVista('admin')">Acceso Privado Administrador</button>
-            </footer>
-        </div>
+function enviarPedidoCliente(){
+ let idx=document.getElementById('vSelectPrendaCliente').value;
+ let cant=parseInt(document.getElementById('vCantCliente').value);
+ let nombre=document.getElementById('cliNombreCliente').value.trim();
+ let tel=document.getElementById('cliTelCliente').value.trim();
+ let dir=document.getElementById('cliDirCliente').value.trim();
+ if(idx===""||isNaN(cant)||cant<=0) return alert("Selecciona prenda");
+ if(!nombre||!tel||!dir) return alert("Rellena datos");
+ let p=cat[idx];
+ if(p.stock>=cant){
+  p.stock-=cant;
+  let total=cant*p.precio;
+  hist.push({cliente:nombre,tel,dir,prodNombre:p.nombre,lote:p.lote,genero:p.genero,talla:p.talla,cuello:p.cuello,manga:p.manga,detalle:'Lote:'+p.lote+'|'+p.genero+'|'+p.talla+'|'+p.cuello+'|'+p.manga,cant,total,estado:"Pendiente"});
+  fetch(dbURL+'datos.json',{method:"PUT",headers:{'Content-Type':'application/json'},body:JSON.stringify({lotes,cat,hist})}).then(()=>{
+   let mensaje=`*NUEVO PEDIDO - VESTUARIO SURVIVOR*%0A%0A👤 Cliente: ${encodeURIComponent(nombre)}%0A📱 Tel: ${encodeURIComponent(tel)}%0A📍 Dir: ${encodeURIComponent(dir)}%0A%0A👕 Producto: ${encodeURIComponent(p.nombre)}%0A🏷️ Detalle: Lote ${encodeURIComponent(p.lote)} | ${encodeURIComponent(p.genero)} | ${encodeURIComponent(p.talla)}%0A🔢 Cant: ${cant}%0A💰 Total: $${total}`;
+   window.open(`https://wa.me/56948918687?text=${mensaje}`,'_blank');
+   alert("¡Pedido enviado! WhatsApp abierto a +56948918687");
+   descargarDatosNube();mostrarVista('productos');
+  });
+ } else alert("Stock insuficiente");
+}
 
-        <!-- VISTA ADMINISTRADOR -->
-        <div id="vistaAdmin" class="vista">
-            <div class="navbar" style="background: #34495e;">
-                <h1>Panel de Gestión SURVIVOR</h1>
-                <button onclick="conmutarVista('clientes')" style="background: #27ae60; border-radius: 6px; padding: 8px 15px;">🛒 Volver a la Tienda</button>
-            </div>
+function enviarTrabajaWA(){
+ let n=document.getElementById('trabNombre').value.trim();
+ let c=document.getElementById('trabContacto').value.trim();
+ let cargo=document.getElementById('trabCargo').value;
+ let m=document.getElementById('trabMsg').value.trim();
+ if(!n||!c) return alert("Completa nombre y contacto");
+ let texto=`*POSTULACION - SURVIVOR*%0A%0A👤 ${encodeURIComponent(n)}%0A📱 ${encodeURIComponent(c)}%0A💼 ${encodeURIComponent(cargo)}%0A📝 ${encodeURIComponent(m)}`;
+ window.open(`https://wa.me/56948918687?text=${texto}`,'_blank');
+}
 
-            <div class="box">
-                <h2>1. Gestión de Inversión por Lote</h2>
-                <div class="grid">
-                    <input type="text" id="iNombreLote" placeholder="Nombre del Lote">
-                    <input type="number" id="iTela" placeholder="Inversión Tela $">
-                    <input type="number" id="iConf" placeholder="Inversión Conf. $">
-                    <input type="number" id="iCant" placeholder="Cantidad Prendas">
-                </div>
-                <button onclick="registrarLote()" style="background: #2980b9; margin-top: 10px;">Registrar Lote</button>
-                <table>
-                    <thead>
-                        <tr><th>Lote</th><th>Tela</th><th>Conf.</th><th>Suma</th><th>Cant.</th><th>Costo Unit.</th><th>Acción</th></tr>
-                    </thead>
-                    <tbody id="bodyLotes"></tbody>
-                </table>
-            </div>
-
-            <div class="box">
-                <h2>2. Catálogo (Productos)</h2>
-                <div class="grid">
-                    <input type="text" id="prodNombre" placeholder="Nombre" value="Polera">
-                    <select id="prodLoteSelect"></select>
-                    <select id="prodGenero"><option>Hombre</option><option>Mujer</option></select>
-                    <select id="prodTalla"><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option></select>
-                    <select id="prodCuello" onchange="ajustarPrecioAutomatico()">
-                        <option value="Cuello Polo">Cuello Polo</option>
-                        <option value="Cuello Medio">Cuello Medio</option>
-                        <option value="Cuello Piqué">Cuello Piqué</option>
-                        <option value="Cuello Beatle">Cuello Beatle</option>
-                    </select>
-                    <select id="prodManga"><option>Manga Corta</option><option>Manga Larga</option></select>
-                    <input type="number" id="prodPrecio" placeholder="Precio Venta $">
-                    <input type="number" id="prodStock" placeholder="Stock Inicial">
-                </div>
-                <div style="margin-top: 15px; max-width: 300px;">
-                    <label style="font-size:13px;" for="prodImagen">📸 Foto del Producto (Opcional):</label>
-                    <input type="file" id="prodImagen" accept="image/*">
-                </div>
-                <button onclick="agregarPrenda()" style="margin-top: 15px;">Agregar al Catálogo</button>
-                <table id="tablaCatalogo"></table>
-            </div>
-
-            <div class="box">
-                <h2>3. Registro de Ventas Manuales</h2>
-                <div class="grid">
-                    <input type="text" id="cliNombre" placeholder="Nombre Cliente">
-                    <input type="text" id="cliTel" placeholder="Teléfono">
-                    <input type="text" id="cliDir" placeholder="Dirección">
-                    <select id="vSelectPrenda"></select>
-                    <input type="number" id="vCant" placeholder="Cantidad (Unidad)">
-                    <select id="vEstadoPago"><option value="Pagado">Pagado</option><option value="Pendiente">Pendiente</option></select>
-                </div>
-                <button onclick="registrarVenta()" style="background: #27ae60; margin-top: 10px;">Registrar Venta</button>
-            </div>
-
-            <div class="box">
-                <h2>4. Historial de Ventas y Pedidos de Clientes</h2>
-                <p><strong>Capital Recuperado:</strong> <span id="resCap">$0</span> | <strong>Ganancia Total:</strong> <span id="resGan">$0</span></p>
-                <table id="tablaVentas"></table>
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        const dbURL = "https://tienda-survivor-default-rtdb.firebaseio.com/";
-        
-        let lotes = [];
-        let cat = [];
-        let hist = [];
-        const CLAVE_ADMIN = "negro1687";
-
-        function descargarDatosNube() {
-            fetch(`${dbURL}datos.json`)
-            .then(res => res.json())
-            .then(data => {
-                if(data) {
-                    lotes = data.lotes || [];
-                    cat = data.cat || [];
-                    hist = data.hist || [];
-                } else {
-                    lotes = []; cat = []; hist = [];
-                }
-                actualizarVisuales();
-            })
-            .catch(err => console.error("Error sincronizando:", err));
-        }
-
-        function subirDatosNube() {
-            fetch(`${dbURL}datos.json`, {
-                method: "PUT",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ lotes, cat, hist })
-            })
-            .then(() => {
-                actualizarVisuales();
-            })
-            .catch(err => console.error("Error subiendo datos:", err));
-        }
-
-        setInterval(descargarDatosNube, 30000);
-        descargarDatosNube();
-
-        function conmutarVista(destino) {
-            if (destino === 'admin') {
-                let intento = prompt("Ingrese la contraseña de administrador:");
-                if (intento === CLAVE_ADMIN) {
-                    document.getElementById('vistaClientes').classList.remove('activa');
-                    document.getElementById('vistaAdmin').classList.add('activa');
-                    descargarDatosNube();
-                } else if (intento !== null) {
-                    alert("Contraseña incorrecta.");
-                }
-            } else {
-                document.getElementById('vistaAdmin').classList.remove('activa');
-                document.getElementById('vistaClientes').classList.add('activa');
-                renderizarTienda(true);
-            }
-        }
-
-        function ajustarPrecioAutomatico() {
-            let cuello = document.getElementById('prodCuello').value;
-            let precioInput = document.getElementById('prodPrecio');
-            if (cuello === "Cuello Polo") precioInput.value = 13000;
-            else if (cuello === "Cuello Medio") precioInput.value = 14000;
-        }
-        ajustarPrecioAutomatico();
-
-        function registrarLote() {
-            let nombre = document.getElementById('iNombreLote').value.trim();
-            let tela = parseFloat(document.getElementById('iTela').value) || 0;
-            let conf = parseFloat(document.getElementById('iConf').value) || 0;
-            let cant = parseInt(document.getElementById('iCant').value) || 0;
-            if(!nombre) return alert("Asigna un nombre al lote");
-
-            let sumaInversion = tela + conf;
-            let costoUnit = cant > 0 ? (sumaInversion) / cant : 0;
-            lotes.push({ nombre, tela, conf, sumaInversion, cant, costoUnit });
-            subirDatosNube();
-            
-            document.getElementById('iNombreLote').value = "";
-            document.getElementById('iTela').value = "";
-            document.getElementById('iConf').value = "";
-            document.getElementById('iCant').value = "";
-        }
-
-        function agregarPrenda() {
-            let loteSel = document.getElementById('prodLoteSelect').value;
-            if(!loteSel) return alert("Crea y selecciona un lote primero");
-
-            let fileInput = document.getElementById('prodImagen');
-            let file = fileInput.files[0];
-
-            let nuevaPrenda = {
-                nombre: document.getElementById('prodNombre').value,
-                lote: loteSel,
-                genero: document.getElementById('prodGenero').value,
-                talla: document.getElementById('prodTalla').value,
-                cuello: document.getElementById('prodCuello').value,
-                manga: document.getElementById('prodManga').value,
-                precio: parseFloat(document.getElementById('prodPrecio').value) || 0,
-                stock: parseInt(document.getElementById('prodStock').value) || 0,
-                imagen: ""
-            };
-
-            if (file) {
-                let reader = new FileReader();
-                reader.onloadend = function() {
-                    nuevaPrenda.imagen = reader.result;
-                    cat.push(nuevaPrenda);
-                    fileInput.value = "";
-                    subirDatosNube();
-                }
-                reader.readAsDataURL(file);
-            } else {
-                cat.push(nuevaPrenda);
-                subirDatosNube();
-            }
-        }
-
-        function ajustarStock(i, c) { 
-            cat[i].stock += c; 
-            if(cat[i].stock < 0) cat[i].stock = 0;
-            subirDatosNube(); 
-        }
-        
-        function eliminarLote(i) { lotes.splice(i, 1); subirDatosNube(); }
-
-        function cambiarEstadoPago(i) {
-            hist[i].estado = hist[i].estado === 'Pagado' ? 'Pendiente' : 'Pagado';
-            subirDatosNube();
-        }
-
-        function eliminarVenta(i) {
-            let venta = hist[i];
-            let prodIndex = cat.findIndex(p => p.nombre === venta.prodNombre && p.lote === venta.lote && p.genero === venta.genero && p.talla === venta.talla && p.cuello === venta.cuello && p.manga === venta.manga);
-            if(prodIndex !== -1) cat[prodIndex].stock += venta.cant;
-            hist.splice(i, 1);
-            subirDatosNube();
-        }
-
-        function registrarVenta() {
-            let idx = document.getElementById('vSelectPrenda').value;
-            let cant = parseInt(document.getElementById('vCant').value);
-            if (idx === "" || isNaN(cant) || cant <= 0) return alert("Datos inválidos");
-            
-            let p = cat[idx];
-            if(p.stock >= cant) {
-                p.stock -= cant;
-                hist.push({ 
-                    cliente: document.getElementById('cliNombre').value, 
-                    tel: document.getElementById('cliTel').value, 
-                    dir: document.getElementById('cliDir').value,
-                    prodNombre: p.nombre, lote: p.lote, genero: p.genero, talla: p.talla, cuello: p.cuello, manga: p.manga,
-                    detalle: `Lote: ${p.lote} | ${p.genero} | ${p.talla} | ${p.cuello} | ${p.manga}`, 
-                    cant, total: cant * p.precio, estado: document.getElementById('vEstadoPago').value 
-                });
-                subirDatosNube();
-                
-                document.getElementById('cliNombre').value = "";
-                document.getElementById('cliTel').value = "";
-                document.getElementById('cliDir').value = "";
-                document.getElementById('vCant').value = "";
-            } else alert("Stock insuficiente");
-        }
-
-        function renderizarTienda(forzarMenu = false) {
-            let filtroG = document.getElementById('filtroGenero').value;
-            let select = document.getElementById('vSelectPrendaCliente');
-            let listaVisual = document.getElementById('listaVisualProductos');
-            
-            let seleccionPrevia = select.value;
-            
-            let htmlSelect = `<option value="">Selecciona tu prenda...</option>`;
-            let htmlVisual = "";
-
-            cat.forEach((p, i) => {
-                if (filtroG !== "Todos" && p.genero !== filtroG) return;
-
-                // DETALLE COMPLETO INCLUYENDO MANGA CORTA / LARGA EN EL MENÚ DESPLEGABLE
-                let desc = `${p.nombre} - ${p.genero} (${p.talla}) | ${p.cuello} | ${p.manga}`;
-                let badge = p.stock > 0 ? `<span class="badge-stock">Disponibles: ${p.stock}</span>` : `<span class="badge-stock agotado">Agotado</span>`;
-
-                if (p.stock > 0) {
-                    htmlSelect += `<option value="${i}">${desc}</option>`;
-                }
-
-                let areaImagen = p.imagen 
-                    ? `<img class="img-producto" src="${p.imagen}" alt="Foto">` 
-                    : `<span class="img-placeholder">Sin foto disponible</span>`;
-
-                htmlVisual += `
-                    <div class="item-producto ${p.genero}">
-                        <div class="img-producto-container">
-                            ${areaImagen}
-                        </div>
-                        <div class="cuerpo-prod">
-                            <div class="info-prod">
-                                <p><strong>${p.nombre} (${p.genero})</strong></p>
-                                <p style="font-size:12px; color:#555;">Talla: ${p.talla} | Cuello: ${p.cuello}<br>Manga: ${p.manga}</p>
-                                ${badge}
-                            </div>
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
-                                <div class="precio-tag">$${p.precio}</div>
-                            </div>
-                        </div>
-                    </div>`;
-            });
-
-            if (forzarMenu || seleccionPrevia === "" || select.options.length <= 1) {
-                select.innerHTML = htmlSelect;
-                select.value = seleccionPrevia;
-            }
-            
-            listaVisual.innerHTML = htmlVisual || "<p style='text-align:center; color:#7f8c8d; grid-column: 1/-1;'>No hay productos disponibles por ahora.</p>";
-            actualizarPrecioTienda();
-        }
-
-        function actualizarPrecioTienda() {
-            let idx = document.getElementById('vSelectPrendaCliente').value;
-            let cant = parseInt(document.getElementById('vCantCliente').value) || 1;
-            
-            if (idx === "" || !cat[idx]) {
-                document.getElementById('precioUnitarioTienda').innerText = "$0";
-                document.getElementById('precioTotalTienda').innerText = "$0";
-                return;
-            }
-
-            let p = cat[idx];
-            document.getElementById('precioUnitarioTienda').innerText = `$${p.precio}`;
-            document.getElementById('precioTotalTienda').innerText = `$${cant * p.precio}`;
-        }
-
-        function enviarPedidoCliente() {
-            let idx = document.getElementById('vSelectPrendaCliente').value;
-            let cant = parseInt(document.getElementById('vCantCliente').value);
-            let nombre = document.getElementById('cliNombreCliente').value.trim();
-            let tel = document.getElementById('cliTelCliente').value.trim();
-            let dir = document.getElementById('cliDirCliente').value.trim();
-
-            if (idx === "" || isNaN(cant) || cant <= 0) return alert("Selecciona una prenda y cantidad válida.");
-            if (!nombre || !tel || !dir) return alert("Por favor rellena tus datos para el envío.");
-
-            let p = cat[idx];
-
-            if (p.stock >= cant) {
-                p.stock -= cant;
-                
-                hist.push({ 
-                    cliente: nombre, tel: tel, dir: dir,
-                    prodNombre: p.nombre, lote: p.lote, genero: p.genero, talla: p.talla, cuello: p.cuello, manga: p.manga,
-                    detalle: `Lote: ${p.lote} | ${p.genero} | ${p.talla} | ${p.cuello} | ${p.manga}`, 
-                    cant, total: cant * p.precio, estado: "Pendiente" 
-                });
-
-                fetch(`${dbURL}datos.json`, {
-                    method: "PUT",
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ lotes, cat, hist })
-                })
-                .then(() => {
-                    alert("¡Tu pedido ha sido recibido con éxito!");
-                    document.getElementById('cliNombreCliente').value = "";
-                    document.getElementById('cliTelCliente').value = "";
-                    document.getElementById('cliDirCliente').value = "";
-                    document.getElementById('vCantCliente').value = 1;
-                    descargarDatosNube();
-                });
-            } else {
-                alert("Stock insuficiente para cumplir tu solicitud.");
-            }
-        }
-
-        function actualizarVisuales() {
-            let htmlL = "";
-            let selL = `<option value="">Seleccione Lote...</option>`;
-            lotes.forEach((l, i) => {
-                htmlL += `<tr><td>${l.nombre}</td><td>$${l.tela}</td><td>$${l.conf}</td><td>$${l.sumaInversion}</td><td>${l.cant}</td><td>$${Math.round(l.costoUnit)}</td>
-                <td><button onclick="eliminarLote(${i})" style="background:#c0392b">Eliminar</button></td></tr>`;
-                selL += `<option value="${l.nombre}">${l.nombre}</option>`;
-            });
-            let bLotes = document.getElementById('bodyLotes');
-            if(bLotes) bLotes.innerHTML = htmlL;
-            let pLoteSel = document.getElementById('prodLoteSelect');
-            if(pLoteSel) pLoteSel.innerHTML = selL;
-
-            let htmlCat = `<tr><th>Producto</th><th>Stock</th><th>Acción</th></tr>`;
-            let selV = `<option value="">Seleccione...</option>`;
-            cat.forEach((p, i) => {
-                htmlCat += `<tr class="${p.genero === 'Hombre' ? 'fila-hombre' : 'fila-mujer'}">
-                <td>Lote: ${p.lote} | ${p.genero} | ${p.talla} | ${p.cuello} | ${p.manga}</td><td>${p.stock}</td>
-                <td><button onclick="ajustarStock(${i}, 1)">+</button><button onclick="ajustarStock(${i}, -1)">-</button>
-                <button onclick="cat.splice(${i},1);subirDatosNube()" style="background:#c0392b">X</button></td></tr>`;
-                selV += `<option value="${i}">Lote: ${p.lote} | ${p.genero} | ${p.talla} | ${p.cuello} | ${p.manga}</option>`;
-            });
-            let tCat = document.getElementById('tablaCatalogo');
-            if(tCat) tCat.innerHTML = htmlCat;
-            let vSelP = document.getElementById('vSelectPrenda');
-            if(vSelP) vSelP.innerHTML = selV;
-
-            let htmlV = `<tr><th>Cliente / Origen</th><th>Teléfono</th><th>Dirección</th><th>Detalle</th><th>Cant.</th><th>Total</th><th>Estado</th><th>Acción</th></tr>`;
-            let cap = 0, gan = 0;
-            hist.forEach((v, i) => {
-                let loteRef = lotes.find(l => l.nombre === v.lote);
-                let costoU = loteRef ? loteRef.costoUnit : 0;
-                if(v.estado === 'Pagado') { 
-                    cap += (v.cant * costoU); 
-                    gan += (v.total - (v.cant * costoU)); 
-                }
-                htmlV += `<tr class="${v.estado === 'Pagado' ? 'pagado' : 'pendiente'}">
-                <td>${v.cliente || 'Pedido Web'}</td><td>${v.tel || '-'}</td><td>${v.dir || '-'}</td><td>${v.detalle}</td><td>${v.cant}</td><td>$${v.total}</td>
-                <td><button onclick="cambiarEstadoPago(${i})">${v.estado}</button></td>
-                <td><button onclick="eliminarVenta(${i})" style="background:#c0392b">Eliminar</button></td></tr>`;
-            });
-            let tVentas = document.getElementById('tablaVentas');
-            if(tVentas) tVentas.innerHTML = htmlV;
-            let rCap = document.getElementById('resCap');
-            if(rCap) rCap.innerText = "$" + Math.round(cap);
-            let rGan = document.getElementById('resGan');
-            if(rGan) rGan.innerText = "$" + Math.round(gan);
-
-            if(document.getElementById('vistaClientes').classList.contains('activa')) {
-                renderizarTienda(false);
-            }
-        }
-    </script>
+function calcularEstadisticas(){
+ let inv=0; lotes.forEach(l=>inv+=l.sumaInversion);
+ let cap=0,gan=0,pend=0;
+ hist.forEach(v=>{let lr=lotes.find(l=>l.nombre===v.lote);let cu=lr?lr.costoUnit:0;if(v.estado==='Pagado'){cap+=v.cant*cu;gan+=v.total-(v.cant*cu);} else pend+=v.total-(v.cant*cu);});
+ let stockCosto=0,stockVenta=0;
+ cat.forEach(p=>{let lr=lotes.find(l=>l.nombre===p.lote);let cu=lr?lr.costoUnit:0;stockCosto+=p.stock*cu;stockVenta+=p.stock*p.precio;});
+ document.getElementById('statInversion').innerText='$'+Math.round(inv).toLocaleString();
+ document.getElementById('statCap').innerText='$'+Math.round(cap).toLocaleString();
+ document.getElementById('statGan').innerText='$'+Math.round(gan).toLocaleString();
+ document.getElementById('statPend').innerText='$'+Math.round(pend).toLocaleString();
+ document.getElementById('statStockCosto').innerText='$'+Math.round(stockCosto).toLocaleString();
+ document.getElementById('statStockVenta').innerText='$'+Math.round(stockVenta).toLocaleString();
+ let htmlL='<tr><th>Lote</th><th>Invertido</th><th>Costo U.</th><th>Vendidas</th><th>Ingresos</th><th>Utilidad</th></tr>';
+ lotes.forEach(l=>{let vendidos=0,ingresos=0;hist.forEach(v=>{if(v.lote===l.nombre&&v.estado==='Pagado'){vendidos+=v.cant;ingresos+=v.total;}});let utilidad=ingresos-(vendidos*l.costoUnit);htmlL+='<tr><td>'+l.nombre+'</td><td>$'+l.sumaInversion+'</td><td>$'+Math.round(l.costoUnit)+'</td><td>'+vendidos+'</td><td>$'+ingresos+'</td><td style="color:'+(utilidad>=0?'green':'red')+'">$'+Math.round(utilidad)+'</td></tr>';});
+ document.getElementById('tablaDashboardLotes').innerHTML=htmlL;
+ let bajos=cat.filter(p=>p.stock<5);let htmlB=bajos.length?bajos.map(p=>'<span style="display:inline-block;background:#ffe0e0;border:1px solid #c0392b;padding:6px 10px;border-radius:8px;margin:4px;font-size:12px">'+p.nombre+' '+p.talla+' - Stock:'+p.stock+'</span>').join(''):'<span style="color:green">Sin stock crítico</span>';
+ document.getElementById('listaStockBajo').innerHTML=htmlB;
+}
+function actualizarVisuales(){
+ let htmlL="";let selL='<option value="">Seleccione Lote...</option>';lotes.forEach((l,i)=>{htmlL+='<tr><td>'+l.nombre+'</td><td>$'+l.tela+'</td><td>$'+l.conf+'</td><td>$'+l.sumaInversion+'</td><td>'+l.cant+'</td><td>$'+Math.round(l.costoUnit)+'</td><td><button onclick="eliminarLote('+i+')" style="background:#c0392b">X</button></td></tr>';selL+='<option value="'+l.nombre+'">'+l.nombre+'</option>';});
+ if(document.getElementById('bodyLotes')) document.getElementById('bodyLotes').innerHTML=htmlL;
+ if(document.getElementById('prodLoteSelect')) document.getElementById('prodLoteSelect').innerHTML=selL;
+ let htmlCat='<tr><th>Producto</th><th>Stock</th><th>Acción</th></tr>';let selV='<option value="">Seleccione...</option>';
+ cat.forEach((p,i)=>{htmlCat+='<tr><td>'+p.lote+'|'+p.genero+'|'+p.talla+'|'+p.cuello+'|'+p.manga+' $'+p.precio+'</td><td>'+p.stock+'</td><td><button onclick="ajustarStock('+i+',1)">+</button><button onclick="ajustarStock('+i+',-1)">-</button><button onclick="cat.splice('+i+',1);subirDatosNube()" style="background:#c0392b">X</button></td></tr>';selV+='<option value="'+i+'">'+p.lote+'|'+p.genero+'|'+p.talla+'</option>';});
+ if(document.getElementById('tablaCatalogo')) document.getElementById('tablaCatalogo').innerHTML=htmlCat;
+ if(document.getElementById('vSelectPrenda')) document.getElementById('vSelectPrenda').innerHTML=selV;
+ let htmlV='<tr><th>Cliente</th><th>Tel</th><th>Detalle</th><th>Cant</th><th>Total</th><th>Estado</th><th>X</th></tr>';let cap=0,gan=0;
+ hist.forEach((v,i)=>{let lr=lotes.find(l=>l.nombre===v.lote);let cu=lr?lr.costoUnit:0;if(v.estado==='Pagado'){cap+=v.cant*cu;gan+=v.total-(v.cant*cu);}htmlV+='<tr class="'+(v.estado==='Pagado'?'pagado':'pendiente')+'"><td>'+v.cliente+'</td><td>'+(v.tel||'-')+'</td><td>'+v.detalle+'</td><td>'+v.cant+'</td><td>$'+v.total+'</td><td><button onclick="cambiarEstadoPago('+i+')">'+v.estado+'</button></td><td><button onclick="eliminarVenta('+i+')" style="background:#c0392b">X</button></td></tr>';});
+ if(document.getElementById('tablaVentas')) document.getElementById('tablaVentas').innerHTML=htmlV;
+ if(document.getElementById('resCap')) document.getElementById('resCap').innerText="$"+Math.round(cap);
+ if(document.getElementById('resGan')) document.getElementById('resGan').innerText="$"+Math.round(gan);
+ renderizarTienda(false);calcularEstadisticas();
+}
+</script>
 </body>
 </html>
