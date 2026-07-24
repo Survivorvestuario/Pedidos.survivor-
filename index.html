@@ -6,613 +6,227 @@
 <title>SURVIVOR VESTUARIO</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
-  --green-dark:#0a1f14;
-  --green-deep:#102a1c;
-  --green-accent:#1a4730;
-  --black:#050805;
-  --white:#ffffff;
-  --gray:#cbd5d0;
-  --card-bg:#142b1e;
-  --border:#1e3a28;
-  --success:#22c55e;
-  --warn:#facc15;
-  --danger:#ef4444;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--green-dark);color:var(--white);overflow-x:hidden}
-button{cursor:pointer;font-family:inherit}
-a{color:inherit}
-
-/* LAYOUT */
-#app{display:flex;min-height:100vh}
-.sidebar{width:280px;background:var(--black);border-right:1px solid var(--border);position:fixed;height:100vh;left:0;top:0;z-index:100;display:flex;flex-direction:column;padding:20px 16px;transition:.3s;overflow-y:auto}
-.sidebar.hidden{transform:translateX(-100%)}
-.sidebar .logo-area{text-align:center;padding:10px 0 20px;border-bottom:1px solid #1a2e22;margin-bottom:16px}
-.sidebar .logo-area img{max-width:160px;max-height:90px;object-fit:contain;background:white;border-radius:8px;padding:6px;display:block;margin:0 auto 10px}
-.sidebar .logo-area h2{font-size:18px;letter-spacing:2px;font-weight:800}
-.menu{flex:1}
-.menu button{width:100%;text-align:left;padding:13px 14px;margin-bottom:8px;background:transparent;border:1px solid #1a2e22;border-radius:10px;color:var(--white);font-weight:600;font-size:13px;display:flex;gap:10px;align-items:center;transition:.2s}
-.menu button:hover,.menu button.active{background:var(--green-accent);border-color:var(--green-accent);color:white;transform:translateX(4px)}
-.menu .sep{margin:16px 0 8px;font-size:11px;color:#5a7a6a;letter-spacing:1px;font-weight:700}
-.main{margin-left:280px;flex:1;min-height:100vh;display:flex;flex-direction:column}
-.topbar{height:72px;background:var(--green-deep);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:50}
-.topbar .center-logo{position:absolute;left:50%;transform:translateX(-50%);text-align:center}
-.topbar .center-logo img{height:48px;max-width:200px;object-fit:contain;background:white;border-radius:8px;padding:4px}
-.hamburger{display:none;background:var(--black);border:1px solid var(--border);color:white;padding:8px 12px;border-radius:8px}
-.content{padding:24px;flex:1}
-@media(max-width:900px){
-  .sidebar{transform:translateX(-100%)} .sidebar.open{transform:translateX(0)}
-  .main{margin-left:0} .hamburger{display:block}
-  .topbar .center-logo{position:static;transform:none}
-}
-
-/* CARDS */
-.box{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px}
-.box h2{font-size:18px;margin-bottom:14px;display:flex;gap:8px;align-items:center}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-.grid-3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-input,select,textarea{background:var(--black);border:1px solid var(--border);color:white;padding:11px 12px;border-radius:10px;width:100%;font-size:14px}
-textarea{min-height:90px;resize:vertical}
-label{font-size:12px;color:var(--gray);margin-bottom:6px;display:block;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-.btn{background:var(--black);color:white;border:1px solid var(--border);padding:11px 16px;border-radius:10px;font-weight:700;font-size:13px;transition:.2s}
-.btn:hover{transform:translateY(-1px);filter:brightness(1.2)}
-.btn-primary{background:var(--white);color:var(--black);border-color:var(--white)}
-.btn-green{background:#16a34a;border-color:#16a34a;color:white}
-.btn-red{background:#dc2626;border-color:#dc2626;color:white}
-.btn-ghost{background:transparent}
-
-/* INICIO */
-.inicio{display:grid;grid-template-columns:1fr 1fr;gap:24px;min-height:60vh;align-items:center;max-width:900px;margin:40px auto}
-@media(max-width:700px){.inicio{grid-template-columns:1fr}}
-.card-inicio{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:36px 24px;text-align:center;transition:.3s}
-.card-inicio:hover{transform:translateY(-6px);border-color:var(--white);box-shadow:0 20px 40px rgba(0,0,0,.4)}
-.card-inicio .icon{font-size:48px;margin-bottom:16px}
-.card-inicio h3{font-size:22px;margin-bottom:8px}
-.card-inicio p{color:var(--gray);font-size:13px;margin-bottom:20px}
-
-/* CATALOGO */
-.catalogo{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
-.prod-card{background:var(--black);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-.prod-card .img{height:200px;background:#0e2217;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
-.prod-card .img img{width:100%;height:100%;object-fit:cover}
-.badge-stock{position:absolute;top:8px;left:8px;padding:4px 8px;border-radius:99px;font-size:11px;font-weight:800}
-.badge-ok{background:var(--success);color:black} .badge-low{background:var(--warn);color:black} .badge-out{background:var(--danger);color:white}
-.prod-info{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
-.prod-info h4{font-size:15px}
-.prod-info .meta{font-size:12px;color:var(--gray);line-height:1.4}
-.prod-info .price{font-size:18px;font-weight:800;margin-top:auto}
-.qty-row{display:flex;gap:8px;align-items:center;margin-top:8px}
-.qty-row input{width:70px;text-align:center}
-
-/* TABLAS */
-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
-th,td{border:1px solid var(--border);padding:8px;text-align:left}
-th{background:var(--black);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--gray)}
-.pagado{background:rgba(34,197,94,.12)!important} .pendiente{background:rgba(250,204,21,.12)!important}
-
-/* UTIL */
-.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px}
-.kpi div{background:var(--black);border:1px solid var(--border);border-radius:12px;padding:14px}
-.kpi strong{display:block;font-size:22px;margin-top:4px}
-.small{font-size:12px;color:#8aa898}
-.vista{display:none} .vista.activa{display:block}
-.tag{display:inline-block;padding:2px 8px;border-radius:99px;background:var(--black);border:1px solid var(--border);font-size:11px;margin-right:4px}
-.editable{border:1px dashed #2a4a36;padding:12px;border-radius:10px;position:relative}
-.edit-btn{position:absolute;top:8px;right:8px;background:var(--white);color:black;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:800}
+:root{--green-dark:#0a1f14;--green-deep:#102a1c;--green-accent:#1a4730;--black:#050805;--white:#fff;--gray:#cbd5d0;--card-bg:#142b1e;--border:#1e3a28;--success:#22c55e;--warn:#facc15;--danger:#ef4444}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Inter',sans-serif;background:var(--green-dark);color:var(--white);overflow-x:hidden}button{cursor:pointer;font-family:inherit}
+#app{display:flex;min-height:100vh}.sidebar{width:290px;background:var(--black);border-right:1px solid var(--border);position:fixed;height:100vh;left:0;top:0;z-index:100;display:flex;flex-direction:column;padding:20px 16px;overflow-y:auto}.sidebar .logo-area{text-align:center;padding:10px 0 20px;border-bottom:1px solid #1a2e22;margin-bottom:16px}.sidebar .logo-area img{max-width:180px;max-height:110px;object-fit:contain;background:transparent;border:none;padding:0;display:block;margin:0 auto 10px}.sidebar .logo-area h2{font-size:18px;letter-spacing:2px;font-weight:800}.menu{flex:1}.menu button{width:100%;text-align:left;padding:13px 14px;margin-bottom:8px;background:transparent;border:1px solid #1a2e22;border-radius:10px;color:var(--white);font-weight:600;font-size:13px;display:flex;gap:10px;align-items:center}.menu button.active{background:var(--green-accent);border-color:var(--green-accent)}.menu .sep{margin:16px 0 8px;font-size:11px;color:#5a7a6a;letter-spacing:1px;font-weight:700}.admin-bottom{margin-top:auto;padding-top:16px;border-top:1px solid #1a2e22}.admin-bottom button{width:100%;background:transparent;border:1px dashed #2a4a36;color:#5a7a6a;padding:10px;border-radius:10px;font-size:12px}.admin-bottom button:hover{color:white;border-color:white}
+.main{margin-left:290px;flex:1;min-height:100vh;display:flex;flex-direction:column}.topbar{height:72px;background:var(--green-deep);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:50}.topbar .center-logo{position:absolute;left:50%;transform:translateX(-50%);text-align:center}.topbar .center-logo img{height:52px;max-width:220px;object-fit:contain;background:transparent;border:none;padding:0;display:block}.hamburger{display:none;background:var(--black);border:1px solid var(--border);color:white;padding:8px 12px;border-radius:8px}.content{padding:24px;flex:1}@media(max-width:900px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.hamburger{display:block}.topbar .center-logo{position:static;transform:none}}
+.box{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px}.box h2{font-size:18px;margin-bottom:14px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}input,select,textarea{background:var(--black);border:1px solid var(--border);color:white;padding:11px 12px;border-radius:10px;width:100%;font-size:14px}textarea{min-height:80px}label{font-size:12px;color:var(--gray);margin-bottom:6px;display:block;font-weight:600;text-transform:uppercase;letter-spacing:.5px}.btn{background:var(--black);color:white;border:1px solid var(--border);padding:11px 16px;border-radius:10px;font-weight:700;font-size:13px}.btn-primary{background:var(--white);color:var(--black)}.btn-green{background:#16a34a;border-color:#16a34a;color:white}.btn-red{background:#dc2626;border-color:#dc2626;color:white}
+.catalogo{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}.prod-card{background:var(--black);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:.2s}.prod-card:hover{border-color:#2a5a3a}.prod-card .img{height:320px;background:#0e2217;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;cursor:pointer}.prod-card .img img{width:100%;height:100%;object-fit:cover}.badge-stock{position:absolute;top:8px;left:8px;padding:4px 8px;border-radius:99px;font-size:11px;font-weight:800}.badge-ok{background:var(--success);color:black}.badge-low{background:var(--warn);color:black}.badge-out{background:var(--danger);color:white}.prod-info{padding:14px;display:flex;flex-direction:column;gap:8px;flex:1}.prod-info h4{font-size:16px}.prod-info .meta{font-size:12px;color:var(--gray);line-height:1.4}.prod-info .price{font-size:20px;font-weight:800;margin-top:auto}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}th,td{border:1px solid var(--border);padding:8px;text-align:left}th{background:var(--black);font-size:11px;color:var(--gray)}.pagado{background:rgba(34,197,94,.12)!important}.pendiente{background:rgba(250,204,21,.12)!important}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}.kpi div{background:var(--black);border:1px solid var(--border);border-radius:12px;padding:14px}.kpi strong{display:block;font-size:22px;margin-top:4px}.small{font-size:12px;color:#8aa898}.vista{display:none}.vista.activa{display:block}.tag{display:inline-block;padding:2px 8px;border-radius:99px;background:var(--black);border:1px solid var(--border);font-size:11px;margin:4px}.editable{border:1px dashed #2a4a36;padding:12px;border-radius:10px;position:relative}.edit-btn{position:absolute;top:8px;right:8px;background:white;color:black;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:800}.nota{background:#1a2e22;border-left:4px solid var(--success);padding:10px 12px;border-radius:8px;margin-bottom:12px;font-size:12px;color:var(--gray)}
+.talla-selector{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.talla-btn{padding:8px 14px;border:1px solid var(--border);background:var(--black);color:white;border-radius:8px;font-size:12px;font-weight:700}.talla-btn.active{background:white;color:black;border-color:white}.talla-btn.disabled{opacity:.3;pointer-events:none}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:200;padding:20px}.modal.open{display:flex}.modal-card{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;max-width:460px;width:100%;overflow:hidden;max-height:90vh;overflow-y:auto}.modal-card .img{height:340px}.modal-card .body{padding:20px}
+.checks{display:flex;flex-wrap:wrap;gap:8px}.check-item{display:flex;align-items:center;gap:4px;background:var(--black);border:1px solid var(--border);padding:6px 10px;border-radius:8px;font-size:12px}.check-item input{width:auto}
+.rank-bar{height:8px;background:var(--black);border-radius:99px;overflow:hidden;margin-top:6px}.rank-fill{height:100%;background:var(--success)}
+#toastAdd{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:white;color:black;padding:12px 20px;border-radius:99px;font-weight:800;font-size:13px;z-index:300;opacity:0;pointer-events:none;transition:.3s;box-shadow:0 10px 30px rgba(0,0,0,.5)}#toastAdd.show{opacity:1;transform:translateX(-50%) translateY(0)} #cartFloat{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:white;color:black;padding:14px 20px;border-radius:16px;display:none;align-items:center;gap:16px;z-index:150;box-shadow:0 10px 40px rgba(0,0,0,.6);font-weight:700} #cartFloat.show{display:flex}
 </style>
 </head>
 <body>
 <div id="app">
-  <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
-    <div class="logo-area">
-      <img id="sideLogo" src="" alt="LOGO" style="display:none">
-      <h2>SURVIVOR<br>VESTUARIO</h2>
-      <div class="small" id="syncStatus">● Sincronizando...</div>
-    </div>
-    <nav class="menu" id="menu">
-      <!-- Se llena dinámico según rol -->
-    </nav>
-    <button class="btn btn-ghost" onclick="App.go('inicio')">🏠 Inicio</button>
-  </aside>
+<aside class="sidebar" id="sidebar">
+<div class="logo-area"><img id="sideLogo" style="display:none"><h2>SURVIVOR<br>VESTUARIO</h2><div class="small" id="syncStatus">● Sincronizando...</div></div>
+<nav class="menu" id="menu"></nav>
+<div class="admin-bottom"><button onclick="App.loginAdmin()">🔐 Administrador</button><div class="small" style="text-align:center;margin-top:8px;font-size:10px">Acceso solo dueño - abajo izquierda</div></div>
+</aside>
+<div class="main">
+<div class="topbar"><button class="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button><div class="center-logo"><img id="topLogo" style="display:none"><div id="topLogoText" style="font-weight:800;letter-spacing:3px">SURVIVOR VESTUARIO</div></div><button class="btn" onclick="App.go('pedido')">🛒 <span id="cartCount">0</span></button></div>
+<div class="content">
 
-  <!-- MAIN -->
-  <div class="main">
-    <div class="topbar">
-      <button class="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
-      <div class="center-logo"><img id="topLogo" src="" alt="SURVIVOR" style="display:none"><div id="topLogoText" style="font-weight:800;letter-spacing:3px">SURVIVOR VESTUARIO</div></div>
-      <div style="display:flex;gap:8px">
-        <button class="btn" id="cartBtn" onclick="App.go('pedido')">🛒 <span id="cartCount">0</span></button>
-      </div>
-    </div>
-    <div class="content">
-      <!-- INICIO -->
-      <div id="vista-inicio" class="vista activa">
-        <div style="text-align:center;margin:20px 0 30px"><h1 style="font-size:32px;letter-spacing:2px">SURVIVOR VESTUARIO</h1><p class="small">Plataforma Integral - Verde oscuro • Blanco • Negro</p></div>
-        <div class="inicio">
-          <div class="card-inicio"><div class="icon">👤</div><h3>SECCIÓN CLIENTE</h3><p>Revisa productos, stock real y haz tu pedido online.</p><button class="btn btn-primary" style="width:100%" onclick="App.setRole('cliente');App.go('productos')">ENTRAR COMO CLIENTE</button></div>
-          <div class="card-inicio"><div class="icon">🔐</div><h3>SECCIÓN ADMINISTRADOR</h3><p>Gestión total: lotes, costos, stock y ventas.</p><button class="btn" style="width:100%" onclick="App.loginAdmin()">ACCESO ADMIN</button></div>
-        </div>
-      </div>
-
-      <!-- CLIENTE: PRODUCTOS -->
-      <div id="vista-productos" class="vista">
-        <div class="box">
-          <h2>🛍️ Productos</h2>
-          <div class="grid" style="grid-template-columns:1fr 1fr 1fr 1fr">
-            <div><label>Género</label><select id="fGenero" onchange="App.cliente.filtrar()"><option value="Todos">Todos</option><option>Hombre</option><option>Mujer</option><option>Unisex</option></select></div>
-            <div><label>Tipo</label><select id="fTipo" onchange="App.cliente.filtrar()"><option value="Todos">Todos</option><option>Polera manga larga</option><option>Polera manga corta</option><option>Pantalón</option><option>Trimao</option><option>Otro</option></select></div>
-            <div><label>Talla</label><select id="fTalla" onchange="App.cliente.filtrar()"><option value="Todos">Todas</option><option>XXS</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>34</option><option>36</option><option>38</option><option>40</option><option>42</option><option>44</option><option>46</option><option>48</option><option>50</option><option>52</option><option>54</option><option>56</option></select></div>
-            <div><label>Buscar</label><input id="fBuscar" placeholder="Color, descripción..." oninput="App.cliente.filtrar()"></div>
-          </div>
-        </div>
-        <div id="catalogoCliente" class="catalogo"></div>
-      </div>
-
-      <!-- CLIENTE: PEDIDO -->
-      <div id="vista-pedido" class="vista">
-        <div class="box">
-          <h2>🧾 Tu Pedido</h2>
-          <div id="listaCarrito"></div>
-          <div style="text-align:right;margin-top:16px"><div style="font-size:22px;font-weight:800">Total: <span id="totalPedido">$0</span></div></div>
-        </div>
-        <div class="box">
-          <h2>Datos de Entrega</h2>
-          <div class="grid"><div><label>Nombre Completo</label><input id="pedNombre"></div><div><label>Teléfono</label><input id="pedTel" placeholder="+569"></div><div><label>Dirección</label><input id="pedDir"></div><div><label>Comuna / Ciudad</label><input id="pedComuna"></div></div>
-          <div style="margin-top:12px"><label>Notas de entrega</label><textarea id="pedNotas" placeholder="Referencias, horario..."></textarea></div>
-          <button class="btn btn-green" style="width:100%;padding:16px;margin-top:16px;font-size:16px" onclick="App.cliente.confirmarPedido()">✅ CONFIRMAR Y ENVIAR PEDIDO POR WHATSAPP</button>
-          <p class="small" style="margin-top:8px">Al confirmar se descuenta stock, queda registrado y se notifica al +56 9 4891 8687</p>
-        </div>
-      </div>
-
-      <!-- CLIENTE: QUIENES SOMOS -->
-      <div id="vista-quienes" class="vista">
-        <div class="box editable"><button class="edit-btn admin-only" onclick="App.admin.editarQuienes()">✏️ Editar</button><h2>Quiénes Somos</h2><div id="txtQuienes"></div></div>
-        <div class="box editable"><button class="edit-btn admin-only" onclick="App.admin.editarMision()">✏️ Editar</button><h2>Misión</h2><div id="txtMision"></div></div>
-        <div class="box editable"><button class="edit-btn admin-only" onclick="App.admin.editarVision()">✏️ Editar</button><h2>Visión</h2><div id="txtVision"></div></div>
-      </div>
-
-      <!-- CLIENTE: MATERIA PRIMA -->
-      <div id="vista-materia" class="vista">
-        <div class="box editable"><button class="edit-btn admin-only" onclick="App.admin.editarMateria()">✏️ Editar</button><h2>Materia Prima</h2><div id="txtMateria"></div></div>
-      </div>
-
-      <!-- ADMIN: ESTADISTICAS -->
-      <div id="vista-estadisticas" class="vista">
-        <div class="box"><h2>📊 Estadísticas por Lote</h2><div class="kpi" id="kpiGeneral"></div><div id="tablaEstadisticas"></div></div>
-      </div>
-
-      <!-- ADMIN: AGREGAR PRODUCTOS -->
-      <div id="vista-agregar" class="vista">
-        <div class="box">
-          <h2>➕ Agregar Productos / Stock - Crear Lote</h2>
-          <div style="background:var(--black);padding:14px;border-radius:12px;margin-bottom:16px">
-            <h3 style="font-size:14px;margin-bottom:10px">Datos del Lote (para estadísticas)</h3>
-            <div class="grid"><input id="lNombre" placeholder="Nombre Lote ej: Lote 12"><input id="lTela" type="number" placeholder="Costo tela $"><input id="lConf" type="number" placeholder="Costo confección $"><input id="lCantFab" type="number" placeholder="Cant. fabricada"></div>
-            <button class="btn btn-green" style="margin-top:10px" onclick="App.lotes.crear()">Guardar Lote</button>
-            <div id="listaLotesAdmin" style="margin-top:12px"></div>
-          </div>
-          <div class="grid">
-            <div><label>Tipo prenda *</label><select id="pTipo" onchange="App.admin.toggleCuello()"><option>Polera manga larga</option><option>Polera manga corta</option><option>Pantalón</option><option>Trimao</option><option>Otro</option></select></div>
-            <div id="wrapCuello"><label>Tipo cuello</label><select id="pCuello"><option>Cuello redondo</option><option>Cuello medio</option><option>Cuello piqué</option><option>Cuello beatle</option><option>Cuello Polo</option></select></div>
-            <div><label>Género *</label><select id="pGenero"><option>Hombre</option><option>Mujer</option><option>Unisex</option></select></div>
-            <div><label>Talla *</label><select id="pTalla"><option>XXS</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>34</option><option>36</option><option>38</option><option>40</option><option>42</option><option>44</option><option>46</option><option>48</option><option>50</option><option>52</option><option>54</option><option>56</option></select></div>
-            <div><label>Color</label><input id="pColor" placeholder="Negro, Blanco..."></div>
-            <div><label>Nombre producto</label><input id="pNombre" value="Polera Survivor"></div>
-            <div><label>Descripción</label><input id="pDesc" placeholder="Algodón premium..."></div>
-            <div><label>Precio venta $</label><input id="pPrecio" type="number"></div>
-            <div><label>Stock inicial</label><input id="pStock" type="number"></div>
-            <div><label>Lote producción *</label><select id="pLote"></select></div>
-            <div><label>Foto producto</label><input type="file" id="pFoto" accept="image/*"></div>
-          </div>
-          <button class="btn btn-primary" style="width:100%;margin-top:16px;padding:14px" onclick="App.productos.agregar()">Agregar al Inventario</button>
-        </div>
-      </div>
-
-      <!-- ADMIN: CATALOGO Y FOTOS -->
-      <div id="vista-catalogoAdmin" class="vista">
-        <div class="box"><h2>🖼️ Catálogo y Fotografías</h2><p class="small">Edita precio, stock, fotos y descripción. Es lo que ve el cliente.</p><div id="catalogoAdminGrid" class="catalogo" style="margin-top:16px"></div></div>
-      </div>
-
-      <!-- ADMIN: VENTAS Y PEDIDOS -->
-      <div id="vista-ventas" class="vista">
-        <div class="box">
-          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px"><h2>📦 Ventas y Pedidos</h2><div><button class="btn btn-green" onclick="App.ventas.exportExcel()">📥 Exportar Excel</button><button class="btn" onclick="App.ventas.nuevaVentaDirecta()">+ Venta Directa</button></div></div>
-          <div class="grid" style="margin-top:12px"><div><label>Filtro estado</label><select id="fEstadoVenta" onchange="App.ventas.render()"><option value="Todos">Todos</option><option>Pagado</option><option>Pago Pendiente</option><option>Pendiente</option></select></div><div><label>Buscar cliente</label><input id="fClienteVenta" placeholder="Nombre, tel..." oninput="App.ventas.render()"></div></div>
-          <div style="overflow:auto"><table id="tablaVentasAdmin"></table></div>
-        </div>
-      </div>
-
-      <!-- ADMIN: CONFIG -->
-      <div id="vista-config" class="vista">
-        <div class="box"><h2>⚙️ Configuración General</h2>
-          <div class="grid">
-            <div><label>Logo empresa</label><input type="file" id="inputLogo" accept="image/*" onchange="App.config.subirLogo(event)"><div style="margin-top:10px"><img id="previewLogo" style="max-width:180px;background:white;padding:6px;border-radius:8px;display:none"></div></div>
-            <div><label>Alerta stock bajo (cantidad)</label><input id="cfgStockMin" type="number" value="3"><button class="btn" style="margin-top:8px" onclick="App.config.guardarStockMin()">Guardar</button></div>
-            <div><label>WhatsApp notificación</label><input id="cfgWsp" value="+56 9 4891 8687" disabled><p class="small">Fijo según requerimiento</p></div>
-          </div>
-          <div class="grid" style="margin-top:16px"><button class="btn" onclick="App.db.exportar()">⬇️ Respaldo JSON</button><button class="btn" onclick="document.getElementById('importJson').click()">⬆️ Importar JSON</button><input type="file" id="importJson" style="display:none" accept=".json" onchange="App.db.importar(event)"></div>
-        </div>
-      </div>
-
-    </div>
-  </div>
+<!-- CLIENTE VE DIRECTO EL CATALOGO - SIN PANTALLA INTERMEDIA -->
+<div id="vista-productos" class="vista activa">
+<div class="box"><h2>🛍️ Catálogo de Fotos</h2><p class="small">Selecciona varias fotos, elige talla de cada una y después haz pedido. Foto + descripción + valor.</p>
+<div class="grid" style="grid-template-columns:1fr 1fr;margin-top:12px"><div><label>🔍 Buscador - solo filtra búsqueda</label><input id="fBuscar" placeholder="Escribe para filtrar..." oninput="App.cliente.filtrar()"></div><div><label>Género</label><select id="fGenero" onchange="App.cliente.filtrar()"><option value="Todos">Todos</option><option>Hombre</option><option>Mujer</option><option>Unisex</option></select></div></div></div>
+<div id="catalogoCliente" class="catalogo"></div>
 </div>
 
+<div id="vista-pedido" class="vista"><div class="box"><h2>🧾 Tu Pedido - Productos seleccionados</h2><div id="listaCarrito"></div><div style="text-align:right;margin-top:16px;font-size:22px;font-weight:800">Total: <span id="totalPedido">$0</span></div></div><div class="box"><h2>Datos Entrega</h2><div class="grid"><div><label>Nombre completo *</label><input id="pedNombre"></div><div><label>Teléfono *</label><input id="pedTel"></div><div><label>Dirección *</label><input id="pedDir"></div><div><label>Comuna</label><input id="pedComuna"></div></div><div style="margin-top:12px"><label>Notas</label><textarea id="pedNotas"></textarea></div><button class="btn btn-green" style="width:100%;padding:16px;margin-top:16px;font-size:16px" onclick="App.cliente.confirmarPedido()">✅ HACER PEDIDO - CONFIRMAR POR WHATSAPP</button><button class="btn" style="width:100%;margin-top:8px;background:transparent" onclick="App.go('productos')">← Seguir comprando</button></div></div>
+
+<div id="vista-quienes" class="vista"><div class="box editable"><button class="edit-btn admin-only" onclick="App.admin.editarQuienes()">✏️</button><h2>Quiénes Somos</h2><div id="txtQuienes"></div></div><div class="box editable"><button class="edit-btn admin-only" onclick="App.admin.editarMision()">✏️</button><h2>Misión</h2><div id="txtMision"></div></div><div class="box editable"><button class="edit-btn admin-only" onclick="App.admin.editarVision()">✏️</button><h2>Visión</h2><div id="txtVision"></div></div></div>
+<div id="vista-materia" class="vista"><div class="box editable"><button class="edit-btn admin-only" onclick="App.admin.editarMateria()">✏️</button><h2>Materia Prima</h2><div id="txtMateria"></div></div></div>
+
+<div id="vista-estadisticas" class="vista">
+<div class="box"><h2>📊 Estadísticas por Lote (Inventario)</h2><div class="kpi" id="kpiGeneral"></div><div id="tablaEstadisticas"></div></div>
+<div class="box"><h2>🔥 ¿Qué polera se vende más?</h2><div id="rankingProductos"></div></div>
+<div class="grid" style="grid-template-columns:1fr 1fr"><div class="box"><h2>📏 Ventas por Talla</h2><div id="ventasTalla"></div></div><div class="box"><h2>🎨 Ventas por Color/Tipo</h2><div id="ventasColorTipo"></div></div></div>
+<div class="box"><h2>⚠️ ¿Qué reponer?</h2><div id="reponer"></div></div>
+</div>
+
+<div id="vista-agregar" class="vista"><div class="box"><h2>📦 INVENTARIO - Solo prendas para efecto inventario (sin foto)</h2><div class="nota">Aquí colocas prendas para control de stock y lote. No es lo que ve el cliente.</div>
+<div style="background:var(--black);padding:14px;border-radius:12px;margin-bottom:16px"><h3 style="font-size:14px;margin-bottom:10px">1. Crear Lote</h3><div class="grid"><input id="lNombre" placeholder="Nombre Lote"><input id="lTela" type="number" placeholder="Costo tela $"><input id="lConf" type="number" placeholder="Costo confección $"><input id="lCantFab" type="number" placeholder="Cant. fabricada"></div><button class="btn btn-green" style="margin-top:10px" onclick="App.lotes.crear()">Guardar Lote</button><div id="listaLotesAdmin" style="margin-top:12px"></div></div>
+<div style="background:var(--black);padding:14px;border-radius:12px"><h3 style="font-size:14px;margin-bottom:10px">2. Agregar prenda a inventario</h3><div class="grid"><div><label>Tipo prenda</label><select id="pTipo"><option>Polera manga larga</option><option>Polera manga corta</option><option>Pantalón</option><option>Trimao</option><option>Otro</option></select></div><div><label>Cuello</label><select id="pCuello"><option>Cuello redondo</option><option>Cuello medio</option><option>Cuello piqué</option><option>Cuello beatle</option><option>Cuello Polo</option></select></div><div><label>Género</label><select id="pGenero"><option>Hombre</option><option>Mujer</option><option>Unisex</option></select></div><div><label>Talla</label><select id="pTalla"><option>XXS</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>34</option><option>36</option><option>38</option><option>40</option><option>42</option><option>44</option><option>46</option><option>48</option><option>50</option><option>52</option><option>54</option><option>56</option></select></div><div><label>Color</label><input id="pColor"></div><div><label>Nombre interno</label><input id="pNombre" value="Polera"></div><div><label>Lote</label><select id="pLote"></select></div><div><label>Stock</label><input id="pStock" type="number"></div></div><button class="btn btn-primary" style="width:100%;margin-top:16px" onclick="App.inventario.agregar()">Agregar al Inventario</button></div>
+<div class="box" style="margin-top:16px"><h2>Stock Inventario</h2><div style="overflow:auto"><table id="tablaInventario"></table></div></div>
+</div></div>
+
+<div id="vista-catalogoAdmin" class="vista"><div class="box"><h2>🖼️ CATÁLOGO Y FOTOS - Foto + Descripción + Valor (Separado de inventario)</h2><div class="nota">Catálogo independiente. Sube foto con descripción y valor. Cliente elige talla al hacer clic.</div>
+<div style="background:var(--black);padding:14px;border-radius:12px;margin-bottom:16px"><h3 style="font-size:14px;margin-bottom:10px">Agregar foto a catálogo</h3><div class="grid"><div><label>Nombre visible *</label><input id="cNombre"></div><div><label>Valor $ *</label><input id="cPrecio" type="number"></div><div><label>Descripción</label><input id="cDesc"></div><div><label>Color</label><input id="cColor"></div><div><label>Género</label><select id="cGenero"><option>Hombre</option><option>Mujer</option><option>Unisex</option></select></div><div><label>Tipo</label><select id="cTipo"><option>Polera manga larga</option><option>Polera manga corta</option><option>Pantalón</option><option>Trimao</option><option>Otro</option></select></div><div><label>Foto *</label><input type="file" id="cFoto" accept="image/*"></div><div><label>Vincular a Lote (descuenta inventario)</label><select id="cLoteVinculo"></select></div></div><div style="margin-top:12px"><label>Tallas disponibles para esta foto (cliente podrá elegir)</label><div class="checks" id="checkTallas">
+<label class="check-item"><input type="checkbox" value="XXS">XXS</label><label class="check-item"><input type="checkbox" value="XS">XS</label><label class="check-item"><input type="checkbox" value="S" checked>S</label><label class="check-item"><input type="checkbox" value="M" checked>M</label><label class="check-item"><input type="checkbox" value="L" checked>L</label><label class="check-item"><input type="checkbox" value="XL" checked>XL</label><label class="check-item"><input type="checkbox" value="XXL">XXL</label><label class="check-item"><input type="checkbox" value="34">34</label><label class="check-item"><input type="checkbox" value="36">36</label><label class="check-item"><input type="checkbox" value="38">38</label><label class="check-item"><input type="checkbox" value="40">40</label><label class="check-item"><input type="checkbox" value="42">42</label><label class="check-item"><input type="checkbox" value="44">44</label><label class="check-item"><input type="checkbox" value="46">46</label><label class="check-item"><input type="checkbox" value="48">48</label><label class="check-item"><input type="checkbox" value="50">50</label><label class="check-item"><input type="checkbox" value="52">52</label><label class="check-item"><input type="checkbox" value="54">54</label><label class="check-item"><input type="checkbox" value="56">56</label>
+</div></div><button class="btn btn-primary" style="width:100%;margin-top:16px;padding:14px" onclick="App.catalogoFotos.agregar()">📸 Guardar en Catálogo</button><input type="hidden" id="cEditId"></div><div id="catalogoAdminGrid" class="catalogo"></div></div></div>
+
+<div id="vista-ventas" class="vista"><div class="box"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px"><h2>📦 Ventas y Pedidos</h2><button class="btn btn-green" onclick="App.ventas.exportExcel()">📥 Excel</button></div><div style="overflow:auto"><table id="tablaVentasAdmin"></table></div></div></div>
+<div id="vista-config" class="vista"><div class="box"><h2>⚙️ Configuración</h2><div class="grid"><div><label>Logo sin borde blanco - PNG transparente</label><input type="file" id="inputLogo" accept="image/*" onchange="App.config.subirLogo(event)"><img id="previewLogo" style="max-width:180px;background:transparent;border:none;padding:0;display:none;margin-top:10px"></div><div><label>Stock mínimo alerta</label><input id="cfgStockMin" type="number"><button class="btn" style="margin-top:8px" onclick="App.config.guardarStockMin()">Guardar</button></div></div><div class="grid" style="margin-top:16px"><button class="btn" onclick="App.db.exportar()">⬇️ Respaldo</button><button class="btn" onclick="document.getElementById('importJson').click()">⬆️ Importar</button><input type="file" id="importJson" style="display:none" accept=".json" onchange="App.db.importar(event)"></div></div></div>
+
+</div>
+</div>
+</div>
+
+<div id="toastAdd">Agregado</div>
+<div id="cartFloat"><span id="cartFloatText">0 productos</span><button class="btn btn-green" style="padding:10px 16px" onclick="App.go('pedido')">HACER PEDIDO 🛒</button></div>
+
+<div class="modal" id="modalTalla"><div class="modal-card"><div class="img"><img id="modalImg" style="width:100%;height:100%;object-fit:cover"></div><div class="body"><h3 id="modalNombre"></h3><p class="small" id="modalDesc" style="margin:8px 0"></p><div style="font-size:22px;font-weight:800;margin:8px 0" id="modalPrecio"></div><label>Selecciona Talla * (obligatorio)</label><div class="talla-selector" id="modalTallas"></div><div style="display:flex;gap:8px;margin-top:12px"><div style="flex:1"><label>Cantidad</label><input type="number" id="modalCant" value="1" min="1"></div><div style="flex:2;display:flex;align-items:end"><button class="btn btn-primary" style="width:100%;padding:14px" onclick="App.cliente.confirmarModal()">Agregar al carrito</button></div></div><button class="btn" style="width:100%;margin-top:10px;background:transparent" onclick="document.getElementById('modalTalla').classList.remove('open')">Cancelar</button></div></div></div>
+
 <script>
-const CONFIG = {
-  dbURL: "https://tienda-survivor-default-rtdb.firebaseio.com/",
-  passAdmin: "negro1687",
-  wspNumero: "56948918687",
-  stockMinDefault: 3
-};
+const CONFIG={dbURL:"https://tienda-survivor-default-rtdb.firebaseio.com/",passAdmin:"negro1687",wspNumero:"56948918687",stockMinDefault:3};
+const App={state:{lotes:[],cat:[],hist:[],config:{},catalogFotos:[],carrito:[],modalProd:null,modalTallaSel:null,role:'cliente'},
+init(){this.db.cargar();setInterval(()=>this.db.cargar(),7000);this.setRole('cliente');this.go('productos');},
+setRole(r){this.state.role=r;this.buildMenu();document.querySelectorAll('.admin-only').forEach(el=>el.style.display=r==='admin'?'block':'none');},
+buildMenu(){
+const m=document.getElementById('menu');let h='';
+h+=`<div class="sep">CLIENTE</div><button onclick="App.go('productos')" id="m-productos">🛍️ CATÁLOGO FOTOS</button><button onclick="App.go('pedido')" id="m-pedido">🧾 PEDIDO <span id="menuCart"></span></button><button onclick="App.go('quienes')" id="m-quienes">🏢 QUIÉNES SOMOS</button><button onclick="App.go('materia')" id="m-materia">🌿 MATERIA PRIMA</button>`;
+if(this.state.role==='admin'){h+=`<div class="sep">ADMINISTRADOR</div><button onclick="App.go('estadisticas')" id="m-estadisticas">📊 ESTADÍSTICAS + RANKING VENTAS</button><button onclick="App.go('agregar')" id="m-agregar">📦 INVENTARIO (STOCK Y LOTE)</button><button onclick="App.go('catalogoAdmin')" id="m-catalogoAdmin">🖼️ CATÁLOGO Y FOTOS (FOTO+DESC+VALOR)</button><button onclick="App.go('ventas')" id="m-ventas">📦 VENTAS</button><button onclick="App.go('config')" id="m-config">⚙️ CONFIG</button><button onclick="App.setRole('cliente');App.go('productos')" style="margin-top:12px;background:#111">👁️ Ver como cliente</button>`;}
+m.innerHTML=h;
+},
+go(v){document.querySelectorAll('.vista').forEach(x=>x.classList.remove('activa'));document.getElementById('vista-'+v).classList.add('activa');document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active'));const b=document.getElementById('m-'+v);if(b)b.classList.add('active');document.getElementById('sidebar').classList.remove('open');if(v==='productos')this.cliente.filtrar();if(v==='pedido')this.cliente.renderCarrito();if(v==='estadisticas')this.estadisticas.render();if(v==='catalogoAdmin')this.catalogoFotos.renderAdmin();},
+loginAdmin(){const p=prompt("Contraseña administrador:");const s=localStorage.getItem('survivor_pass')||CONFIG.passAdmin;if(p===s){this.setRole('admin');this.go('estadisticas');}else if(p!==null)alert("Incorrecta");},
+db:{async cargar(){try{const r=await fetch(`${CONFIG.dbURL}datos.json`);const d=await r.json();if(d){App.state.lotes=d.lotes||[];App.state.cat=d.cat||[];App.state.hist=d.hist||[];App.state.config=d.config||{logo:"",quienes:"Somos SURVIVOR VESTUARIO, marca chilena.",mision:"Entregar productos durables.",vision:"Ser referente nacional.",materia:"Algodón pima y telas premium.",stockMin:3};App.state.catalogFotos=d.catalogFotos||[];}document.getElementById('syncStatus').innerText='● Conectado';App.ui.refresh();}catch(e){document.getElementById('syncStatus').innerText='● Sin conexión';}},
+async guardar(){await fetch(`${CONFIG.dbURL}datos.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({lotes:App.state.lotes,cat:App.state.cat,hist:App.state.hist,config:App.state.config,catalogFotos:App.state.catalogFotos})});App.ui.refresh();},
+exportar(){const blob=new Blob([JSON.stringify({lotes:App.state.lotes,cat:App.state.cat,hist:App.state.hist,config:App.state.config,catalogFotos:App.state.catalogFotos},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`survivor_${new Date().toISOString().slice(0,10)}.json`;a.click();},
+importar(e){const f=e.target.files[0];if(!f)return;const fr=new FileReader();fr.onload=ev=>{try{const d=JSON.parse(ev.target.result);App.state.lotes=d.lotes||[];App.state.cat=d.cat||[];App.state.hist=d.hist||[];App.state.config=d.config||App.state.config;App.state.catalogFotos=d.catalogFotos||[];App.db.guardar();alert("Importado");}catch{alert("JSON inválido")}};fr.readAsText(f);}},
+ui:{refresh(){const logo=App.state.config.logo;if(logo){document.getElementById('sideLogo').src=logo;document.getElementById('sideLogo').style.display='block';document.getElementById('topLogo').src=logo;document.getElementById('topLogo').style.display='block';document.getElementById('topLogoText').style.display='none';document.getElementById('previewLogo').src=logo;document.getElementById('previewLogo').style.display='block';}document.getElementById('txtQuienes').innerHTML=(App.state.config.quienes||'').replace(/\n/g,'<br>');document.getElementById('txtMision').innerHTML=(App.state.config.mision||'').replace(/\n/g,'<br>');document.getElementById('txtVision').innerHTML=(App.state.config.vision||'').replace(/\n/g,'<br>');document.getElementById('txtMateria').innerHTML=(App.state.config.materia||'').replace(/\n/g,'<br>');document.getElementById('cfgStockMin').value=App.state.config.stockMin||3;App.lotes.renderSelects();App.cliente.filtrar();App.cliente.renderCarrito();App.estadisticas.render();App.catalogoFotos.renderAdmin();App.inventario.renderTabla();App.ventas.render();}},
+lotes:{crear(){const n=document.getElementById('lNombre').value.trim();const t=parseFloat(document.getElementById('lTela').value)||0;const c=parseFloat(document.getElementById('lConf').value)||0;const cant=parseInt(document.getElementById('lCantFab').value)||0;if(!n)return alert("Nombre lote");App.state.lotes.push({nombre:n,tela:t,conf:c,sumaInversion:t+c,cant,costoUnit:cant>0?(t+c)/cant:0});App.db.guardar();['lNombre','lTela','lConf','lCantFab'].forEach(id=>document.getElementById(id).value='');},
+renderSelects(){const sel=document.getElementById('pLote');if(sel)sel.innerHTML=App.state.lotes.map(l=>`<option value="${l.nombre}">${l.nombre}</option>`).join('')||'<option value="">Crea lote</option>';const sel2=document.getElementById('cLoteVinculo');if(sel2)sel2.innerHTML='<option value="">Sin vínculo</option>'+App.state.lotes.map(l=>`<option value="${l.nombre}">${l.nombre}</option>`).join('');const cont=document.getElementById('listaLotesAdmin');if(cont)cont.innerHTML=App.state.lotes.map((l,i)=>`<span class="tag">${l.nombre} - $${l.sumaInversion} <button onclick="App.state.lotes.splice(${i},1);App.db.guardar()" style="background:none;border:none;color:#ef4444">x</button></span>`).join('');}},
+inventario:{agregar(){const lote=document.getElementById('pLote').value;if(!lote)return alert("Selecciona lote");const item={nombre:document.getElementById('pNombre').value||'Prenda',tipoPrenda:document.getElementById('pTipo').value,cuello:document.getElementById('pCuello').value,genero:document.getElementById('pGenero').value,talla:document.getElementById('pTalla').value,color:document.getElementById('pColor').value||'',stock:parseInt(document.getElementById('pStock').value)||0,lote:lote};App.state.cat.push(item);App.db.guardar();alert("Agregado a inventario");},
+renderTabla(){const tabla=document.getElementById('tablaInventario');if(!tabla)return;let html='<tr><th>Nombre</th><th>Lote</th><th>Tipo</th><th>Gen</th><th>Talla</th><th>Color</th><th>Stock</th><th></th></tr>';App.state.cat.forEach((p,i)=>{html+=`<tr><td>${p.nombre}</td><td>${p.lote}</td><td>${p.tipoPrenda}</td><td>${p.genero}</td><td>${p.talla}</td><td>${p.color}</td><td>${p.stock}</td><td><button class="btn btn-red" onclick="App.state.cat.splice(${i},1);App.db.guardar()">X</button></td></tr>`;});tabla.innerHTML=html;}},
+catalogoFotos:{getTallas(){const checks=document.querySelectorAll('#checkTallas input:checked');return Array.from(checks).map(c=>c.value);},async agregar(){const fotoFile=document.getElementById('cFoto').files[0];const editId=document.getElementById('cEditId').value;let fotoBase="";if(fotoFile){fotoBase=await App.utils.compress(fotoFile,900);}else if(editId!==""){fotoBase=App.state.catalogFotos[parseInt(editId)]?.foto||"";}if(!fotoBase&&editId==="")return alert("Sube una foto");const tallas=App.catalogoFotos.getTallas();if(tallas.length===0)return alert("Selecciona al menos una talla");const obj={nombre:document.getElementById('cNombre').value||'Producto',descripcion:document.getElementById('cDesc').value||'',color:document.getElementById('cColor').value||'',genero:document.getElementById('cGenero').value,tipoPrenda:document.getElementById('cTipo').value,precio:parseFloat(document.getElementById('cPrecio').value)||0,foto:fotoBase,loteVinculo:document.getElementById('cLoteVinculo').value||'',tallas:tallas};if(editId!==""){App.state.catalogFotos[parseInt(editId)]=obj;document.getElementById('cEditId').value="";}else{App.state.catalogFotos.push(obj);}App.db.guardar();['cNombre','cDesc','cColor','cPrecio','cFoto'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});alert("Guardado catálogo: "+tallas.join(', '));},
+renderAdmin(){const cont=document.getElementById('catalogoAdminGrid');if(!cont)return;cont.innerHTML=App.state.catalogFotos.map((p,i)=>`<div class="prod-card"><div class="img"><img src="${p.foto}"><span class="badge-stock badge-ok">$${p.precio}</span></div><div class="prod-info"><h4>${p.nombre}</h4><div class="meta">${p.tipoPrenda} - ${p.genero}<br>Tallas: ${(p.tallas||[]).join(', ')}<br>Color ${p.color}<br>${p.descripcion}</div><div class="price">$${p.precio}</div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn" onclick="App.catalogoFotos.editar(${i})">✏️</button><button class="btn btn-red" onclick="App.catalogoFotos.eliminar(${i})">X</button></div></div></div>`).join('')||'<p class="small">No hay fotos aún.</p>';},
+editar(i){const p=App.state.catalogFotos[i];document.getElementById('cNombre').value=p.nombre;document.getElementById('cDesc').value=p.descripcion;document.getElementById('cColor').value=p.color;document.getElementById('cGenero').value=p.genero;document.getElementById('cTipo').value=p.tipoPrenda;document.getElementById('cPrecio').value=p.precio;document.getElementById('cLoteVinculo').value=p.loteVinculo||'';document.querySelectorAll('#checkTallas input').forEach(ch=>{ch.checked=(p.tallas||[]).includes(ch.value);});document.getElementById('cEditId').value=i;window.scrollTo(0,0);},
+eliminar(i){if(confirm("¿Eliminar foto?")){App.state.catalogFotos.splice(i,1);App.db.guardar();}}},
 
-const App = {
-  state: { lotes:[], cat:[], hist:[], config:{}, carrito:[], role:'cliente', vista:'inicio' },
-  init(){
-    this.db.cargar();
-    setInterval(()=>this.db.cargar(),6000);
-    this.setRole('cliente');
-    this.go('inicio');
-  },
-  setRole(role){
-    this.state.role = role;
-    this.buildMenu();
-    document.querySelectorAll('.admin-only').forEach(el=>el.style.display = role==='admin' ? 'block' : 'none');
-  },
-  buildMenu(){
-    const menu = document.getElementById('menu');
-    let html='';
-    if(this.state.role==='cliente' || this.state.role==='admin'){
-      html+=`<div class="sep">CLIENTE</div>
-      <button onclick="App.go('productos')" id="m-productos">🛍️ PRODUCTOS</button>
-      <button onclick="App.go('pedido')" id="m-pedido">🧾 PEDIDO <span id="menuCart" style="margin-left:auto"></span></button>
-      <button onclick="App.go('quienes')" id="m-quienes">🏢 QUIÉNES SOMOS</button>
-      <button onclick="App.go('materia')" id="m-materia">🌿 MATERIA PRIMA</button>`;
-    }
-    if(this.state.role==='admin'){
-      html+=`<div class="sep">ADMINISTRADOR</div>
-      <button onclick="App.go('estadisticas')" id="m-estadisticas">📊 ESTADÍSTICAS</button>
-      <button onclick="App.go('agregar')" id="m-agregar">➕ AGREGAR PRODUCTOS / STOCK</button>
-      <button onclick="App.go('catalogoAdmin')" id="m-catalogoAdmin">🖼️ CATÁLOGO Y FOTOS</button>
-      <button onclick="App.go('ventas')" id="m-ventas">📦 VENTAS Y PEDIDOS</button>
-      <button onclick="App.go('config')" id="m-config">⚙️ CONFIGURACIÓN</button>`;
-    }
-    menu.innerHTML=html;
-  },
-  go(vista){
-    document.querySelectorAll('.vista').forEach(v=>v.classList.remove('activa'));
-    document.getElementById('vista-'+vista).classList.add('activa');
-    this.state.vista=vista;
-    document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active'));
-    const btn=document.getElementById('m-'+vista); if(btn) btn.classList.add('active');
-    document.getElementById('sidebar').classList.remove('open');
-    if(vista==='productos') this.cliente.filtrar();
-    if(vista==='pedido') this.cliente.renderCarrito();
-    if(vista==='estadisticas') this.estadisticas.render();
-    if(vista==='catalogoAdmin') this.productos.renderAdmin();
-    if(vista==='ventas') this.ventas.render();
-  },
-  loginAdmin(){
-    const p = prompt("Contraseña administrador:");
-    const saved = localStorage.getItem('survivor_pass') || CONFIG.passAdmin;
-    if(p===saved){ this.setRole('admin'); this.go('estadisticas'); alert("Acceso concedido"); }
-    else if(p!==null) alert("Contraseña incorrecta");
-  },
-  db:{
-    async cargar(){
-      try{
-        const r=await fetch(`${CONFIG.dbURL}datos.json`);
-        const data=await r.json();
-        if(data){
-          App.state.lotes=data.lotes||[];
-          App.state.cat=data.cat||[];
-          App.state.hist=data.hist||[];
-          App.state.config=data.config||{ logo:"", quienes:"Somos SURVIVOR VESTUARIO, marca chilena dedicada a vestuario urbano y laboral de alta calidad.", mision:"Entregar productos durables, cómodos y con identidad.", vision:"Ser referente nacional en vestuario.", materia:"Trabajamos con algodón pima, telas anti-desgarro y procesos de confección locales.", stockMin: CONFIG.stockMinDefault };
-        }
-        document.getElementById('syncStatus').innerText='● Conectado';
-        document.getElementById('syncStatus').style.color='#22c55e';
-        App.ui.refresh();
-      }catch(e){ document.getElementById('syncStatus').innerText='● Sin conexión'; document.getElementById('syncStatus').style.color='#ef4444'; }
-    },
-    async guardar(){
-      await fetch(`${CONFIG.dbURL}datos.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({lotes:App.state.lotes,cat:App.state.cat,hist:App.state.hist,config:App.state.config})});
-      App.ui.refresh();
-    },
-    exportar(){
-      const blob=new Blob([JSON.stringify({lotes:App.state.lotes,cat:App.state.cat,hist:App.state.hist,config:App.state.config},null,2)],{type:'application/json'});
-      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`survivor_${new Date().toISOString().slice(0,10)}.json`; a.click();
-    },
-    importar(e){
-      const file=e.target.files[0]; if(!file) return;
-      const fr=new FileReader(); fr.onload=ev=>{
-        try{const d=JSON.parse(ev.target.result); App.state.lotes=d.lotes||[]; App.state.cat=d.cat||[]; App.state.hist=d.hist||[]; App.state.config=d.config||App.state.config; App.db.guardar(); alert("Importado");}catch{alert("JSON inválido")}
-      }; fr.readAsText(file);
-    }
-  },
-  ui:{
-    refresh(){
-      // logo
-      const logo = App.state.config.logo;
-      if(logo){ document.getElementById('sideLogo').src=logo; document.getElementById('sideLogo').style.display='block'; document.getElementById('topLogo').src=logo; document.getElementById('topLogo').style.display='block'; document.getElementById('topLogoText').style.display='none'; document.getElementById('previewLogo').src=logo; document.getElementById('previewLogo').style.display='block'; }
-      // quienes y materia
-      document.getElementById('txtQuienes').innerHTML=(App.state.config.quienes||'').replace(/\n/g,'<br>');
-      document.getElementById('txtMision').innerHTML=(App.state.config.mision||'').replace(/\n/g,'<br>');
-      document.getElementById('txtVision').innerHTML=(App.state.config.vision||'').replace(/\n/g,'<br>');
-      document.getElementById('txtMateria').innerHTML=(App.state.config.materia||'').replace(/\n/g,'<br>');
-      document.getElementById('cfgStockMin').value=App.state.config.stockMin||CONFIG.stockMinDefault;
-      App.lotes.renderSelects();
-      App.cliente.filtrar();
-      App.cliente.renderCarrito();
-      App.estadisticas.render();
-      App.productos.renderAdmin();
-      App.ventas.render();
-    }
-  },
-  lotes:{
-    crear(){
-      const nombre=document.getElementById('lNombre').value.trim();
-      const tela=parseFloat(document.getElementById('lTela').value)||0;
-      const conf=parseFloat(document.getElementById('lConf').value)||0;
-      const cant=parseInt(document.getElementById('lCantFab').value)||0;
-      if(!nombre) return alert("Nombre lote requerido");
-      App.state.lotes.push({nombre,tela,conf,sumaInversion:tela+conf,cant,costoUnit: cant>0?(tela+conf)/cant:0});
-      App.db.guardar();
-      ['lNombre','lTela','lConf','lCantFab'].forEach(id=>document.getElementById(id).value='');
-    },
-    renderSelects(){
-      const sel=document.getElementById('pLote'); if(!sel) return;
-      sel.innerHTML=App.state.lotes.map(l=>`<option value="${l.nombre}">${l.nombre}</option>`).join('') || '<option value="">Crea un lote primero</option>';
-      const cont=document.getElementById('listaLotesAdmin'); if(cont){ cont.innerHTML=App.state.lotes.map((l,i)=>`<span class="tag">${l.nombre} - $${l.sumaInversion} - ${l.cant}u <button onclick="App.state.lotes.splice(${i},1);App.db.guardar()" style="background:none;border:none;color:#ef4444;cursor:pointer">x</button></span>`).join(''); }
-    }
-  },
-  productos:{
-    async agregar(){
-      const lote=document.getElementById('pLote').value;
-      if(!lote) return alert("Selecciona lote");
-      const file=document.getElementById('pFoto').files[0];
-      let imgBase="";
-      if(file){ imgBase=await App.utils.compress(file); }
-      const prod={
-        nombre:document.getElementById('pNombre').value||'Producto Survivor',
-        tipoPrenda:document.getElementById('pTipo').value,
-        cuello:document.getElementById('pCuello').value,
-        genero:document.getElementById('pGenero').value,
-        talla:document.getElementById('pTalla').value,
-        color:document.getElementById('pColor').value||'',
-        descripcion:document.getElementById('pDesc').value||'',
-        precio:parseFloat(document.getElementById('pPrecio').value)||0,
-        stock:parseInt(document.getElementById('pStock').value)||0,
-        lote:lote,
-        // compatibilidad con estructura vieja
-        lote: lote, genero: document.getElementById('pGenero').value, talla: document.getElementById('pTalla').value, cuello: document.getElementById('pCuello').value, manga: document.getElementById('pTipo').value.includes('manga')?document.getElementById('pTipo').value:'', // para que el historial viejo siga
-        imagen: imgBase
-      };
-      App.state.cat.push(prod);
-      App.db.guardar();
-      alert("Producto agregado");
-      document.getElementById('pFoto').value='';
-    },
-    renderAdmin(){
-      const cont=document.getElementById('catalogoAdminGrid'); if(!cont) return;
-      cont.innerHTML=App.state.cat.map((p,i)=>{
-        const low=(App.state.config.stockMin||3);
-        const badge = p.stock<=0 ? `<span class="badge-stock badge-out">Agotado</span>` : p.stock<=low ? `<span class="badge-stock badge-low">¡Quedan ${p.stock}!</span>` : `<span class="badge-stock badge-ok">${p.stock} disp.</span>`;
-        return `<div class="prod-card"><div class="img">${p.imagen?`<img src="${p.imagen}">`:'Sin foto'}${badge}</div><div class="prod-info">
-        <h4>${p.nombre}</h4><div class="meta">${p.tipoPrenda||p.manga||''} | ${p.cuello||''}<br>${p.genero} - ${p.talla} - ${p.color}<br>${p.descripcion||''}<br>Lote: ${p.lote}</div><div class="price">$${p.precio}</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap"><input type="number" id="editPrice${i}" value="${p.precio}" style="width:90px"><input type="number" id="editStock${i}" value="${p.stock}" style="width:70px"><button class="btn" onclick="App.productos.guardarEdicion(${i})">Guardar</button></div>
-        <div style="display:flex;gap:6px;margin-top:6px"><input type="file" accept="image/*" onchange="App.productos.cambiarFoto(event,${i})"><button class="btn btn-red" onclick="App.productos.eliminar(${i})">Eliminar</button></div></div></div>`;
-      }).join('');
-    },
-    guardarEdicion(i){
-      const p=App.state.cat[i];
-      p.precio=parseFloat(document.getElementById('editPrice'+i).value)||p.precio;
-      p.stock=parseInt(document.getElementById('editStock'+i).value)||p.stock;
-      App.db.guardar();
-    },
-    async cambiarFoto(e,i){
-      const file=e.target.files[0]; if(!file) return;
-      App.state.cat[i].imagen=await App.utils.compress(file);
-      App.db.guardar();
-    },
-    eliminar(i){ if(confirm("¿Eliminar producto?")){ App.state.cat.splice(i,1); App.db.guardar(); } }
-  },
-  cliente:{
-    filtrar(){
-      const g=document.getElementById('fGenero').value;
-      const t=document.getElementById('fTipo').value;
-      const ta=document.getElementById('fTalla').value;
-      const q=document.getElementById('fBuscar').value.toLowerCase();
-      const cont=document.getElementById('catalogoCliente');
-      let html='';
-      App.state.cat.forEach((p,idx)=>{
-        if(p.stock<=0) return; // no mostrar agotados al cliente? sí mostrar pero con alerta
-        if(g!=='Todos' && p.genero!==g) return;
-        if(t!=='Todos' && (p.tipoPrenda||'')!==t) return;
-        if(ta!=='Todos' && p.talla!==ta) return;
-        if(q && !( (p.nombre||'').toLowerCase().includes(q) || (p.color||'').toLowerCase().includes(q) || (p.descripcion||'').toLowerCase().includes(q) )) return;
-        const min=App.state.config.stockMin||3;
-        let badgeClass='badge-ok', badgeTxt=`${p.stock} disponibles`;
-        if(p.stock<=min){ badgeClass='badge-low'; badgeTxt=`¡Quedan ${p.stock}! Stock bajo`; }
-        html+=`<div class="prod-card"><div class="img">${p.imagen?`<img src="${p.imagen}">`:'Sin foto'}<span class="badge-stock ${badgeClass}">${badgeTxt}</span></div><div class="prod-info"><h4>${p.nombre}</h4><div class="meta"><strong>${p.tipoPrenda||''}</strong> - ${p.cuello||''}<br>${p.genero} | Talla ${p.talla} | Color ${p.color}<br>${p.descripcion||''}<br><span class="tag">Lote ${p.lote}</span></div><div class="price">$${p.precio}</div><div class="qty-row"><input type="number" id="qty${idx}" value="1" min="1" max="${p.stock}"><button class="btn btn-primary" style="flex:1" onclick="App.cliente.addCarrito(${idx})">Agregar</button></div></div></div>`;
-      });
-      cont.innerHTML=html||'<p class="small">No hay productos con esos filtros</p>';
-    },
-    addCarrito(idx){
-      const qty=parseInt(document.getElementById('qty'+idx).value)||1;
-      const prod=App.state.cat[idx];
-      if(qty>prod.stock) return alert("Stock insuficiente");
-      const existente=App.state.carrito.find(c=>c.idx===idx);
-      if(existente) existente.qty+=qty; else App.state.carrito.push({idx,qty,prod:{...prod}});
-      App.cliente.renderCarrito();
-      App.go('pedido');
-    },
-    renderCarrito(){
-      const cont=document.getElementById('listaCarrito');
-      if(!cont) return;
-      if(App.state.carrito.length===0){ cont.innerHTML='<p class="small">Carrito vacío</p>'; document.getElementById('totalPedido').innerText='$0'; document.getElementById('cartCount').innerText='0'; document.getElementById('menuCart').innerText=''; return; }
-      let total=0; let html='<table><tr><th>Producto</th><th>Talla</th><th>Cant</th><th>P.Unit</th><th>Total</th><th></th></tr>';
-      App.state.carrito.forEach((c,i)=>{
-        const prod=App.state.cat[c.idx];
-        const sub=prod.precio*c.qty; total+=sub;
-        html+=`<tr><td>${prod.nombre}<br><span class="small">${prod.tipoPrenda} ${prod.color} - ${prod.descripcion}</span></td><td>${prod.talla}</td><td>${c.qty}</td><td>$${prod.precio}</td><td>$${sub}</td><td><button class="btn btn-red" onclick="App.cliente.quitar(${i})">X</button></td></tr>`;
-      });
-      html+='</table>';
-      cont.innerHTML=html;
-      document.getElementById('totalPedido').innerText='$'+total;
-      document.getElementById('cartCount').innerText=App.state.carrito.length;
-      document.getElementById('menuCart').innerText=`(${App.state.carrito.length})`;
-    },
-    quitar(i){ App.state.carrito.splice(i,1); App.cliente.renderCarrito(); },
-    confirmarPedido(){
-      if(App.state.carrito.length===0) return alert("Carrito vacío");
-      const nombre=document.getElementById('pedNombre').value.trim();
-      const tel=document.getElementById('pedTel').value.trim();
-      const dir=document.getElementById('pedDir').value.trim();
-      const comuna=document.getElementById('pedComuna').value.trim();
-      if(!nombre||!tel||!dir) return alert("Completa nombre, teléfono y dirección");
-      // descontar stock y registrar
-      App.state.carrito.forEach(c=>{
-        const p=App.state.cat[c.idx];
-        p.stock-=c.qty;
-        App.state.hist.push({
-          cliente:nombre, tel, dir: dir + ' ' + comuna, comuna, notas: document.getElementById('pedNotas').value,
-          prodNombre:p.nombre, lote:p.lote, genero:p.genero, talla:p.talla, cuello:p.cuello, manga:p.tipoPrenda, color:p.color, descripcion:p.descripcion,
-          detalle: `${p.nombre} | ${p.tipoPrenda} | ${p.genero} | ${p.talla} | ${p.color}`,
-          cant:c.qty, total: c.qty * p.precio, precioUnit:p.precio,
-          estado:'Pendiente', tipo:'Pedido Online', fecha: new Date().toLocaleString('es-CL')
-        });
-      });
-      App.db.guardar().then(()=>{
-        // WhatsApp notificación admin
-        let msg=`*NUEVO PEDIDO SURVIVOR VESTUARIO*%0A%0ACliente: ${nombre}%0ATel: ${tel}%0ADir: ${dir} ${comuna}%0A%0AProductos:%0A`;
-        let total=0;
-        App.state.carrito.forEach(c=>{ const p=App.state.cat[c.idx]; total+=c.qty*p.precio; msg+=`- ${p.nombre} (${p.talla}/${p.color}) x${c.qty} = $${c.qty*p.precio}%0A`; });
-        msg+=`%0A*TOTAL: $${total}*%0ANotas: ${document.getElementById('pedNotas').value}`;
-        window.open(`https://wa.me/${CONFIG.wspNumero}?text=${msg}`,'_blank');
-        App.state.carrito=[]; App.cliente.renderCarrito();
-        alert("Pedido registrado. Se abrirá WhatsApp para notificar al administrador.");
-        App.go('productos');
-      });
-    }
-  },
-  ventas:{
-    render(){
-      const tabla=document.getElementById('tablaVentasAdmin'); if(!tabla) return;
-      const fEst=document.getElementById('fEstadoVenta').value;
-      const fCli=document.getElementById('fClienteVenta').value.toLowerCase();
-      let html=`<tr><th>Fecha</th><th>Cliente / Contacto</th><th>Producto</th><th>Talla</th><th>Cant</th><th>P.Unit</th><th>Total</th><th>Estado</th><th>Tipo</th><th>Acción</th></tr>`;
-      App.state.hist.slice().reverse().forEach((v,revIdx)=>{
-        const idx=App.state.hist.length-1-revIdx;
-        if(fEst!=='Todos' && v.estado!==fEst && !(fEst==='Pago Pendiente' && v.estado==='Pendiente')) return;
-        if(fCli && !( (v.cliente||'').toLowerCase().includes(fCli) || (v.tel||'').includes(fCli) )) return;
-        html+=`<tr class="${v.estado==='Pagado'?'pagado':'pendiente'}"><td>${v.fecha||''}</td><td>${v.cliente}<br><span class="small">${v.tel}<br>${v.dir||''}</span></td><td>${v.prodNombre||v.detalle}<br><span class="small">${v.color||''} ${v.descripcion||''}</span></td><td>${v.talla||''}</td><td>${v.cant}</td><td>$${v.precioUnit||Math.round(v.total/v.cant)}</td><td>$${v.total}</td><td><button class="btn" onclick="App.ventas.toggleEstado(${idx})">${v.estado}</button></td><td>${v.tipo||'Pedido'}</td><td><button class="btn btn-red" onclick="App.ventas.eliminar(${idx})">Eliminar</button></td></tr>`;
-      });
-      tabla.innerHTML=html;
-    },
-    toggleEstado(i){ App.state.hist[i].estado = App.state.hist[i].estado==='Pagado'?'Pago Pendiente':'Pagado'; App.db.guardar(); },
-    eliminar(i){
-      if(!confirm("¿Eliminar/anular venta? El stock volverá al inventario.")) return;
-      const v=App.state.hist[i];
-      const pi=App.state.cat.findIndex(p=>p.lote===v.lote && p.talla===v.talla && p.genero===v.genero && (p.nombre===v.prodNombre || true));
-      // buscar mejor match
-      let idxProd=App.state.cat.findIndex(p=>p.lote===v.lote && p.talla===v.talla && p.genero===v.genero);
-      if(idxProd!==-1) App.state.cat[idxProd].stock+=v.cant;
-      else { // fallback por nombre
-        const f=App.state.cat.findIndex(p=>p.nombre===v.prodNombre); if(f!==-1) App.state.cat[f].stock+=v.cant;
-      }
-      App.state.hist.splice(i,1);
-      App.db.guardar();
-    },
-    nuevaVentaDirecta(){
-      const prodIdx=prompt("Índice del producto en catálogo (0 = primero). Ve a Catálogo para ver orden. O escribe nombre exacto:");
-      if(prodIdx===null) return;
-      let p=null, idx=-1;
-      if(isNaN(prodIdx)){ idx=App.state.cat.findIndex(x=>x.nombre.toLowerCase()===prodIdx.toLowerCase()); p=App.state.cat[idx]; }
-      else { idx=parseInt(prodIdx); p=App.state.cat[idx]; }
-      if(!p) return alert("Producto no encontrado");
-      const cant=parseInt(prompt(`Stock actual ${p.stock}. Cantidad a vender:`)||'1');
-      if(cant>p.stock) return alert("Sin stock");
-      const cliente=prompt("Nombre cliente:")||'Venta Directa';
-      const tel=prompt("Teléfono:")||'';
-      const dir=prompt("Dirección:")||'';
-      p.stock-=cant;
-      App.state.hist.push({cliente,tel,dir,prodNombre:p.nombre,lote:p.lote,genero:p.genero,talla:p.talla,color:p.color,descripcion:p.descripcion,detalle:`${p.nombre} | ${p.talla} | ${p.color}`,cant,total:cant*p.precio,precioUnit:p.precio,estado:'Pagado',tipo:'Venta Directa',fecha:new Date().toLocaleString('es-CL')});
-      App.db.guardar();
-    },
-    exportExcel(){
-      // CSV compatible con Excel
-      let csv='Fecha,Nombre,Telefono,Direccion,Producto,Talla,Cantidad,Precio Unitario,Total,Estado,Tipo\n';
-      App.state.hist.forEach(v=>{
-        const row=[v.fecha||'',`"${(v.cliente||'').replace(/"/g,'""')}"`,v.tel||'',`"${(v.dir||'').replace(/"/g,'""')}"`,`"${(v.prodNombre||v.detalle||'').replace(/"/g,'""')}"`,v.talla||'',v.cant,v.precioUnit||'',v.total,v.estado||'',v.tipo||''].join(',');
-        csv+=row+'\n';
-      });
-      const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`ventas_survivor_${new Date().toISOString().slice(0,10)}.csv`; a.click();
-    }
-  },
-  estadisticas:{
-    render(){
-      const cont=document.getElementById('tablaEstadisticas');
-      const kpi=document.getElementById('kpiGeneral');
-      if(!cont) return;
-      let invTotal=0, recTotal=0, ganTotal=0, vendTotal=0, stockTotal=0;
-      let html='<div style="overflow:auto"><table><tr><th>Lote</th><th>Tipo</th><th>Fabricadas</th><th>Costo Tela</th><th>Costo Conf</th><th>Costo Total</th><th>Costo x Prenda</th><th>Precio Venta</th><th>Vendidas</th><th>Stock Restante</th><th>Recuperado</th><th>Ganancia</th><th>% Gan</th><th>Valor Potencial Stock</th></tr>';
-      App.state.lotes.forEach(lote=>{
-        const prods=App.state.cat.filter(p=>p.lote===lote.nombre);
-        const ventas=App.state.hist.filter(h=>h.lote===lote.nombre && h.estado==='Pagado');
-        const cantVendida=ventas.reduce((a,v)=>a+v.cant,0);
-        const stockRestante=prods.reduce((a,p)=>a+p.stock,0);
-        const precioVentaProm = prods.length ? Math.round(prods.reduce((a,p)=>a+p.precio,0)/prods.length) : 0;
-        const recuperado=ventas.reduce((a,v)=>a+v.total,0);
-        const costoTotal=lote.tela+lote.conf;
-        const costoX = lote.costoUnit;
-        const costoVendido = cantVendida * costoX;
-        const ganancia = recuperado - costoVendido;
-        const perc = recuperado ? Math.round((ganancia/recuperado)*100) : 0;
-        const valorPotencial = stockRestante * precioVentaProm;
-        invTotal+=costoTotal; recTotal+=recuperado; ganTotal+=ganancia; vendTotal+=cantVendida; stockTotal+=stockRestante;
-        const tipoProd = prods[0]?.tipoPrenda || 'Polera';
-        html+=`<tr><td>${lote.nombre}</td><td>${tipoProd}</td><td>${lote.cant}</td><td>$${lote.tela}</td><td>$${lote.conf}</td><td>$${costoTotal}</td><td>$${Math.round(costoX)}</td><td>$${precioVentaProm}</td><td>${cantVendida}</td><td>${stockRestante}</td><td>$${recuperado}</td><td>$${Math.round(ganancia)}</td><td>${perc}%</td><td>$${valorPotencial}</td></tr>`;
-      });
-      html+='</table></div>';
-      cont.innerHTML=html;
-      if(kpi) kpi.innerHTML=`<div><span class="small">Inversión Total</span><strong>$${invTotal}</strong></div><div><span class="small">Recuperado</span><strong>$${recTotal}</strong></div><div><span class="small">Ganancia Total</span><strong>$${Math.round(ganTotal)}</strong></div><div><span class="small">Prendas Vendidas</span><strong>${vendTotal}</strong></div><div><span class="small">Stock Restante</span><strong>${stockTotal}</strong></div>`;
-    }
-  },
-  admin:{
-    toggleCuello(){ const tipo=document.getElementById('pTipo').value; document.getElementById('wrapCuello').style.display = tipo.includes('Polera') ? 'block' : 'none'; },
-    editarQuienes(){ const nuevo=prompt("Editar Quiénes Somos:", App.state.config.quienes||''); if(nuevo!==null){ App.state.config.quienes=nuevo; App.db.guardar(); } },
-    editarMision(){ const nuevo=prompt("Editar Misión:", App.state.config.mision||''); if(nuevo!==null){ App.state.config.mision=nuevo; App.db.guardar(); } },
-    editarVision(){ const nuevo=prompt("Editar Visión:", App.state.config.vision||''); if(nuevo!==null){ App.state.config.vision=nuevo; App.db.guardar(); } },
-    editarMateria(){ const nuevo=prompt("Editar Materia Prima:", App.state.config.materia||''); if(nuevo!==null){ App.state.config.materia=nuevo; App.db.guardar(); } }
-  },
-  config:{
-    async subirLogo(e){
-      const file=e.target.files[0]; if(!file) return;
-      const b64=await App.utils.compress(file,400);
-      App.state.config.logo=b64;
-      App.db.guardar();
-    },
-    guardarStockMin(){ const v=parseInt(document.getElementById('cfgStockMin').value)||3; App.state.config.stockMin=v; App.db.guardar(); alert("Stock mínimo actualizado"); }
-  },
-  utils:{
-    compress(file,max=600){
-      return new Promise(res=>{
-        const r=new FileReader(); r.onload=ev=>{
-          const img=new Image(); img.onload=()=>{
-            const c=document.createElement('canvas'); let w=img.width,h=img.height;
-            if(w>h && w>max){ h*=max/w; w=max; } else if(h>max){ w*=max/h; h=max; }
-            c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h);
-            res(c.toDataURL('image/jpeg',0.7));
-          }; img.src=ev.target.result;
-        }; r.readAsDataURL(file);
-      });
-    }
-  }
-};
+cliente:{
+filtrar(){
+const q=document.getElementById('fBuscar').value.toLowerCase();
+const g=document.getElementById('fGenero').value;
+const cont=document.getElementById('catalogoCliente');
+let html='';
+App.state.catalogFotos.forEach((p,idx)=>{
+if(g!=='Todos'&&p.genero!==g)return;
+if(q&&!((p.nombre||'').toLowerCase().includes(q)||(p.descripcion||'').toLowerCase().includes(q)||(p.color||'').toLowerCase().includes(q)))return;
+html+=`<div class="prod-card"><div class="img" onclick="App.cliente.abrirModal(${idx})"><img src="${p.foto}"><span class="badge-stock badge-ok">$${p.precio}</span></div><div class="prod-info"><h4>${p.nombre}</h4><div class="meta">${p.tipoPrenda} - ${p.genero}<br>Tallas: ${(p.tallas||[]).join(', ')}<br>Color: ${p.color}<br>${p.descripcion}</div><div class="price">$${p.precio}</div><button class="btn btn-primary" style="width:100%;margin-top:8px;padding:12px" onclick="App.cliente.abrirModal(${idx})">👁️ Seleccionar talla</button></div></div>`;
+});
+cont.innerHTML=html||'<p class="small">Aún no hay productos. Admin > Catálogo y Fotos</p>';
+},
+abrirModal(idx){
+const p=App.state.catalogFotos[idx];
+App.state.modalProd=p;App.state.modalProdIdx=idx;
+document.getElementById('modalImg').src=p.foto;
+document.getElementById('modalNombre').innerText=p.nombre;
+document.getElementById('modalDesc').innerText=p.descripcion+' | Color: '+p.color;
+document.getElementById('modalPrecio').innerText='$'+p.precio;
+const cont=document.getElementById('modalTallas');cont.innerHTML='';
+(p.tallas||[]).forEach(t=>{
+let stockReal=999;
+if(p.loteVinculo){const inv=App.state.cat.filter(x=>x.lote===p.loteVinculo&&x.talla===t&&x.genero===p.genero);stockReal=inv.reduce((a,b)=>a+b.stock,0);}
+const disabled=stockReal<=0?'disabled':'';
+const label=stockReal<=0?`${t} (agotado)`:stockReal<900?`${t} (${stockReal} disp.)`:t;
+cont.innerHTML+=`<button class="talla-btn ${disabled}" onclick="App.cliente.seleccionarTalla(this,'${t}')">${label}</button>`;
+});
+App.state.modalTallaSel=null;
+document.getElementById('modalCant').value=1;
+document.getElementById('modalTalla').classList.add('open');
+},
+seleccionarTalla(btn,talla){document.querySelectorAll('.talla-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');App.state.modalTallaSel=talla;},
+confirmarModal(){
+if(!App.state.modalTallaSel)return alert("Debes seleccionar una talla");
+const qty=parseInt(document.getElementById('modalCant').value)||1;
+const prod=App.state.modalProd;const talla=App.state.modalTallaSel;
+if(prod.loteVinculo){
+const inv=App.state.cat.filter(x=>x.lote===prod.loteVinculo&&x.talla===talla&&x.genero===prod.genero);
+const totalStock=inv.reduce((a,b)=>a+b.stock,0);
+if(totalStock<qty)return alert(`Stock insuficiente para talla ${talla}. Quedan ${totalStock}`);
+}
+// Agregar al carrito y quedarse en catálogo para seguir comprando
+App.state.carrito.push({idx:App.state.modalProdIdx,qty,talla,prod});
+document.getElementById('modalTalla').classList.remove('open');
+App.cliente.renderCarrito();
+// Toast
+const toast=document.getElementById('toastAdd');
+toast.innerText=`✅ Talla ${talla} agregada - ${App.state.carrito.length} producto(s)`;
+toast.classList.add('show');
+setTimeout(()=>toast.classList.remove('show'),2500);
+},
+renderCarrito(){
+const cont=document.getElementById('listaCarrito');if(!cont)return;
+if(App.state.carrito.length===0){
+cont.innerHTML='<p class="small">Carrito vacío - ve al catálogo y selecciona varios productos con su talla</p>';
+document.getElementById('totalPedido').innerText='$0';document.getElementById('cartCount').innerText='0';
+const mc=document.getElementById('menuCart');if(mc)mc.innerText='';
+const floatBar=document.getElementById('cartFloat');if(floatBar)floatBar.classList.remove('show');
+return;
+}
+let total=0;let html='<table><tr><th>Foto</th><th>Producto</th><th>Talla seleccionada</th><th>Cant</th><th>Total</th><th></th></tr>';
+App.state.carrito.forEach((c,i)=>{
+const p=c.prod;const sub=p.precio*c.qty;total+=sub;
+html+=`<tr><td><img src="${p.foto}" style="width:50px;height:50px;object-fit:cover;border-radius:6px"></td><td>${p.nombre}<br><span class="small">${p.descripcion}</span></td><td><strong style="background:white;color:black;padding:4px 8px;border-radius:6px">${c.talla}</strong></td><td>${c.qty}</td><td>$${sub}</td><td><button class="btn btn-red" onclick="App.cliente.quitar(${i})">X</button></td></tr>`;
+});
+html+='</table>';cont.innerHTML=html;
+document.getElementById('totalPedido').innerText='$'+total;
+document.getElementById('cartCount').innerText=App.state.carrito.length;
+const mc=document.getElementById('menuCart');if(mc)mc.innerText=`(${App.state.carrito.length})`;
+const floatBar=document.getElementById('cartFloat');const floatText=document.getElementById('cartFloatText');
+if(floatBar&&floatText){floatText.innerText=`${App.state.carrito.length} producto${App.state.carrito.length>1?'s':''} seleccionado${App.state.carrito.length>1?'s':''}`;floatBar.classList.add('show');}
+},
+quitar(i){App.state.carrito.splice(i,1);App.cliente.renderCarrito();},
+confirmarPedido(){
+if(App.state.carrito.length===0)return alert("Carrito vacío - selecciona varios productos primero");
+const nombre=document.getElementById('pedNombre').value.trim();
+const tel=document.getElementById('pedTel').value.trim();
+const dir=document.getElementById('pedDir').value.trim();
+if(!nombre||!tel||!dir)return alert("Completa nombre, teléfono y dirección");
+App.state.carrito.forEach(c=>{
+const p=c.prod;
+if(p.loteVinculo){let restante=c.qty;App.state.cat.forEach(inv=>{if(restante<=0)return;if(inv.lote===p.loteVinculo&&inv.talla===c.talla&&inv.genero===p.genero){const desc=Math.min(inv.stock,restante);inv.stock-=desc;restante-=desc;}});}
+App.state.hist.push({cliente:nombre,tel,dir:dir+' '+document.getElementById('pedComuna').value,prodNombre:p.nombre,lote:p.loteVinculo||'Catálogo',genero:p.genero,talla:c.talla,color:p.color,descripcion:p.descripcion,detalle:`${p.nombre} | Talla ${c.talla}`,cant:c.qty,total:c.qty*p.precio,precioUnit:p.precio,estado:'Pendiente',tipo:'Pedido Online',fecha:new Date().toLocaleString('es-CL'),foto:p.foto,tipoPrenda:p.tipoPrenda});
+});
+App.db.guardar().then(()=>{
+let msg=`*NUEVO PEDIDO SURVIVOR - ${App.state.carrito.length} PRODUCTOS*%0ACliente: ${nombre}%0ATel: ${tel}%0ADir: ${dir}%0A%0AProductos:%0A`;let total=0;
+App.state.carrito.forEach(c=>{total+=c.qty*c.prod.precio;msg+=`- ${c.prod.nombre} Talla ${c.talla} x${c.qty} = $${c.qty*c.prod.precio}%0A`;});
+msg+=`%0ATOTAL: $${total}`;
+window.open(`https://wa.me/${CONFIG.wspNumero}?text=${msg}`,'_blank');
+App.state.carrito=[];App.cliente.renderCarrito();alert(`Pedido de ${App.state.carrito.length} productos registrado`);App.go('productos');
+});
+}
+},
 
+ventas:{render(){const tabla=document.getElementById('tablaVentasAdmin');if(!tabla)return;let html=`<tr><th>Foto</th><th>Fecha</th><th>Cliente</th><th>Producto</th><th>Talla</th><th>Cant</th><th>Total</th><th>Estado</th><th>Acción</th></tr>`;App.state.hist.slice().reverse().forEach((v,revIdx)=>{const idx=App.state.hist.length-1-revIdx;html+=`<tr class="${v.estado==='Pagado'?'pagado':'pendiente'}"><td>${v.foto?`<img src="${v.foto}" style="width:40px;height:40px;object-fit:cover">`:''}</td><td>${v.fecha||''}</td><td>${v.cliente}<br><span class="small">${v.tel||''}</span></td><td>${v.prodNombre}</td><td><strong>${v.talla||''}</strong></td><td>${v.cant}</td><td>$${v.total}</td><td><button class="btn" onclick="App.ventas.toggleEstado(${idx})">${v.estado}</button></td><td><button class="btn btn-red" onclick="App.ventas.eliminar(${idx})">X</button></td></tr>`;});tabla.innerHTML=html;},
+toggleEstado(i){App.state.hist[i].estado=App.state.hist[i].estado==='Pagado'?'Pago Pendiente':'Pagado';App.db.guardar();},
+eliminar(i){if(!confirm("¿Anular? Devolverá stock"))return;const v=App.state.hist[i];if(v.lote&&v.lote!=='Catálogo'){App.state.cat.forEach(inv=>{if(inv.lote===v.lote&&inv.talla===v.talla)inv.stock+=v.cant;});}App.state.hist.splice(i,1);App.db.guardar();},
+exportExcel(){let csv='Fecha,Nombre,Telefono,Producto,Talla,Cantidad,Total,Estado\n';App.state.hist.forEach(v=>{csv+=`${v.fecha||''},${v.cliente||''},${v.tel||''},${v.prodNombre||''},${v.talla||''},${v.cant},${v.total},${v.estado}\n`;});const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`ventas_${new Date().toISOString().slice(0,10)}.csv`;a.click();}},
+
+estadisticas:{render(){
+const cont=document.getElementById('tablaEstadisticas');const kpi=document.getElementById('kpiGeneral');if(!cont)return;
+let invTotal=0,recTotal=0,ganTotal=0,vendTotal=0,stockTotal=0;
+let html='<div style="overflow:auto"><table><tr><th>Lote</th><th>Fabricadas</th><th>Costo Total</th><th>Costo x Prenda</th><th>Vendidas</th><th>Stock</th><th>Recuperado</th><th>Ganancia</th></tr>';
+App.state.lotes.forEach(lote=>{const inv=App.state.cat.filter(p=>p.lote===lote.nombre);const ventas=App.state.hist.filter(h=>h.lote===lote.nombre&&h.estado==='Pagado');const cantVendida=ventas.reduce((a,v)=>a+v.cant,0);const stockRestante=inv.reduce((a,p)=>a+p.stock,0);const recuperado=ventas.reduce((a,v)=>a+v.total,0);const costoTotal=lote.tela+lote.conf;const ganancia=recuperado-(cantVendida*lote.costoUnit);invTotal+=costoTotal;recTotal+=recuperado;ganTotal+=ganancia;vendTotal+=cantVendida;stockTotal+=stockRestante;html+=`<tr><td>${lote.nombre}</td><td>${lote.cant}</td><td>$${costoTotal}</td><td>$${Math.round(lote.costoUnit)}</td><td>${cantVendida}</td><td>${stockRestante}</td><td>$${recuperado}</td><td>$${Math.round(ganancia)}</td></tr>`;});
+html+='</table></div>';cont.innerHTML=html;
+if(kpi)kpi.innerHTML=`<div><span class="small">Inversión</span><strong>$${invTotal}</strong></div><div><span class="small">Recuperado</span><strong>$${recTotal}</strong></div><div><span class="small">Ganancia</span><strong>$${Math.round(ganTotal)}</strong></div><div><span class="small">Vendidas</span><strong>${vendTotal}</strong></div><div><span class="small">Stock</span><strong>${stockTotal}</strong></div>`;
+
+const ventasPorProducto={};App.state.hist.forEach(v=>{if(v.estado!=='Pagado')return;const key=v.prodNombre+'|'+(v.talla||'')+'|'+(v.color||'');if(!ventasPorProducto[key])ventasPorProducto[key]={nombre:v.prodNombre,talla:v.talla,color:v.color,tipo:v.tipoPrenda||'',cant:0,total:0,foto:v.foto||''};ventasPorProducto[key].cant+=v.cant;ventasPorProducto[key].total+=v.total;});
+const ranking=Object.values(ventasPorProducto).sort((a,b)=>b.cant-a.cant);const maxCant=ranking[0]?.cant||1;
+let htmlRank='<div style="overflow:auto"><table><tr><th>Foto</th><th>Producto</th><th>Talla</th><th>Color</th><th>Vendidas</th><th>Total</th><th>Popularidad</th></tr>';if(ranking.length===0)htmlRank+='<tr><td colspan="7" class="small">Sin ventas pagadas</td></tr>';ranking.forEach(r=>{const perc=Math.round((r.cant/maxCant)*100);htmlRank+=`<tr><td>${r.foto?`<img src="${r.foto}" style="width:40px;height:40px;object-fit:cover">`:''}</td><td><strong>${r.nombre}</strong></td><td>${r.talla||''}</td><td>${r.color||''}</td><td><strong>${r.cant}</strong></td><td>$${r.total}</td><td><div class="rank-bar"><div class="rank-fill" style="width:${perc}%"></div></div></td></tr>`;});htmlRank+='</table></div>';document.getElementById('rankingProductos').innerHTML=htmlRank;
+
+const porTalla={};App.state.hist.forEach(v=>{if(v.estado!=='Pagado')return;const t=v.talla||'Sin talla';porTalla[t]=(porTalla[t]||0)+v.cant;});
+let htmlTalla='<table><tr><th>Talla</th><th>Vendidas</th></tr>';Object.entries(porTalla).sort((a,b)=>b[1]-a[1]).forEach(([t,c])=>{htmlTalla+=`<tr><td><strong>${t}</strong></td><td>${c}</td></tr>`;});htmlTalla+='</table>';document.getElementById('ventasTalla').innerHTML=htmlTalla;
+
+const porColorTipo={};App.state.hist.forEach(v=>{if(v.estado!=='Pagado')return;const key=(v.tipoPrenda||'')+' - '+(v.color||'');porColorTipo[key]=(porColorTipo[key]||0)+v.cant;});
+let htmlColor='<table><tr><th>Tipo/Color</th><th>Vendidas</th></tr>';Object.entries(porColorTipo).sort((a,b)=>b[1]-a[1]).forEach(([k,c])=>{htmlColor+=`<tr><td>${k}</td><td><strong>${c}</strong></td></tr>`;});htmlColor+='</table>';document.getElementById('ventasColorTipo').innerHTML=htmlColor;
+
+let htmlReponer='<table><tr><th>Producto</th><th>Vendidas</th><th>Stock</th><th>Acción</th></tr>';ranking.slice(0,10).forEach(r=>{let stockActual=0;App.state.cat.forEach(inv=>{if(r.talla&&inv.talla!==r.talla)return;if(inv.nombre===r.nombre)stockActual+=inv.stock;});if(stockActual===0){const fotoMatch=App.state.catalogFotos.find(f=>f.nombre===r.nombre);if(fotoMatch&&fotoMatch.loteVinculo){const inv=App.state.cat.filter(x=>x.lote===fotoMatch.loteVinculo&&x.talla===r.talla);stockActual=inv.reduce((a,b)=>a+b.stock,0);}}let accion=stockActual<=3?'⚠️ REPONER URGENTE':'OK';htmlReponer+=`<tr><td>${r.nombre} Talla ${r.talla}</td><td>${r.cant}</td><td>${stockActual}</td><td>${accion}</td></tr>`;});htmlReponer+='</table>';if(ranking.length===0)htmlReponer='<p class="small">Sin datos</p>';document.getElementById('reponer').innerHTML=htmlReponer;
+}
+},
+
+admin:{editarQuienes(){const n=prompt("Editar Quiénes Somos:",App.state.config.quienes||'');if(n!==null){App.state.config.quienes=n;App.db.guardar();}},editarMision(){const n=prompt("Editar Misión:",App.state.config.mision||'');if(n!==null){App.state.config.mision=n;App.db.guardar();}},editarVision(){const n=prompt("Editar Visión:",App.state.config.vision||'');if(n!==null){App.state.config.vision=n;App.db.guardar();}},editarMateria(){const n=prompt("Editar Materia Prima:",App.state.config.materia||'');if(n!==null){App.state.config.materia=n;App.db.guardar();}}},
+config:{async subirLogo(e){const file=e.target.files[0];if(!file)return;const b64=await App.utils.compress(file,400);App.state.config.logo=b64;App.db.guardar();},guardarStockMin(){const v=parseInt(document.getElementById('cfgStockMin').value)||3;App.state.config.stockMin=v;App.db.guardar();alert("Guardado");}},
+utils:{compress(file,max=900){return new Promise(res=>{const r=new FileReader();r.onload=ev=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');let w=img.width,h=img.height;if(w>h&&w>max){h*=max/w;w=max;}else if(h>max){w*=max/h;h=max;}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res(c.toDataURL('image/jpeg',0.7));};img.src=ev.target.result;};r.readAsDataURL(file);});}}
+};
 document.addEventListener('DOMContentLoaded',()=>App.init());
 </script>
 </body>
