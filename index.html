@@ -29,7 +29,7 @@ a{color:inherit}
 .sidebar{width:280px;background:var(--black);border-right:1px solid var(--border);position:fixed;height:100vh;left:0;top:0;z-index:100;display:flex;flex-direction:column;padding:20px 16px;transition:.3s;overflow-y:auto}
 .sidebar.hidden{transform:translateX(-100%)}
 .sidebar .logo-area{text-align:center;padding:10px 0 20px;border-bottom:1px solid #1a2e22;margin-bottom:16px}
-.sidebar .logo-area img{max-width:160px;max-height:90px;object-fit:contain;background:transparent;border:none;padding:0;display:block;margin:0 auto 10px}
+.sidebar .logo-area img{max-width:160px;max-height:90px;object-fit:contain;background:white;border-radius:8px;padding:6px;display:block;margin:0 auto 10px}
 .sidebar .logo-area h2{font-size:18px;letter-spacing:2px;font-weight:800}
 .menu{flex:1}
 .menu button{width:100%;text-align:left;padding:13px 14px;margin-bottom:8px;background:transparent;border:1px solid #1a2e22;border-radius:10px;color:var(--white);font-weight:600;font-size:13px;display:flex;gap:10px;align-items:center;transition:.2s}
@@ -38,7 +38,7 @@ a{color:inherit}
 .main{margin-left:280px;flex:1;min-height:100vh;display:flex;flex-direction:column}
 .topbar{height:72px;background:var(--green-deep);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:50}
 .topbar .center-logo{position:absolute;left:50%;transform:translateX(-50%);text-align:center}
-.topbar .center-logo img{height:48px;max-width:200px;object-fit:contain;background:transparent;border:none;padding:0}
+.topbar .center-logo img{height:48px;max-width:200px;object-fit:contain;background:white;border-radius:8px;padding:4px}
 .hamburger{display:none;background:var(--black);border:1px solid var(--border);color:white;padding:8px 12px;border-radius:8px}
 .content{padding:24px;flex:1}
 @media(max-width:900px){
@@ -228,7 +228,7 @@ th{background:var(--black);font-size:11px;text-transform:uppercase;letter-spacin
       <div id="vista-config" class="vista">
         <div class="box"><h2>⚙️ Configuración General</h2>
           <div class="grid">
-            <div><label>Logo empresa</label><input type="file" id="inputLogo" accept="image/*" onchange="App.config.subirLogo(event)"><div style="margin-top:10px"><img id="previewLogo" style="max-width:180px;background:transparent;border:none;padding:0;display:none"></div></div>
+            <div><label>Logo empresa</label><input type="file" id="inputLogo" accept="image/*" onchange="App.config.subirLogo(event)"><div style="margin-top:10px"><img id="previewLogo" style="max-width:180px;background:white;padding:6px;border-radius:8px;display:none"></div></div>
             <div><label>Alerta stock bajo (cantidad)</label><input id="cfgStockMin" type="number" value="3"><button class="btn" style="margin-top:8px" onclick="App.config.guardarStockMin()">Guardar</button></div>
             <div><label>WhatsApp notificación</label><input id="cfgWsp" value="+56 9 4891 8687" disabled><p class="small">Fijo según requerimiento</p></div>
           </div>
