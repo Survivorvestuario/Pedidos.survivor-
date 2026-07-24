@@ -1,146 +1,436 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VESTUARIO SURVIVOR - SISTEMA COMPLETO V6</title>
-<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Anton&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root{--verde-oscuro:#0a1f13;--verde:#1b7a3d;--verde-claro:#2ecc71;--verde-bg:#143d24;--negro:#080808}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--verde-bg);color:white;display:flex;min-height:100vh}
-.sidebar{width:320px;background:var(--verde-oscuro);border-right:4px solid var(--negro);position:fixed;left:0;top:0;bottom:0;display:flex;flex-direction:column;z-index:10;overflow-y:auto}
-.logo-box{background:#000;border-bottom:3px solid var(--verde-claro);padding:20px;text-align:center;display:flex;flex-direction:column;align-items:center}
-.logo-box img{max-width:190px;max-height:150px;object-fit:contain;margin-bottom:8px}
-.brand-name{font-family:'Black Ops One',Impact,sans-serif;font-size:25px;letter-spacing:2px;line-height:1}
-.brand-sub{font-family:'Anton',sans-serif;font-size:11px;letter-spacing:5px;color:var(--verde-claro);margin-top:4px}
-.admin-only{display:none}#bodyRoot.admin-mode.admin-only{display:block}
-.nav-section{padding:12px}.nav-title{font-size:9px;letter-spacing:2px;color:#5a8a6a;margin:12px 0 5px 5px;font-weight:bold}
-.nav-btn{width:100%;padding:10px 11px;background:transparent;border:1px solid #1e3d29;color:white;border-radius:9px;text-align:left;font-weight:700;cursor:pointer;font-size:12px;margin-bottom:5px;display:flex;justify-content:space-between}
-.nav-btn:hover{background:var(--verde)}.nav-btn.active{background:var(--verde);border-color:white}
-.main{margin-left:320px;flex:1;padding:24px}
-.box{background:white;color:#111;padding:18px;border-radius:14px;margin-bottom:16px;box-shadow:0 8px 20px rgba(0,0,0,0.4);border-left:6px solid black}
-.box h2{color:var(--verde);border-bottom:3px solid black;padding-bottom:7px;margin-bottom:12px;font-family:'Anton',sans-serif;font-size:18px}
-.box h3{font-size:14px;margin:8px 0}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
-label{font-size:11px;font-weight:bold;margin:6px 0 2px 0;display:block;color:#333}
-input,select,textarea{padding:10px;width:100%;border:2px solid black;border-radius:8px;background:white;color:black;font-size:13px}
-button{padding:8px 11px;cursor:pointer;background:black;color:white;border:none;border-radius:7px;font-weight:bold;font-size:11px}
-.btn-verde{background:var(--verde)}.btn-compra{width:100%;padding:12px;background:var(--verde);color:white;border:2px solid black;border-radius:10px;font-size:14px;font-weight:bold;margin-top:8px}
-.vista{display:none}.vista.activa{display:block;animation:fade.25s}@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.lista-productos{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
-.item-producto{border-radius:12px;border:2px solid black;background:white;overflow:hidden;cursor:pointer;transition:.2s;display:flex;flex-direction:column}
-.item-producto:hover{transform:translateY(-2px)}.item-producto.seleccionado{outline:4px solid var(--verde-claro)}
-.img-producto-container{width:100%;height:150px;background:#e8f5e9;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
-.img-producto{width:100%;height:100%;object-fit:cover}
-.badge-stock{background:var(--verde);color:white;padding:3px 8px;border-radius:12px;font-size:10px;font-weight:bold;margin-top:4px;display:inline-block}
-.badge-stock.agotado{background:#c0392b}
-.precio-tag{font-size:16px;font-weight:bold;color:var(--verde)}
-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:11px}th,td{border:1px solid #ddd;padding:6px;text-align:center}th{background:black;color:white;font-size:10px}
-.pagado{background:#d4edda!important}.pendiente{background:#fff3cd!important}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:10px}
-.stat-card{background:black;color:white;border-radius:10px;padding:12px;border:2px solid var(--verde)}
-.stat-card.green{background:var(--verde)}.stat-card h4{font-size:9px;letter-spacing:1px;color:var(--verde-claro);margin-bottom:3px}.stat-card.val{font-size:18px;font-weight:bold}
-.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:100;padding:10px}.modal.active{display:flex}.modal-box{background:white;color:black;padding:16px;border-radius:12px;width:96%;max-width:520px;max-height:92vh;overflow-y:auto}
-.wa-float{position:fixed;bottom:18px;right:18px;background:#25D366;color:white;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 6px 18px rgba(0,0,0,0.4);z-index:99;text-decoration:none}
-.talla-selector{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
-.talla-btn{padding:6px 10px;border:2px solid black;border-radius:20px;background:white;color:black;cursor:pointer;font-size:11px;font-weight:bold}
-.talla-btn.active{background:var(--verde);color:white;border-color:black}
-@media(max-width:900px){.sidebar{width:100%;position:relative}.main{margin-left:0}body{flex-direction:column}}
-</style>
-</head>
-<body id="bodyRoot">
-<div class="sidebar">
- <div class="logo-box">
-  <img id="logoImg" src="survivor_logo_final.png" onerror="this.style.display='none'">
-  <div class="brand-name">VESTUARIO</div><div class="brand-name" style="color:#2ecc71">SURVIVOR</div><div class="brand-sub">— RESISTENCIA —</div>
-  <div class="admin-only"><label style="margin-top:8px;background:#111;color:#aaa;border:1px dashed #2ecc71;border-radius:20px;padding:5px 10px;font-size:9px;cursor:pointer">CAMBIAR LOGO<input type="file" id="inputLogo" accept="image/*" style="display:none" onchange="cargarLogo(event)"></label></div>
- </div>
- <div class="nav-section">
-  <div class="nav-title">CLIENTE</div>
-  <button class="nav-btn active" onclick="mostrarVista('quienes')">🏢 QUIENES SOMOS</button>
-  <button class="nav-btn" onclick="mostrarVista('materia')">🧵 MATERIA PRIMA</button>
-  <button class="nav-btn" onclick="mostrarVista('productos')">👕 PRODUCTOS</button>
-  <button class="nav-btn" onclick="mostrarVista('compras')">🛒 COMPRAS / PEDIDO</button>
-  <button class="nav-btn" onclick="mostrarVista('contacto')">📩 CONTACTANOS</button>
-  <div id="adminMenu" class="admin-only">
-   <div class="nav-title" style="color:#ff6b6b">🔐 MODO ADMINISTRADOR</div>
-   <button class="nav-btn" onclick="mostrarVista('dashboard')">📊 ESTADISTICAS COMPLETAS</button>
-   <button class="nav-btn" onclick="mostrarVista('editarPaginas')">✏️ EDITAR QUIENES SOMOS / MATERIA PRIMA</button>
-   <button class="nav-btn" onclick="mostrarVista('lotes')">📦 LOTES - COSTOS Y CANTIDAD</button>
-   <button class="nav-btn" onclick="mostrarVista('catalogoAdmin')">🗃️ PRODUCTOS ADMIN + FOTO + LOTE</button>
-   <button class="nav-btn" onclick="mostrarVista('ventas')">📋 VENTAS ADMIN</button>
-  </div>
-  <div style="margin-top:15px;padding:8px;background:#000;border-radius:10px;text-align:center">
-   <button id="btnAdminToggle" onclick="toggleAdmin()" style="width:100%;background:#1b7a3d;padding:9px;border-radius:8px">🔐 MODO ADMIN</button>
-   <div style="font-size:8px;color:#777;margin-top:4px">Clave: negro1687</div>
-  </div>
- </div>
-</div>
-<div class="main">
- <div id="vistaQuienes" class="vista activa"><div class="box" style="background:#0a1f13;color:white;border-color:#2ecc71"><h2 id="qTitulo" style="color:white;border-color:#2ecc71;font-family:'Black Ops One'">QUIENES SOMOS - VESTUARIO SURVIVOR</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><div><h3 style="color:#2ecc71">Misión</h3><p id="qMision" style="margin:6px 0;line-height:1.5;font-size:13px">Confeccionamos vestuario resistente.</p><h3 style="color:#2ecc71;margin-top:10px">Visión</h3><p id="qVision" style="font-size:13px">Ser líderes en vestuario laboral.</p></div><div style="background:white;color:black;padding:12px;border-radius:10px"><h3>¿Por qué elegirnos?</h3><ul id="qLista" style="margin:8px 18px;line-height:2;font-size:12px"></ul></div></div></div></div>
- <div id="vistaMateria" class="vista"><div class="box"><h2 id="mTitulo">MATERIA PRIMA</h2><p id="mDesc" style="font-size:12px"></p><div class="stats-grid" id="mGrid"></div></div></div>
- <div id="vistaProductos" class="vista"><div class="box"><h2>CATÁLOGO CLIENTE - Todo lo que subes en stock se refleja aquí</h2><div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap"><select id="filtroGenero" onchange="renderizarTienda(true)" style="max-width:160px"><option value="Todos">Todos</option><option value="Hombre">Hombre</option><option value="Mujer">Mujer</option></select><select id="filtroTipo" onchange="renderizarTienda(true)" style="max-width:180px"><option value="Todos">Todo tipo</option><option value="Polera Manga Corta">Polera Manga Corta</option><option value="Polera Manga Larga">Polera Manga Larga</option><option value="Pantalón">Pantalón</option><option value="TRI MAO">TRI MAO</option></select><span id="infoSeleccion" style="background:black;color:white;padding:6px 10px;border-radius:8px;font-size:11px">Ninguno</span><span id="totalStockInfo" style="background:#1b7a3d;color:white;padding:6px 10px;border-radius:8px;font-size:11px">Stock total: 0</span></div><div class="lista-productos" id="listaVisualProductos"></div><button class="btn-compra" onclick="irACompras()">🛒 COMPRAR SELECCIONADO → IR A PEDIDO</button></div></div>
- <div id="vistaCompras" class="vista"><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><div class="box"><h2>1. Tu Prenda</h2><select id="vSelectPrendaCliente" onchange="actualizarPrecioTienda()"></select><div style="display:flex;justify-content:space-between;margin-top:10px"><div><span style="font-size:11px">Unitario:</span><div class="precio-tag" id="precioUnitarioTienda">$0</div></div><div style="width:35%"><label>Cantidad</label><input type="number" id="vCantCliente" value="1" min="1" oninput="actualizarPrecioTienda()"></div></div><div style="text-align:right;margin-top:8px;font-size:16px;font-weight:bold;color:#1b7a3d">Total: <span id="precioTotalTienda">$0</span></div><div id="previewProducto" style="margin-top:10px;border:2px dashed #ccc;border-radius:10px;padding:8px;text-align:center;min-height:90px;font-size:12px">Selecciona producto</div></div><div class="box"><h2>2. Datos Envío</h2><label>Nombre</label><input id="cliNombreCliente"><label>Teléfono</label><input id="cliTelCliente"><label>Dirección</label><input id="cliDirCliente"><button class="btn-compra" onclick="enviarPedidoCliente()">✅ Confirmar + WhatsApp +56948918687</button></div></div></div>
- <div id="vistaContacto" class="vista"><div class="box"><h2>CONTACTANOS / TRABAJA CON NOSOTROS</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><div><h3 id="cEmpresa">VESTUARIO SURVIVOR</h3><p id="cDatos" style="font-size:12px">📍 Santiago<br>📱 +56 9 4891 8687</p></div><div><div style="display:flex;flex-direction:column;gap:6px"><input id="trabNombre" placeholder="Tu nombre"><input id="trabContacto" placeholder="Correo / teléfono"><select id="trabCargo"><option>Vendedor</option><option>Confección</option><option>Reparto</option><option>Distribuidor</option></select><textarea id="trabMsg" rows="3" placeholder="Cuéntanos"></textarea><button class="btn-verde" onclick="enviarTrabajaWA()">📲 Enviar por WhatsApp</button></div></div></div>
- <div id="vistaDashboard" class="vista"><div class="box" style="background:#0a1f13;color:white;border-color:#2ecc71"><h2 style="color:white;border-color:#2ecc71">📊 ESTADISTICA COMPLETA - Costo tela, confección, cantidad, unitario, recuperación, ganancia</h2><div class="stats-grid"><div class="stat-card green"><h4>TOTAL TELA</h4><div class="val" id="statTela">$0</div></div><div class="stat-card green"><h4>TOTAL CONFECCION</h4><div class="val" id="statConf">$0</div></div><div class="stat-card green"><h4>TOTAL INVERTIDO</h4><div class="val" id="statInversion">$0</div></div><div class="stat-card"><h4>CANTIDAD PRENDAS LOTES</h4><div class="val" id="statCantLotes">0</div></div><div class="stat-card"><h4>VALOR UNITARIO PROMEDIO</h4><div class="val" id="statUnitario">$0</div></div><div class="stat-card"><h4>RECUPERACION CAPITAL (PAGADO)</h4><div class="val" id="statCap">$0</div></div><div class="stat-card"><h4>GANANCIA REAL PAGADA</h4><div class="val" id="statGan" style="color:#2ecc71">$0</div></div><div class="stat-card"><h4>GANANCIA POR COBRAR</h4><div class="val" id="statPend">$0</div></div><div class="stat-card"><h4>STOCK TOTAL UNIDADES</h4><div class="val" id="statStockUnidades" style="color:#2ecc71">0</div></div><div class="stat-card"><h4>STOCK VALOR COSTO / VENTA</h4><div class="val" id="statStockCosto" style="font-size:14px">$0</div><div class="val" id="statStockVenta" style="font-size:14px;color:#2ecc71">$0</div></div></div><div style="margin-top:14px;background:white;color:black;border-radius:10px;padding:10px"><h4>Detalle por Lote - Tela + Confección + Cantidad + Unitario + Recuperación + Ganancia</h4><table id="tablaDashboardLotes"></table></div></div></div>
- <div id="vistaEditarPaginas" class="vista"><div class="box"><h2>✏️ EDITAR TEXTOS WEB - Quienes Somos y Materia Prima</h2><div style="border:2px solid black;border-radius:10px;padding:10px;margin-top:8px"><h3>QUIENES SOMOS</h3><label>Título</label><input id="editQTitulo"><label>Misión</label><textarea id="editQMision" rows="3"></textarea><label>Visión</label><textarea id="editQVision" rows="3"></textarea><label>Lista beneficios (separa con coma)</label><input id="editQLista"><button class="btn-verde" style="margin-top:6px" onclick="guardarQuienes()">💾 Guardar Quienes Somos</button></div><div style="border:2px solid black;border-radius:10px;padding:10px;margin-top:10px"><h3>MATERIA PRIMA</h3><label>Título</label><input id="editMTitulo"><label>Descripción</label><textarea id="editMDesc" rows="3"></textarea><label>Items (Nombre|Descripción ;...)</label><textarea id="editMItems" rows="3"></textarea><button class="btn-verde" style="margin-top:6px" onclick="guardarMateria()">💾 Guardar Materia Prima</button></div><div style="border:2px solid black;border-radius:10px;padding:10px;margin-top:10px"><h3>CONTACTO</h3><label>Empresa</label><input id="editCEmpresa"><label>Datos (usa &lt;br&gt;)</label><textarea id="editCDatos" rows="3"></textarea><button class="btn-verde" style="margin-top:6px" onclick="guardarContacto()">💾 Guardar Contacto</button></div></div></div>
- <div id="vistaLotes" class="vista"><div class="box"><h2>📦 LOTES - Botones para costos, cantidad y número de lote</h2><div style="background:#e8f5e9;border:2px dashed #1b7a3d;border-radius:10px;padding:10px;margin-bottom:10px;font-size:11px"><b>1. Número de Lote</b><br><b>2. Costo Tela</b><br><b>3. Costo Producción</b><br><b>4. Cantidad Prendas</b><br><b>→ Valor unitario = (Tela+Producción)/Cantidad</b></div><div class="grid" style="grid-template-columns:1fr 1fr 1fr 1fr"><div><label>🔢 Número de Lote</label><input id="iNumeroLote" placeholder="Ej: Lote-001"></div><div><label>🧶 Costo Tela $</label><input type="number" id="iTela" placeholder="50000"></div><div><label>🔧 Costo Producción $</label><input type="number" id="iConf" placeholder="80000"></div><div><label>👕 Cantidad Prendas</label><input type="number" id="iCant" placeholder="20"></div></div><div style="margin-top:8px;background:black;color:white;padding:8px;border-radius:8px;font-size:12px">Valor unitario: <span id="previewUnitario" style="color:#2ecc71;font-weight:bold">$0</span> = (Tela + Producción) / Cantidad</div><button onclick="registrarLote()" class="btn-verde" style="margin-top:10px">💾 Registrar Lote</button><table><thead><tr><th>N° Lote</th><th>Costo Tela</th><th>Costo Prod</th><th>Suma</th><th>Cant.</th><th>Valor Unit.</th><th>Stock Rest.</th><th>X</th></tr></thead><tbody id="bodyLotes"></tbody></table></div></div>
- <div id="vistaCatalogoAdmin" class="vista"><div class="box"><h2>🗃️ PRODUCTOS - Botones completos</h2><div class="grid" style="grid-template-columns:1fr 1fr"><div><label>🔢 Número de Lote</label><select id="prodLoteSelect"></select></div><div><label>👕 Tipo Prenda</label><select id="prodTipoPrenda" onchange="cambiarTipoPrenda()"><option value="Polera Manga Corta">Polera Manga Corta</option><option value="Polera Manga Larga">Polera Manga Larga</option><option value="Pantalón">Pantalón</option><option value="TRI MAO">TRI MAO</option></select></div></div><div class="grid" style="grid-template-columns:1fr 1fr 1fr"><div><label>👤 Hombre / Mujer</label><select id="prodGenero"><option>Hombre</option><option>Mujer</option></select></div><div><label>📦 Cantidad Stock</label><input type="number" id="prodStock" placeholder="10"></div><div><label>💰 Precio Venta $</label><input type="number" id="prodPrecio" placeholder="15000"></div></div><div id="contenedorTallasPolera"><label>📏 Talla Polera - XXS a XXL</label><div class="talla-selector" id="tallaPoleraBtns"><button class="talla-btn" onclick="seleccionarTalla('XXS')">XXS</button><button class="talla-btn" onclick="seleccionarTalla('XS')">XS</button><button class="talla-btn" onclick="seleccionarTalla('S')">S</button><button class="talla-btn" onclick="seleccionarTalla('M')">M</button><button class="talla-btn" onclick="seleccionarTalla('L')">L</button><button class="talla-btn" onclick="seleccionarTalla('XL')">XL</button><button class="talla-btn" onclick="seleccionarTalla('XXL')">XXL</button></div><input type="hidden" id="prodTalla" value="M"></div><div id="contenedorTallasPantalon" style="display:none"><label>📏 Talla Pantalón / TRI MAO - 34 a 54</label><div class="talla-selector" id="tallaPantalonBtns"></div><input type="hidden" id="prodTallaNum" value="40"></div><div style="margin-top:8px"><label>📸 Foto Producto</label><input type="file" id="prodImagen" accept="image/*"></div><div style="margin-top:8px"><label>Nombre Producto</label><input id="prodNombre" value="Producto Survivor"></div><button onclick="agregarPrenda()" style="margin-top:10px;background:#1b7a3d;width:100%;padding:12px">➕ Agregar Producto - Se refleja en catálogo cliente automáticamente</button><div style="margin-top:14px"><h3>Stock Creado - Modificar foto, precio, stock en cualquier momento</h3><table id="tablaCatalogo"></table><div style="margin-top:8px;background:#0a1f13;color:white;padding:8px;border-radius:8px;font-size:12px"><b>Sumatoria Stock Total:</b> <span id="sumatoriaStock">0 unidades</span> | <b>Valor venta total:</b> <span id="sumatoriaValor">$0</span></div></div></div></div>
- <div id="vistaVentas" class="vista"><div class="box"><h2>📋 VENTAS ADMIN - Mismos botones que cliente + Botón Pagado/Pendiente en venta directa</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div style="border:2px solid black;border-radius:10px;padding:10px"><h3 style="font-size:12px">1. Selecciona prenda (igual que cliente)</h3><div style="display:flex;gap:4px;margin-bottom:8px"><select id="filtroGeneroVentas" onchange="renderizarTiendaVentas()" style="font-size:11px"><option value="Todos">Todos</option><option value="Hombre">Hombre</option><option value="Mujer">Mujer</option></select><select id="filtroTipoVentas" onchange="renderizarTiendaVentas()" style="font-size:11px"><option value="Todos">Todo tipo</option><option value="Polera Manga Corta">Polera Manga Corta</option><option value="Polera Manga Larga">Polera Manga Larga</option><option value="Pantalón">Pantalón</option><option value="TRI MAO">TRI MAO</option></select></div><div class="lista-productos" id="listaVisualVentas" style="max-height:400px;overflow-y:auto"></div></div><div><div style="border:2px solid black;border-radius:10px;padding:10px"><h3 style="font-size:12px">2. Datos venta directa con botón Pagado/Pendiente</h3><label>Cliente</label><input id="cliNombre" placeholder="Cliente"><label>Tel</label><input id="cliTel"><label>Dir</label><input id="cliDir"><label>Prenda seleccionada</label><select id="vSelectPrenda"></select><label>Cantidad</label><input type="number" id="vCant" value="1" min="1"><label>Estado Pago - Botón Pagado/Pendiente que pediste</label><select id="vEstadoPago"><option value="Pagado">Pagado</option><option value="Pendiente">Pendiente</option></select><div style="margin-top:8px"><span style="font-size:11px">Unitario:</span><span id="precioUnitarioAdmin" style="font-weight:bold;color:#1b7a3d">$0</span> | Total: <span id="precioTotalAdmin" style="font-weight:bold">$0</span></div><button onclick="registrarVenta()" style="margin-top:8px;background:#1b7a3d;width:100%">💾 Registrar Venta Directa</button></div></div></div></div><div class="box"><h2>HISTORIAL VENTAS - Todas las ventas (cliente + directa) con botones Pagado/Pendiente y Eliminar</h2><p style="font-size:11px"><b>Capital recuperado:</b> <span id="resCap">$0</span> | <b>Ganancia:</b> <span id="resGan">$0</span> | <b>Stock total:</b> <span id="resStock">0</span> unidades</p><table id="tablaVentas"></table></div></div>
-</div>
-<div id="modalEditar" class="modal"><div class="modal-box"><h3>✏️ Editar Producto</h3><div style="display:flex;flex-direction:column;gap:6px;margin-top:8px"><label>Nombre</label><input id="editProdNombre"><label>Lote</label><select id="editProdLote"></select><label>Tipo Prenda</label><select id="editProdTipo"><option>Polera Manga Corta</option><option>Polera Manga Larga</option><option>Pantalón</option><option>TRI MAO</option></select><label>Genero</label><select id="editProdGenero"><option>Hombre</option><option>Mujer</option></select><label>Talla</label><input id="editProdTalla"><label>Precio</label><input type="number" id="editProdPrecio"><label>Stock</label><input type="number" id="editProdStock"><label>Nueva Foto</label><input type="file" id="editProdFoto" accept="image/*"><div style="display:flex;gap:6px;margin-top:8px"><button onclick="guardarEdicionProducto()" class="btn-verde" style="flex:1">💾 Guardar</button><button onclick="cerrarModal()" style="flex:1;background:#c0392b">Cancelar</button></div></div></div></div>
-<a href="https://wa.me/56948918687?text=Hola%20VESTUARIO%20SURVIVOR%20quiero%20info" target="_blank" class="wa-float">💬</a>
-<script>
-const dbURL="https://tienda-survivor-default-rtdb.firebaseio.com/";
-let lotes=[],cat=[],hist=[],config={};
-const CLAVE_ADMIN="negro1687";
-let productoSeleccionadoIndex="", productoSeleccionadoVentas="";
-let adminDesbloqueado=false; let editIndex=null; let tallaSeleccionada="M";
-function cargarLogo(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{localStorage.setItem('logoSurvivor',ev.target.result);document.getElementById('logoImg').src=ev.target.result;document.getElementById('logoImg').style.display='block';};r.readAsDataURL(f);}
-(function(){const s=localStorage.getItem('logoSurvivor');if(s){const img=document.getElementById('logoImg');if(img){img.src=s;img.style.display='block';}}})();
-function mostrarVista(n){document.querySelectorAll('.vista').forEach(v=>v.classList.remove('activa'));const m={quienes:'vistaQuienes',materia:'vistaMateria',productos:'vistaProductos',compras:'vistaCompras',contacto:'vistaContacto',dashboard:'vistaDashboard',editarPaginas:'vistaEditarPaginas',lotes:'vistaLotes',catalogoAdmin:'vistaCatalogoAdmin',ventas:'vistaVentas'};if(m[n]) document.getElementById(m[n]).classList.add('activa');if(n==='productos'||n==='ventas'){renderizarTienda(true);renderizarTiendaVentas();}if(n==='dashboard') calcularEstadisticas();}
-function toggleAdmin(){if(adminDesbloqueado){adminDesbloqueado=false;document.getElementById('bodyRoot').classList.remove('admin-mode');document.getElementById('adminMenu').classList.remove('visible');document.getElementById('btnAdminToggle').innerText='🔐 MODO ADMIN';mostrarVista('quienes');return;}let p=prompt('Contraseña admin:');if(p===CLAVE_ADMIN){adminDesbloqueado=true;document.getElementById('bodyRoot').classList.add('admin-mode');document.getElementById('adminMenu').classList.add('visible');document.getElementById('btnAdminToggle').innerText='🚪 SALIR ADMIN';document.getElementById('btnAdminToggle').style.background='#c0392b';mostrarVista('dashboard');}else if(p!==null) alert('Incorrecta');}
-function irACompras(){if(productoSeleccionadoIndex===""){alert("Selecciona prenda en PRODUCTOS");return;}mostrarVista('compras');}
-function descargarDatosNube(){fetch(dbURL+'datos.json').then(r=>r.json()).then(data=>{if(data){lotes=data.lotes||[];cat=data.cat||[];hist=data.hist||[];config=data.config||{quienes:{titulo:"QUIENES SOMOS - VESTUARIO SURVIVOR",mision:"Confeccionamos vestuario resistente.",vision:"Ser líderes en Chile.",lista:"Telas premium,Confección nacional,Tallas XXS-XXL y 34-54,Stock inmediato"},materia:{titulo:"MATERIA PRIMA",desc:"Insumos por lote.",items:"Tela Piqué|Alta durabilidad;Tela Jersey|Suave;Confección|Costo taller"},contacto:{empresa:"VESTUARIO SURVIVOR",datos:"📍 Santiago<br>📱 +56 9 4891 8687"}};}else{lotes=[];cat=[];hist=[];}aplicarConfig();actualizarVisuales();});}
-function subirDatosNube(){fetch(dbURL+'datos.json',{method:"PUT",headers:{'Content-Type':'application/json'},body:JSON.stringify({lotes,cat,hist,config})}).then(()=>actualizarVisuales());}
-function aplicarConfig(){if(!config.quienes) return;document.getElementById('qTitulo').innerText=config.quienes.titulo||'';document.getElementById('qMision').innerText=config.quienes.mision||'';document.getElementById('qVision').innerText=config.quienes.vision||'';if(config.quienes.lista){let items=config.quienes.lista.split(',');document.getElementById('qLista').innerHTML=items.map(i=>'<li>✅ '+i.trim()+'</li>').join('');}document.getElementById('mTitulo').innerText=config.materia.titulo||'';document.getElementById('mDesc').innerText=config.materia.desc||'';if(config.materia.items){let parts=config.materia.items.split(';');let h='';parts.forEach(p=>{let [n,d]=p.split('|');if(n) h+=`<div class="stat-card"><h4>${n.trim()}</h4><div style="font-size:11px">${(d||'').trim()}</div></div>`;});document.getElementById('mGrid').innerHTML=h;}document.getElementById('cEmpresa').innerText=config.contacto.empresa||'';document.getElementById('cDatos').innerHTML=config.contacto.datos||'';document.getElementById('editQTitulo').value=config.quienes.titulo||'';document.getElementById('editQMision').value=config.quienes.mision||'';document.getElementById('editQVision').value=config.quienes.vision||'';document.getElementById('editQLista').value=config.quienes.lista||'';document.getElementById('editMTitulo').value=config.materia.titulo||'';document.getElementById('editMDesc').value=config.materia.desc||'';document.getElementById('editMItems').value=config.materia.items||'';document.getElementById('editCEmpresa').value=config.contacto.empresa||'';document.getElementById('editCDatos').value=config.contacto.datos||'';}
-function guardarQuienes(){config.quienes={titulo:document.getElementById('editQTitulo').value,mision:document.getElementById('editQMision').value,vision:document.getElementById('editQVision').value,lista:document.getElementById('editQLista').value};subirDatosNube();alert('Quienes Somos guardado');}
-function guardarMateria(){config.materia={titulo:document.getElementById('editMTitulo').value,desc:document.getElementById('editMDesc').value,items:document.getElementById('editMItems').value};subirDatosNube();alert('Materia Prima guardada');}
-function guardarContacto(){config.contacto={empresa:document.getElementById('editCEmpresa').value,datos:document.getElementById('editCDatos').value};subirDatosNube();alert('Contacto guardado');}
-setInterval(descargarDatosNube,30000);descargarDatosNube();
-document.getElementById('iTela').addEventListener('input', actualizarPreviewUnitario);
-document.getElementById('iConf').addEventListener('input', actualizarPreviewUnitario);
-document.getElementById('iCant').addEventListener('input', actualizarPreviewUnitario);
-function actualizarPreviewUnitario(){let tela=parseFloat(document.getElementById('iTela').value)||0;let conf=parseFloat(document.getElementById('iConf').value)||0;let cant=parseInt(document.getElementById('iCant').value)||0;let unit=cant>0?(tela+conf)/cant:0;document.getElementById('previewUnitario').innerText='$'+Math.round(unit);}
-function registrarLote(){let numero=document.getElementById('iNumeroLote').value.trim();let tela=parseFloat(document.getElementById('iTela').value)||0;let conf=parseFloat(document.getElementById('iConf').value)||0;let cant=parseInt(document.getElementById('iCant').value)||0;if(!numero) return alert("Pon número de lote");if(cant<=0) return alert("Cantidad debe ser >0");let suma=tela+conf;let costo=suma/cant;lotes.push({numero:numero,nombre:numero,tela:tela,conf:conf,sumaInversion:suma,cant:cant,costoUnit:costo});subirDatosNube();document.getElementById('iNumeroLote').value="";document.getElementById('iTela').value="";document.getElementById('iConf').value="";document.getElementById('iCant').value="";document.getElementById('previewUnitario').innerText='$0';}
-function inicializarTallasPantalon(){let cont=document.getElementById('tallaPantalonBtns');let html='';for(let i=34;i<=54;i+=2){html+=`<button class="talla-btn" onclick="seleccionarTallaNum(${i})">${i}</button>`;}cont.innerHTML=html;}
-inicializarTallasPantalon();
-function seleccionarTalla(talla){tallaSeleccionada=talla;document.querySelectorAll('#tallaPoleraBtns.talla-btn').forEach(b=>{b.classList.toggle('active', b.innerText===talla);});document.getElementById('prodTalla').value=talla;}
-function seleccionarTallaNum(num){tallaSeleccionada=num.toString();document.querySelectorAll('#tallaPantalonBtns.talla-btn').forEach(b=>{b.classList.toggle('active', b.innerText==num);});document.getElementById('prodTallaNum').value=num;}
-function cambiarTipoPrenda(){let tipo=document.getElementById('prodTipoPrenda').value;let poleraDiv=document.getElementById('contenedorTallasPolera');let pantalonDiv=document.getElementById('contenedorTallasPantalon');if(tipo==='Pantalón' || tipo==='TRI MAO'){poleraDiv.style.display='none';pantalonDiv.style.display='block';tallaSeleccionada=document.getElementById('prodTallaNum').value||'40';} else {poleraDiv.style.display='block';pantalonDiv.style.display='none';tallaSeleccionada=document.getElementById('prodTalla').value||'M';}}
-seleccionarTalla('M'); seleccionarTallaNum(40);
-function agregarPrenda(){let loteSel=document.getElementById('prodLoteSelect').value;if(!loteSel) return alert("Crea lote primero y selecciona número de lote");let tipo=document.getElementById('prodTipoPrenda').value;let tallaFinal='';if(tipo==='Pantalón' || tipo==='TRI MAO'){tallaFinal=document.getElementById('prodTallaNum').value;} else {tallaFinal=document.getElementById('prodTalla').value;}let genero=document.getElementById('prodGenero').value;let stock=parseInt(document.getElementById('prodStock').value)||0;let precio=parseFloat(document.getElementById('prodPrecio').value)||0;let nombre=document.getElementById('prodNombre').value||tipo;if(!precio) return alert("Ponle precio al producto");let fi=document.getElementById('prodImagen');let file=fi.files[0];let nueva={nombre:nombre,lote:loteSel,numeroLote:loteSel,tipo:tipo,genero:genero,talla:tallaFinal,tallaTipo: (tipo==='Pantalón'||tipo==='TRI MAO')?'numerica':'letra',cuello:tipo,manga:tipo,precio:precio,stock:stock,imagen:""};if(file){let r=new FileReader();r.onload=ev=>{nueva.imagen=ev.target.result;cat.push(nueva);subirDatosNube();fi.value="";};r.readAsDataURL(file);} else {cat.push(nueva);subirDatosNube();}}
-function eliminarLote(i){if(confirm("Eliminar lote?")){lotes.splice(i,1);subirDatosNube();}}
-function ajustarStock(i,d){cat[i].stock+=d;if(cat[i].stock<0) cat[i].stock=0;subirDatosNube();}
-function cambiarEstadoPago(i){hist[i].estado=hist[i].estado==='Pagado'?'Pendiente':'Pagado';subirDatosNube();}
-function eliminarVenta(i){if(!confirm("Eliminar venta?")) return; hist.splice(i,1); subirDatosNube();}
-function seleccionarProducto(i){productoSeleccionadoIndex=i;document.getElementById('vSelectPrendaCliente').value=i;document.getElementById('infoSeleccion').innerText='Seleccionado: '+cat[i].nombre+' '+cat[i].talla+' Stock:'+cat[i].stock;actualizarPrecioTienda();}
-function seleccionarProductoVentas(i){productoSeleccionadoVentas=i;document.getElementById('vSelectPrenda').value=i;actualizarPrecioAdmin();}
-function renderizarTienda(forzar){let lista=document.getElementById('listaVisualProductos');let select=document.getElementById('vSelectPrendaCliente');if(!lista||!select) return;let filtroGenero=document.getElementById('filtroGenero').value;let filtroTipo=document.getElementById('filtroTipo').value;let prev=select.value;let htmlV="";let htmlS='<option value="">Seleccione prenda...</option>';let totalStock=0;cat.forEach(p=>totalStock+=p.stock);document.getElementById('totalStockInfo').innerText='Stock total: '+totalStock+' unidades';if(document.getElementById('sumatoriaStock')) document.getElementById('sumatoriaStock').innerText=totalStock+' unidades';let valorTotal=0;cat.forEach(p=>valorTotal+=p.stock*p.precio);if(document.getElementById('sumatoriaValor')) document.getElementById('sumatoriaValor').innerText='$'+valorTotal.toLocaleString();if(document.getElementById('resStock')) document.getElementById('resStock').innerText=totalStock;cat.forEach((p,i)=>{if(filtroGenero!=="Todos"&&p.genero!==filtroGenero) return;if(filtroTipo!=="Todos"&&p.tipo!==filtroTipo) return;let img=p.imagen?'<img src="'+p.imagen+'" class="img-producto">':'<div style="color:#888;font-size:11px">Sin foto</div>';htmlV+=`<div class="item-producto" onclick="seleccionarProducto(${i})"><div class="img-producto-container">${img}</div><div style="padding:8px"><strong style="font-size:12px">${p.nombre}</strong><br><small style="font-size:10px">Lote:${p.lote} | ${p.tipo} | ${p.genero} | Talla:${p.talla}<br>Stock:${p.stock}</small><br><span class="badge-stock ${p.stock<=0?'agotado':''}">${p.stock>0?'Stock:'+p.stock:'AGOTADO'}</span><div class="precio-tag">$${p.precio}</div></div></div>`;htmlS+=`<option value="${i}">${p.nombre} - Lote:${p.lote} | ${p.tipo} | ${p.genero} | Talla:${p.talla} ${p.stock<=0?'(AGOTADO)':''}</option>`;});if(forzar||prev===""||select.options.length<=1){select.innerHTML=htmlS;select.value=prev;}lista.innerHTML=htmlV||"<p style='color:white;text-align:center'>No hay productos</p>";actualizarPrecioTienda();}
-function renderizarTiendaVentas(){let lista=document.getElementById('listaVisualVentas');let select=document.getElementById('vSelectPrenda');if(!lista||!select) return;let filtroGenero=document.getElementById('filtroGeneroVentas').value;let filtroTipo=document.getElementById('filtroTipoVentas').value;let prev=select.value;let htmlV="";let htmlS='<option value="">Seleccione prenda...</option>';cat.forEach((p,i)=>{if(filtroGenero!=="Todos"&&p.genero!==filtroGenero) return;if(filtroTipo!=="Todos"&&p.tipo!==filtroTipo) return;let img=p.imagen?'<img src="'+p.imagen+'" class="img-producto">':'<div style="color:#888;font-size:10px">Sin foto</div>';htmlV+=`<div class="item-producto ${productoSeleccionadoVentas==i?'seleccionado':''}" onclick="seleccionarProductoVentas(${i})"><div class="img-producto-container" style="height:100px">${img}</div><div style="padding:6px"><strong style="font-size:11px">${p.nombre}</strong><br><small style="font-size:9px">Lote:${p.lote}|${p.tipo}|${p.talla}|Stock:${p.stock}</small><div class="precio-tag" style="font-size:12px">$${p.precio}</div></div></div>`;htmlS+=`<option value="${i}">${p.nombre} - ${p.lote} | ${p.tipo} | Talla:${p.talla}</option>`;});if(prev===""||select.options.length<=1){select.innerHTML=htmlS;select.value=prev;}lista.innerHTML=htmlV||"<p>No hay productos</p>";actualizarPrecioAdmin();}
-function actualizarPrecioTienda(){let idx=document.getElementById('vSelectPrendaCliente').value;let cant=parseInt(document.getElementById('vCantCliente').value)||1;let unit=document.getElementById('precioUnitarioTienda');let total=document.getElementById('precioTotalTienda');let prev=document.getElementById('previewProducto');if(idx===""||!cat[idx]){unit.innerText="$0";total.innerText="$0";if(prev) prev.innerHTML="Selecciona producto";return;}let p=cat[idx];unit.innerText='$'+p.precio;total.innerText='$'+(cant*p.precio);if(prev){let img=p.imagen?'<img src="'+p.imagen+'" style="max-width:100%;max-height:140px;border-radius:8px">':'Sin foto';prev.innerHTML=img+'<br><b>'+p.nombre+'</b><br>'+p.tipo+' Talla:'+p.talla+'<br>Stock:'+p.stock;}}
-function actualizarPrecioAdmin(){let idx=document.getElementById('vSelectPrenda').value;let cant=parseInt(document.getElementById('vCant').value)||1;let unit=document.getElementById('precioUnitarioAdmin');let total=document.getElementById('precioTotalAdmin');if(idx===""||!cat[idx]){unit.innerText="$0";total.innerText="$0";return;}let p=cat[idx];unit.innerText='$'+p.precio;total.innerText='$'+(cant*p.precio);}
-function enviarPedidoCliente(){let idx=document.getElementById('vSelectPrendaCliente').value;let cant=parseInt(document.getElementById('vCantCliente').value);let nombre=document.getElementById('cliNombreCliente').value.trim();let tel=document.getElementById('cliTelCliente').value.trim();let dir=document.getElementById('cliDirCliente').value.trim();if(idx===""||isNaN(cant)||cant<=0) return alert("Selecciona prenda");if(!nombre||!tel||!dir) return alert("Rellena datos");let p=cat[idx];if(p.stock>=cant){p.stock-=cant;let total=cant*p.precio;hist.push({cliente:nombre,tel,dir,prodNombre:p.nombre,lote:p.lote,tipo:p.tipo,genero:p.genero,talla:p.talla,detalle:'Lote:'+p.lote+'|'+p.tipo+'|'+p.genero+'|Talla:'+p.talla,cant,total,estado:"Pendiente"});fetch(dbURL+'datos.json',{method:"PUT",headers:{'Content-Type':'application/json'},body:JSON.stringify({lotes,cat,hist,config})}).then(()=>{let m=`*NUEVO PEDIDO - SURVIVOR*%0A👤 ${encodeURIComponent(nombre)}%0A📱 ${encodeURIComponent(tel)}%0A📍 ${encodeURIComponent(dir)}%0A👕 ${encodeURIComponent(p.nombre)}%0A🏷️ ${encodeURIComponent(p.tipo)} Talla:${encodeURIComponent(p.talla)}%0A🔢 ${cant}%0A💰 $${total}`;window.open(`https://wa.me/56948918687?text=${m}`,'_blank');alert("¡Pedido enviado! WhatsApp a +56948918687");descargarDatosNube();mostrarVista('productos');});}else alert("Stock insuficiente");}
-function registrarVenta(){let idx=document.getElementById('vSelectPrenda').value;let cant=parseInt(document.getElementById('vCant').value);if(idx===""||isNaN(cant)) return alert("Selecciona prenda y cantidad");let p=cat[idx];if(p.stock<cant) return alert("Stock insuficiente - tienes "+p.stock);p.stock-=cant;let total=cant*p.precio;hist.push({cliente:document.getElementById('cliNombre').value||'Venta Admin',tel:document.getElementById('cliTel').value,dir:document.getElementById('cliDir').value,prodNombre:p.nombre,lote:p.lote,tipo:p.tipo,genero:p.genero,talla:p.talla,detalle:'Lote:'+p.lote+'|'+p.tipo+'|'+p.genero+'|Talla:'+p.talla,cant,total,estado:document.getElementById('vEstadoPago').value});subirDatosNube();alert('Venta registrada - aparece en historial con botones Pagado/Pendiente y Eliminar');}
-function enviarTrabajaWA(){let n=document.getElementById('trabNombre').value.trim();let c=document.getElementById('trabContacto').value.trim();let cargo=document.getElementById('trabCargo').value;let m=document.getElementById('trabMsg').value.trim();if(!n||!c) return alert("Completa");let t=`*POSTULACION*%0A👤 ${encodeURIComponent(n)}%0A📱 ${encodeURIComponent(c)}%0A💼 ${encodeURIComponent(cargo)}%0A📝 ${encodeURIComponent(m)}`;window.open(`https://wa.me/56948918687?text=${t}`,'_blank');}
-function editarFotoRapida(i){let inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=ev=>{cat[i].imagen=ev.target.result;subirDatosNube();alert('Foto actualizada - se refleja en catálogo cliente al instante');};r.readAsDataURL(f);};inp.click();}
-function abrirEditarProducto(i){editIndex=i;let p=cat[i];document.getElementById('editProdNombre').value=p.nombre;document.getElementById('editProdLote').innerHTML=document.getElementById('prodLoteSelect').innerHTML;document.getElementById('editProdLote').value=p.lote;document.getElementById('editProdTipo').value=p.tipo||'Polera Manga Corta';document.getElementById('editProdGenero').value=p.genero;document.getElementById('editProdTalla').value=p.talla;document.getElementById('editProdPrecio').value=p.precio;document.getElementById('editProdStock').value=p.stock;document.getElementById('modalEditar').classList.add('active');}
-function cerrarModal(){document.getElementById('modalEditar').classList.remove('active');editIndex=null;}
-function guardarEdicionProducto(){if(editIndex===null) return;let p=cat[editIndex];p.nombre=document.getElementById('editProdNombre').value;p.lote=document.getElementById('editProdLote').value;p.tipo=document.getElementById('editProdTipo').value;p.genero=document.getElementById('editProdGenero').value;p.talla=document.getElementById('editProdTalla').value;p.precio=parseFloat(document.getElementById('editProdPrecio').value)||0;p.stock=parseInt(document.getElementById('editProdStock').value)||0;let fi=document.getElementById('editProdFoto');if(fi.files[0]){let r=new FileReader();r.onload=ev=>{p.imagen=ev.target.result;subirDatosNube();cerrarModal();};r.readAsDataURL(fi.files[0]);}else{subirDatosNube();cerrarModal();}}
-function calcularEstadisticas(){let totalTela=0,totalConf=0,totalCant=0;lotes.forEach(l=>{totalTela+=l.tela||0;totalConf+=l.conf||0;totalCant+=l.cant||0;});let totalInv=totalTela+totalConf;let unitProm=totalCant>0?totalInv/totalCant:0;let cap=0,gan=0,pend=0;hist.forEach(v=>{let lr=lotes.find(l=>l.nombre===v.lote||l.numero===v.lote);let cu=lr?lr.costoUnit:0;if(v.estado==='Pagado'){cap+=v.cant*cu;gan+=v.total-(v.cant*cu);}else pend+=v.total-(v.cant*cu);});let stockCosto=0,stockVenta=0,stockUnidades=0;cat.forEach(p=>{let lr=lotes.find(l=>l.nombre===p.lote||l.numero===p.lote);let cu=lr?lr.costoUnit:0;stockCosto+=p.stock*cu;stockVenta+=p.stock*p.precio;stockUnidades+=p.stock;});document.getElementById('statTela').innerText='$'+Math.round(totalTela).toLocaleString();document.getElementById('statConf').innerText='$'+Math.round(totalConf).toLocaleString();document.getElementById('statInversion').innerText='$'+Math.round(totalInv).toLocaleString();document.getElementById('statCantLotes').innerText=totalCant;document.getElementById('statUnitario').innerText='$'+Math.round(unitProm).toLocaleString();document.getElementById('statCap').innerText='$'+Math.round(cap).toLocaleString();document.getElementById('statGan').innerText='$'+Math.round(gan).toLocaleString();document.getElementById('statPend').innerText='$'+Math.round(pend).toLocaleString();document.getElementById('statStockUnidades').innerText=stockUnidades;document.getElementById('statStockCosto').innerText='$'+Math.round(stockCosto).toLocaleString();document.getElementById('statStockVenta').innerText='$'+Math.round(stockVenta).toLocaleString();let htmlL='<tr><th>N° Lote</th><th>Costo Tela</th><th>Costo Conf.</th><th>Cant. Prendas</th><th>Valor Unit.</th><th>Stock Rest.</th><th>Vendidas</th><th>Ingresos</th><th>Recup. Capital</th><th>Ganancia</th></tr>';lotes.forEach(l=>{let vendidos=0,ingresos=0;hist.forEach(v=>{if((v.lote===l.nombre||v.lote===l.numero)&&v.estado==='Pagado'){vendidos+=v.cant;ingresos+=v.total;}});let stockRest=0;cat.forEach(p=>{if(p.lote===l.nombre||p.lote===l.numero) stockRest+=p.stock;});let recup=vendidos*l.costoUnit;let ganancia=ingresos-recup;htmlL+=`<tr><td>${l.numero||l.nombre}</td><td>$${l.tela}</td><td>$${l.conf}</td><td>${l.cant}</td><td>$${Math.round(l.costoUnit)}</td><td>${stockRest}</td><td>${vendidos}</td><td>$${ingresos}</td><td>$${Math.round(recup)}</td><td style="color:${ganancia>=0?'green':'red'}">$${Math.round(ganancia)}</td></tr>`;});document.getElementById('tablaDashboardLotes').innerHTML=htmlL;}
-function actualizarVisuales(){let htmlL="";let selL='<option value="">Seleccione N° Lote...</option>';lotes.forEach((l,i)=>{let stockRest=0;cat.forEach(p=>{if(p.lote===l.nombre||p.lote===l.numero) stockRest+=p.stock;});htmlL+=`<tr><td>${l.numero||l.nombre}</td><td>$${l.tela}</td><td>$${l.conf}</td><td>$${l.sumaInversion}</td><td>${l.cant}</td><td>$${Math.round(l.costoUnit)}</td><td>${stockRest}</td><td><button onclick="eliminarLote(${i})" style="background:#c0392b">X</button></td></tr>`;selL+=`<option value="${l.numero||l.nombre}">${l.numero||l.nombre} - Tela:$${l.tela} Conf:$${l.conf} Cant:${l.cant} Unit:$${Math.round(l.costoUnit)}</option>`;});if(document.getElementById('bodyLotes')) document.getElementById('bodyLotes').innerHTML=htmlL;if(document.getElementById('prodLoteSelect')) document.getElementById('prodLoteSelect').innerHTML=selL;let htmlCat='<tr><th>Foto</th><th>Producto Detalle</th><th>Stock</th><th>Acciones Foto/Editar</th></tr>';let selV='<option value="">Seleccione prenda...</option>';cat.forEach((p,i)=>{let mini=p.imagen?`<img src="${p.imagen}" style="width:45px;height:45px;object-fit:cover;border-radius:5px">`:'Sin foto';htmlCat+=`<tr><td>${mini}</td><td><b>${p.nombre}</b><br><small>Lote:${p.lote}|${p.tipo||p.cuello}|${p.genero}|Talla:${p.talla}<br>$${p.precio}</small></td><td>${p.stock}<br><button onclick="ajustarStock(${i},1)">+</button><button onclick="ajustarStock(${i},-1)">-</button></td><td><button onclick="editarFotoRapida(${i})" style="background:#1b7a3d">📸 Cambiar Foto</button><br><button onclick="abrirEditarProducto(${i})" style="background:#2980b9;margin-top:3px">✏️ Editar Todo</button><br><button onclick="cat.splice(${i},1);subirDatosNube()" style="background:#c0392b;margin-top:3px">X Eliminar</button></td></tr>`;selV+=`<option value="${i}">${p.nombre} - Lote:${p.lote} | ${p.tipo||''} | Talla:${p.talla} | ${p.genero} | Stock:${p.stock}</option>`;});if(document.getElementById('tablaCatalogo')) document.getElementById('tablaCatalogo').innerHTML=htmlCat;if(document.getElementById('vSelectPrenda')) document.getElementById('vSelectPrenda').innerHTML=selV;let htmlV='<tr><th>Cliente</th><th>Detalle Completo</th><th>Cant</th><th>Total</th><th>Estado</th><th>X</th></tr>';let cap=0,gan=0;hist.forEach((v,i)=>{let lr=lotes.find(l=>l.nombre===v.lote||l.numero===v.lote);let cu=lr?lr.costoUnit:0;if(v.estado==='Pagado'){cap+=v.cant*cu;gan+=v.total-(v.cant*cu);}htmlV+=`<tr class="${v.estado==='Pagado'?'pagado':'pendiente'}"><td>${v.cliente}<br><small>${v.tel||''}</small></td><td>${v.detalle||v.prodNombre} ${v.tipo||''} Talla:${v.talla||''}</td><td>${v.cant}</td><td>$${v.total}</td><td><button onclick="cambiarEstadoPago(${i})" style="background:${v.estado==='Pagado'?'#1b7a3d':'#f39c12'}">${v.estado}</button></td><td><button onclick="eliminarVenta(${i})" style="background:#c0392b">X</button></td></tr>`;});if(document.getElementById('tablaVentas')) document.getElementById('tablaVentas').innerHTML=htmlV;if(document.getElementById('resCap')) document.getElementById('resCap').innerText="$"+Math.round(cap);if(document.getElementById('resGan')) document.getElementById('resGan').innerText="$"+Math.round(gan);if(document.getElementById('resStock')) document.getElementById('resStock').innerText=cat.reduce((a,p)=>a+p.stock,0);renderizarTienda(false);renderizarTiendaVentas();calcularEstadisticas();}
-function ajustarStock(i,d){cat[i].stock+=d;if(cat[i].stock<0) cat[i].stock=0;subirDatosNube();}
-</script>
-</body>
-</html>
+REQUERIMIENTOS PARA LA PÁGINA WEB “SURVIVOR VESTUARIO”
+
+Necesito desarrollar una página web para mi marca SURVIVOR VESTUARIO, orientada a la venta de prendas de vestir, control de inventario, registro de ventas, gestión de pedidos y control de costos de producción.
+
+1. Diseño general de la página
+
+- El nombre de la página será SURVIVOR VESTUARIO.
+- La página debe tener un diseño moderno, ordenado y fácil de utilizar desde un teléfono celular.
+- El color de fondo principal debe ser un verde muy oscuro.
+- Las letras deben ser principalmente de color blanco.
+- Los detalles, bordes y elementos secundarios deben utilizar el color negro.
+- Todos los botones y secciones principales deben ubicarse en un menú lateral izquierdo.
+- Debe existir una opción en el modo administrador para subir o cambiar el logotipo de la empresa.
+- El logotipo debe mostrarse centrado en la parte superior de la página.
+
+---
+
+2. Página de inicio
+
+La página principal debe contar con dos botones principales:
+
+👤 SECCIÓN CLIENTE
+
+Permite a los clientes revisar los productos disponibles y realizar pedidos.
+
+🔐 SECCIÓN ADMINISTRADOR
+
+Debe contar con un botón de acceso protegido mediante contraseña.
+
+Contraseña inicial del administrador: "negro1687"
+
+---
+
+3. SECCIÓN CLIENTE
+
+El cliente debe poder acceder a las siguientes secciones:
+
+3.1. Productos
+
+Debe existir un botón llamado PRODUCTOS.
+
+Al ingresar, el cliente debe visualizar un catálogo con:
+
+- Fotografía del producto.
+- Nombre del producto.
+- Descripción.
+- Tipo de prenda.
+- Color.
+- Talla.
+- Precio.
+- Stock disponible.
+
+El cliente debe poder seleccionar uno o varios productos y agregarlos a su pedido.
+
+Debe existir un botón COMPRAR o REALIZAR PEDIDO, que dirija al cliente a la sección de pedido.
+
+---
+
+3.2. Sección Pedido
+
+En esta sección debe aparecer:
+
+- Listado de los productos seleccionados.
+- Descripción de cada producto.
+- Talla seleccionada.
+- Cantidad solicitada.
+- Precio unitario.
+- Valor total de cada producto.
+- Valor total del pedido.
+
+El cliente deberá completar los siguientes datos:
+
+- Nombre completo.
+- Dirección.
+- Número de teléfono.
+- Otros datos necesarios para la entrega, si corresponde.
+
+Al confirmar el pedido:
+
+1. El pedido debe quedar registrado en el sistema.
+2. Debe descontarse automáticamente del stock disponible.
+3. El administrador debe recibir una notificación del nuevo pedido mediante WhatsApp al número:
+
++56 9 4891 8687
+
+---
+
+3.3. Sección “Quiénes Somos”
+
+El cliente debe poder visualizar una sección denominada QUIÉNES SOMOS.
+
+Esta sección debe contener:
+
+- Información de la empresa.
+- Misión.
+- Visión.
+
+La información debe poder ser modificada desde el modo administrador, mediante botones de edición.
+
+---
+
+3.4. Sección Materia Prima
+
+Debe existir una sección llamada MATERIA PRIMA, donde el cliente pueda conocer información relacionada con los materiales utilizados en la fabricación de los productos.
+
+Esta información debe ser editable desde el modo administrador mediante botones de edición.
+
+---
+
+4. SECCIÓN ADMINISTRADOR
+
+El administrador debe tener acceso a un menú lateral con diferentes secciones de gestión.
+
+---
+
+5. Sección Estadísticas
+
+Debe existir un botón llamado ESTADÍSTICAS.
+
+Esta sección debe permitir visualizar información por cada lote de producción.
+
+Debe incluir:
+
+- Lote de producción.
+- Tipo de producto.
+- Cantidad total de prendas fabricadas.
+- Costo total de la tela o materia prima.
+- Costo total de confección.
+- Costo total de producción.
+- Costo de producción por prenda.
+- Precio de venta por prenda.
+- Dinero recuperado.
+- Ganancia obtenida.
+- Cantidad de prendas vendidas.
+- Cantidad de prendas restantes en stock.
+
+Cálculo del costo por prenda
+
+El sistema debe realizar automáticamente el siguiente cálculo:
+
+Costo total de producción = Costo de tela + Costo de confección
+
+Luego:
+
+Costo por prenda = Costo total de producción ÷ cantidad total de prendas fabricadas
+
+El sistema debe permitir ingresar el precio de venta de cada producto y calcular automáticamente:
+
+- Dinero recuperado de la inversión.
+- Ganancia por unidad.
+- Ganancia total por lote.
+- Porcentaje de ganancia, si es posible.
+
+---
+
+6. Sección Agregar Productos / Stock
+
+Debe existir una sección para ingresar nuevos productos y registrarlos en el inventario.
+
+El administrador debe poder ingresar:
+
+Tipo de prenda
+
+- Polera manga larga.
+- Polera manga corta.
+- Pantalón.
+- Trimao.
+- Otro.
+
+Tipo de cuello para poleras
+
+En caso de seleccionar una polera, debe aparecer la opción para seleccionar:
+
+- Cuello redondo.
+- Cuello medio.
+- Cuello piqué.
+- Cuello beatle.
+
+Género
+
+- Hombre.
+- Mujer.
+- Unisex, si corresponde.
+
+Talla
+
+Para poleras:
+
+- XXS.
+- XS.
+- S.
+- M.
+- L.
+- XL.
+- XXL.
+
+Para pantalones o trimao:
+
+- Talla 34 hasta talla 56.
+
+Otros datos
+
+También debe permitir ingresar:
+
+- Color.
+- Descripción.
+- Fotografía del producto.
+- Precio de venta.
+- Cantidad de stock inicial.
+- Lote de producción.
+
+El sistema debe permitir ingresar los costos asociados al lote:
+
+- Costo de tela o materia prima.
+- Costo de confección.
+- Cantidad total de prendas fabricadas.
+
+Estos datos deben quedar directamente relacionados con las estadísticas y el inventario.
+
+---
+
+7. Sección Catálogo y Fotografías
+
+Debe existir una sección en el modo administrador para:
+
+- Agregar fotografías de los productos.
+- Cambiar fotografías.
+- Eliminar fotografías.
+- Agregar o modificar la descripción.
+- Ingresar el precio de venta.
+- Definir las tallas disponibles.
+- Definir el stock disponible.
+
+La información ingresada en esta sección debe ser la misma que posteriormente visualizará el cliente en el catálogo de productos.
+
+---
+
+8. Control automático de Stock
+
+El sistema debe estar conectado directamente al inventario.
+
+Cuando se realiza una venta:
+
+El sistema debe:
+
+- Registrar la venta.
+- Descontar automáticamente la cantidad vendida del stock.
+- Actualizar la cantidad disponible para el cliente.
+
+Cuando se elimina una venta:
+
+El sistema debe:
+
+- Eliminar o anular la venta.
+- Devolver automáticamente la cantidad de productos al inventario.
+
+Por ejemplo:
+
+Stock inicial: 20 unidades
+Venta: 3 unidades
+Stock disponible: 17 unidades
+
+Si la venta se elimina:
+
+Stock nuevamente disponible: 20 unidades
+
+---
+
+9. Alertas de Stock Bajo
+
+El sistema debe generar alertas automáticas cuando el stock de un producto sea bajo.
+
+La alerta debe poder ser visualizada:
+
+- Por el administrador en su panel de control.
+- Por el cliente en el catálogo de productos.
+
+La cantidad mínima para activar la alerta debería poder configurarse desde el modo administrador.
+
+Por ejemplo:
+
+Stock bajo: quedan 3 unidades disponibles.
+
+---
+
+10. Sección Ventas y Pedidos
+
+Debe existir una sección llamada VENTAS Y PEDIDOS.
+
+En ella, el administrador debe poder visualizar tanto:
+
+- Ventas ingresadas directamente por el administrador.
+- Pedidos realizados por los clientes desde la página.
+
+Cada venta o pedido debe mostrar:
+
+- Nombre del cliente.
+- Teléfono.
+- Dirección.
+- Datos de contacto.
+- Producto adquirido.
+- Descripción del producto.
+- Talla.
+- Cantidad solicitada.
+- Precio unitario.
+- Valor total.
+- Fecha de la venta o pedido.
+
+---
+
+11. Estado de pago
+
+Cada venta debe contar con un botón o selector que permita cambiar su estado:
+
+- PAGO PENDIENTE
+- PAGADO
+
+Este estado debe poder modificarse desde el panel de administrador.
+
+---
+
+12. Eliminar o anular ventas
+
+Cada venta o pedido debe contar con un botón ELIMINAR o ANULAR VENTA.
+
+Al eliminar o anular una venta:
+
+- La venta debe dejar de considerarse como venta efectiva.
+- Los productos deben volver automáticamente al inventario.
+- El stock debe actualizarse inmediatamente.
+
+Idealmente, el sistema debería solicitar una confirmación antes de eliminar la venta.
+
+---
+
+13. Exportación de ventas a Excel
+
+El administrador debe contar con un botón para EXPORTAR VENTAS A EXCEL.
+
+El archivo debe incluir información como:
+
+- Fecha.
+- Nombre del cliente.
+- Teléfono.
+- Dirección.
+- Producto.
+- Talla.
+- Cantidad.
+- Precio unitario.
+- Total de la venta.
+- Estado del pago.
+- Tipo de venta: directa o pedido online.
+
+---
+
+14. Registro de ventas directas
+
+El administrador debe poder ingresar manualmente una venta realizada directamente, sin que el cliente haya utilizado la página web.
+
+Para ello, debe poder seleccionar:
+
+- Producto.
+- Talla.
+- Cantidad.
+- Cliente.
+- Datos de contacto.
+- Precio.
+- Estado de pago.
+
+Al registrar la venta directa:
+
+- El sistema debe descontar automáticamente las unidades del stock.
+- La venta debe quedar registrada en las estadísticas.
+- Debe aparecer en el registro general de ventas.
+- Debe poder exportarse posteriormente a Excel.
+
+---
+
+15. Cálculo de costos, recuperación y ganancias
+
+El sistema debe permitir ingresar los datos económicos de cada lote de producción.
+
+Por ejemplo:
+
+- Costo total de tela: $________.
+- Costo total de confección: $________.
+- Cantidad total de prendas fabricadas: ________.
+- Precio de venta por prenda: $________.
+
+El sistema debe calcular automáticamente:
+
+Costo total del lote
+
+Costo de tela + costo de confección
+
+Costo de fabricación por prenda
+
+Costo total del lote ÷ cantidad de prendas fabricadas
+
+Dinero recuperado
+
+Cantidad de prendas vendidas × precio de venta
+
+Ganancia
+
+Dinero recuperado − costo de las prendas vendidas
+
+También debe mostrar los resultados generales de cada lote:
+
+- Inversión total.
+- Dinero recuperado.
+- Ganancia.
+- Stock restante.
+- Valor potencial del stock restante.
+
+---
+
+16. Objetivo general del sistema
+
+La página SURVIVOR VESTUARIO debe funcionar como una plataforma integral que permita:
+
+1. Mostrar los productos a los clientes.
+2. Permitir la realización de pedidos online.
+3. Recibir notificaciones de nuevos pedidos por WhatsApp.
+4. Administrar productos y fotografías.
+5. Controlar el stock en tiempo real.
+6. Registrar ventas online y ventas directas.
+7. Controlar los pagos pendientes y pagados.
+8. Calcular costos de producción.
+9. Calcular la recuperación de la inversión.
+10. Calcular las ganancias por producto y por lote.
+11. Controlar el inventario.
+12. Exportar el registro de ventas a Excel.
+13. Editar la información de la empresa, misión, visión y materia prima desde el panel administrador.
+
+La página debe tener una interfaz moderna, sencilla, responsiva y adaptada principalmente para su utilización desde teléfonos celulares, manteniendo una identidad visual basada en verde muy oscuro, blanco y negro.   Puedes crearla y darme el código directamente en este chat 
